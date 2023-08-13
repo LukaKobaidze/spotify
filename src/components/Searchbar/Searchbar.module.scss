@@ -1,0 +1,50 @@
+.formContainer {
+  position: relative;
+  display: flex;
+  align-items: center;
+  color: #fff;
+  height: 100%;
+}
+
+.input {
+  color: inherit;
+  width: 100%;
+  height: 100%;
+  border-radius: 100vw;
+  padding: 6px 36px;
+  background-color: #242424;
+  border: none;
+
+  &:hover,
+  &:focus-visible {
+    background-color: #2a2a2a;
+    box-shadow: 0 0 0 1px hsla(0, 0%, 100%, 0.2);
+    outline: none;
+  }
+}
+
+.searchButton,
+.clearButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: inherit;
+}
+
+.searchButton {
+  position: absolute;
+  left: 7px;
+  width: 16px;
+  height: 16px;
+}
+
+.clearButtonWrapper {
+  position: absolute;
+  right: 0;
+}
+
+.clearButton {
+}

@@ -1,17 +1,38 @@
-import Link from "next/link";
-import styles from './Sidebar.module.scss'
+'use client';
+import Link from 'next/link';
+import data from '@/data';
+import { usePathname } from 'next/navigation';
+import Tooltip from '../Tooltip';
+import styles from './Sidebar.module.scss';
 
-interface Props {
-  
-}
+interface Props {}
 
 export default function Sidebar(props: Props) {
+  const pathname = usePathname();
 
-  return <aside className={styles.sidebar}>
+  return (
+    <aside className={styles.sidebar}>
+      <nav className={`roundedContainer ${styles.nav}`}>
+        {data.mainNavigation.map(({ path, name, Icon, IconActive }) => {
+          const isActive = pathname === path
 
-    <nav className={`roundedContainer ${styles.nav}`}>
-      <Link href="/" className="textButton">Home</Link>
-      <Link href="/search" className="textButton">Search</Link>
-    </nav>
-  </aside>
+          return (
+            <Tooltip key={path} text={name} position="right" offset={-6} showOnHover>
+              <Link href={path} className={`textButton ${isActive ? 'textButtonActive' : ''}`}>
+                {isActive ? (
+                  <IconActive
+                    className={`${styles.navIcon} ${styles[`navIcon${name}`]}`}
+                  />
+                ) : (
+                  <Icon
+                    className={`${styles.navIcon} ${styles[`navIcon${name}`]}`}
+                  />
+                )}
+              </Link>
+            </Tooltip>
+          );
+        })}
+      </nav>
+    </aside>
+  );
 }

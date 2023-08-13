@@ -1,7 +1,16 @@
 .sidebar {
   width: 72px;
+  margin-right: 8px;
 }
 
 .nav {
-  padding: 20px;
+  padding: 3px 8px;
+
+  &Icon {
+    transform: scale(0.6);
+
+    &Search {
+      transform: scale(0.5);
+    }
+  }
 }
