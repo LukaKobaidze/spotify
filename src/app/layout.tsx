@@ -15,7 +15,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en">
       <body className={inter.className}>
         <Sidebar />
-        <main>{children}</main>
+        <div className="roundedContainer">{children}</div>
       </body>
     </html>
   );
