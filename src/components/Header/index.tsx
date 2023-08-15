@@ -1,6 +1,6 @@
 'use client';
 import { IconKeyboardArrowLeft, IconKeyboardArrowRight } from '@/icons';
-import { useRouter } from 'next/navigation'
+import { useRouter } from 'next/navigation';
 import Tooltip from '../Tooltip';
 import styles from './Header.module.scss';
 
@@ -10,8 +10,6 @@ export default function Header(props: Props) {
   const { className, children, ...restProps } = props;
 
   const router = useRouter();
-
-  console.log(window.history);
 
   return (
     <header className={`${styles.header} ${className || ''}`} {...restProps}>

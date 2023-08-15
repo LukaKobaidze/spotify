@@ -3,10 +3,11 @@
   display: flex;
   align-items: center;
   color: #fff;
-  height: 100%;
+  height: 48px;
 }
 
 .input {
+  font-family: inherit;
   color: inherit;
   width: 100%;
   height: 100%;
@@ -36,14 +37,13 @@
 
 .searchButton {
   position: absolute;
-  left: 7px;
-  width: 16px;
-  height: 16px;
+  left: -4px;
+  transform: scale(.35);
 }
 
 .clearButtonWrapper {
-  position: absolute;
-  right: 0;
+  position: absolute !important;
+  right: 7px;
 }
 
 .clearButton {

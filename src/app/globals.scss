@@ -12,10 +12,41 @@
   margin: 0;
 }
 
+img,
+svg {
+  display: block;
+}
+
 body {
   background-color: #000;
-  display: flex;
+  color: #b3b3b3;
   padding: 8px;
+  height: 100vh;
+  display: grid;
+  flex-direction: column;
+  overflow: hidden;
+  grid-template-areas:
+    'sidebar main'
+    'player player';
+
+  grid-template-columns: auto 1fr;
+  grid-template-rows: 1fr 72px;
+}
+
+.mainContentContainer {
+  padding-left: 24px;
+  padding-right: 24px;
+  flex-grow: 1;
+  grid-area: main;
+  overflow: auto;
+}
+
+.sidebar {
+  grid-area: sidebar;
+}
+
+.player {
+  grid-area: player;
 }
 
 .roundedContainer {
@@ -33,7 +64,12 @@ body {
   transition: color 200ms;
   cursor: pointer;
 
-  &:hover, &Active {
+  &:hover,
+  &Active {
     color: rgb(255, 255, 255);
   }
+}
+
+.layoutMainContent {
+  display: flex;
 }

@@ -1,4 +1,6 @@
 .sidebar {
+  display: flex;
+  flex-direction: column;
   width: 72px;
   margin-right: 8px;
 }
@@ -13,4 +15,9 @@
       transform: scale(0.5);
     }
   }
+}
+
+.library {
+  flex-grow: 1;
+  margin-top: 8px;
 }
