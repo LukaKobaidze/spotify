@@ -1,9 +1,22 @@
-export function msToTime(ms: number) {
-  let seconds = Math.floor((ms / 1000) % 60);
-  let minutes = Math.floor((ms / (1000 * 60)) % 60);
-  let hours = Math.floor((ms / (1000 * 60 * 60)) % 24);
+export function msToTime(milliseconds: number) {
+  //Get hours from milliseconds
+  var hours = milliseconds / (1000 * 60 * 60);
+  var absoluteHours = Math.floor(hours);
+  var h = absoluteHours > 9 ? absoluteHours : '0' + absoluteHours;
 
-  let time = !hours ? [minutes, seconds] : [hours, minutes, seconds];
+  //Get remainder from hours and convert to minutes
+  var minutes = (hours - absoluteHours) * 60;
+  var absoluteMinutes = Math.floor(minutes);
+  var m = absoluteMinutes > 9 ? absoluteMinutes : '0' + absoluteMinutes;
 
-  return time.map((n) => (n < 10 ? '0' + n : n)).join(':');
+  //Get remainder from minutes and convert to seconds
+  var seconds = (minutes - absoluteMinutes) * 60;
+  var absoluteSeconds = Math.floor(seconds);
+  var s = absoluteSeconds > 9 ? absoluteSeconds : '0' + absoluteSeconds;
+
+  if (h === '00') {
+    return m + ':' + s;
+  }
+
+  return h + ':' + m + ':' + s;
 }

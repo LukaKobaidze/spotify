@@ -17,6 +17,14 @@ svg {
   display: block;
 }
 
+button {
+  background: none;
+  border: none;
+  color: inherit;
+  font-family: inherit;
+  cursor: pointer;
+}
+
 body {
   background-color: #000;
   color: #b3b3b3;
@@ -30,7 +38,7 @@ body {
     'player player';
 
   grid-template-columns: auto 1fr;
-  grid-template-rows: 1fr 72px;
+  grid-template-rows: 1fr 80px;
 }
 
 .mainContentContainer {
@@ -39,6 +47,22 @@ body {
   flex-grow: 1;
   grid-area: main;
   overflow: auto;
+
+  &::-webkit-scrollbar {
+    width: 0.75em;
+
+    &-thumb {
+      background: rgba(255, 255, 255, 0.3);
+
+      &:hover {
+        background: rgba(255, 255, 255, 0.5);
+      }
+
+      &:active {
+        background: rgba(255, 255, 255, 0.7);
+      }
+    }
+  }
 }
 
 .sidebar {
@@ -55,10 +79,6 @@ body {
 }
 
 .textButton {
-  background: none;
-  border: none;
-  color: inherit;
-  font-family: inherit;
   text-decoration: none;
   color: rgb(192, 192, 192);
   transition: color 200ms;

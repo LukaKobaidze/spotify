@@ -10,3 +10,8 @@ export { default as IconKeyboardArrowLeft } from './keyboard_arrow_left.svg';
 export { default as IconKeyboardArrowRight } from './keyboard_arrow_right.svg';
 export { default as IconPlay } from './play.svg';
 export { default as IconPause } from './pause.svg';
+export { default as IconSkipNext } from './skip_next.svg';
+export { default as IconSkipPrevious } from './skip_previous.svg';
+export { default as IconVolumeHigh } from './volume-high.svg';
+export { default as IconVolumeLow } from './volume-low.svg';
+export { default as IconVolumeMute } from './volume-mute.svg';

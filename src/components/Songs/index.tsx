@@ -1,10 +1,11 @@
-import { useEffect, useContext } from 'react';
+import { useEffect, useContext, useState } from 'react';
 import Image from 'next/image';
 import { msToTime } from '@/helpers/time';
-import { IconDuration, IconHeart, IconPlay } from '@/icons';
+import { IconDuration, IconHeart, IconPause, IconPlay } from '@/icons';
 import Tooltip from '../Tooltip';
 import styles from './Songs.module.scss';
 import { PlayerContext } from '@/context/player.context';
+import TrackTitle from '../TrackTitle';
 
 interface Props {
   data: any[];
@@ -12,7 +13,7 @@ interface Props {
 
 export default function Songs(props: Props) {
   const { data } = props;
-  const { playTrack } = useContext(PlayerContext);
+  const { track, isPlaying, playTrack } = useContext(PlayerContext);
 
   useEffect(() => {
     console.log(data);
@@ -38,47 +39,48 @@ export default function Songs(props: Props) {
         </th>
       </tr>
 
-      {data?.map((track: any, i: number) => {
-        const image = track.album.images[track.album.images.length - 1];
+      {data?.map((mapTrack: any, i: number) => {
+        const image = mapTrack.album.images[2];
+        const songIsPlaying = mapTrack.id === track?.id && isPlaying;
 
         return (
-          <tr key={track.id} className={styles.songRow}>
+          <tr
+            key={mapTrack.id}
+            className={`${styles.songRow} ${songIsPlaying ? styles.isPlaying : ''}`}
+          >
             <td className={styles.index}>
-              <span className={styles.indexSpan}>{i + 1} </span>
-              <button className={styles.player} onClick={playTrack}>
-                <IconPlay />
+              <button
+                className={styles.player}
+                onClick={() => {
+                  playTrack(mapTrack);
+                }}
+              >
+                {songIsPlaying ? <IconPause /> : <IconPlay />}
               </button>
+              <span className={styles.indexSpan}>{i + 1} </span>
             </td>
             <td className={styles.tdTitle}>
-              <Image
-                alt=""
-                src={image.url}
-                width={image.height}
-                height={image.height}
-                className={styles.tdTitleImage}
+              <TrackTitle
+                trackName={mapTrack.name}
+                artistName={mapTrack.artists[0].name}
+                image={image.url}
+                imageSize={image.height}
               />
-              <div>
-                <div className={styles.tdTitleText}>
-                  <span className={styles.tdTitleTextTrack}>{track.name}</span>
-                  <span className={styles.tdTitleTextArtist}>
-                    {track.artists[0].name}
-                  </span>
-                </div>
-              </div>
             </td>
-            <td>{track.album.name}</td>
+            <td className={styles.tdAlbum}>{mapTrack.album.name}</td>
             <td className={styles.tdDuration}>
               <Tooltip
                 text="Save to Your Library"
                 position="top"
                 showOnHover
+                offset={0}
                 className={styles.buttonLikeWrapper}
               >
                 <button className={styles.buttonLike}>
                   <IconHeart />
                 </button>
               </Tooltip>
-              <div>{msToTime(track.duration_ms)}</div>
+              <div>{msToTime(mapTrack.duration_ms)}</div>
             </td>
           </tr>
         );

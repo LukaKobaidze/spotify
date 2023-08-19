@@ -52,7 +52,17 @@
     }
 
     & .player {
-      display: block;
+      opacity: 1;
+    }
+
+    & .indexSpan {
+      opacity: 0;
+    }
+  }
+
+  &.isPlaying {
+    & .player {
+      opacity: 1;
     }
 
     & .indexSpan {
@@ -61,18 +71,25 @@
   }
 
   & > td {
-    height: 49.5px;
+    height: 55.5px;
     padding: 0 16px;
   }
 }
 
 .player {
-  display: none;
-  background: none;
-  border: none;
-  cursor: pointer;
+  opacity: 0;
   color: #fff;
   transform: translateX(-4px);
+  position: relative;
+  z-index: 2;
+
+  &:focus-visible {
+    opacity: 1;
+
+    & + .indexSpan {
+      opacity: 0;
+    }
+  }
 }
 
 .thDurationWrapper {
@@ -80,46 +97,20 @@
   margin-left: 75px;
 }
 
-.tdTitle {
-  display: flex;
-  align-items: center;
-  transform: translateY(4px);
-
-  &Image {
-    width: 40px;
-    height: 40px;
-    margin-right: 16px;
-  }
-
-  &Text {
-    display: flex;
-    flex-direction: column;
-
-    &Track {
-      color: #fff;
-    }
-
-    &Artist {
-      font-size: 14px;
-      margin-top: 5px;
-    }
-  }
-}
-
 .tdDuration {
   display: flex;
   align-items: center;
 }
 
+.tdAlbum {
+  font-size: 13px;
+}
+
 .buttonLikeWrapper {
-  margin-right: 40px;
+  margin-right: 20px;
 }
 
 .buttonLike {
-  color: inherit;
-  background: none;
-  border: none;
-  cursor: pointer;
   transform: scale(0.6);
   padding: 10px;
 }

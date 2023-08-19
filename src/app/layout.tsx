@@ -4,6 +4,7 @@ import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import { SpotifyAccessProvider } from '@/context/spotifyAccess.context';
 import Player from '@/components/Player';
+import { PlayerContextProvider } from '@/context/player.context';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -15,13 +16,15 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <SpotifyAccessProvider>
-      <html lang="en">
-        <body className={inter.className}>
-          <Sidebar className="sidebar" />
-          <div className="roundedContainer mainContentContainer">{children}</div>
-          <Player className="player" />
-        </body>
-      </html>
+      <PlayerContextProvider>
+        <html lang="en">
+          <body className={inter.className}>
+            <Sidebar className="sidebar" />
+            <div className="roundedContainer mainContentContainer">{children}</div>
+            <Player className="player" />
+          </body>
+        </html>
+      </PlayerContextProvider>
     </SpotifyAccessProvider>
   );
 }

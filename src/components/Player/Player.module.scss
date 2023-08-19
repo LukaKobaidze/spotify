@@ -1,2 +1,95 @@
 .container {
+  display: flex;
+  align-items: center;
+  padding: 7px 8px 0 8px;
+}
+
+.trackImage {
+  width: 56px !important;
+  height: 56px !important;
+  border-radius: 5px;
+}
+
+.trackName {
+  font-size: 13px !important;
+}
+
+.trackArtist {
+  font-size: 11px !important;
+}
+
+.left,
+.right {
+  width: 75%;
+}
+
+.middle {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+
+  &Top {
+    display: flex;
+  }
+}
+
+.right {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+
+  & > *:not(:last-child) {
+    margin-right: 7px;
+  }
+}
+
+.buttonPlayWrapper {
+  margin: 0 20px;
+}
+
+.buttonSkip {
+  &Icon {
+    transform: scale(1.2);
+  }
+}
+
+.buttonPlay {
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  background-color: #fff;
+  color: #000;
+  cursor: pointer;
+}
+
+.playback {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  margin-top: 8px;
+  font-size: 12px;
+
+  &Range {
+    accent-color: #fff;
+    width: 100%;
+    margin: 0 10px;
+    height: 5px;
+
+    &:hover {
+      accent-color: rgb(29, 185, 84);
+    }
+  }
+}
+
+.volumeRange {
+  margin-top: 2px;
+  width: 93px;
+  accent-color: #fff;
+  height: 5px;
 }
