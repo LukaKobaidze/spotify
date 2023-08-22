@@ -9,6 +9,8 @@ import { fetchSearch } from '@/helpers/requests';
 import Songs from '@/components/Songs';
 import Link from 'next/link';
 import Image from 'next/image';
+import Playlist from '@/components/Playlist';
+import Card from '@/components/Card';
 
 let timeout: NodeJS.Timeout;
 export default function SearchPage() {
@@ -45,13 +47,12 @@ export default function SearchPage() {
     if (!search) {
       setSearchResult(undefined);
     } else {
-      fetchSearch(token, search).then((data) => setSearchResult(data));
+      fetchSearch(token, search, 6).then((data) => setSearchResult(data));
     }
   }, [search, token]);
 
-  const topResult = searchResult?.artists.items[0];
-
-  console.log(topResult);
+  const topResult = searchResult?.artists?.items[0];
+  console.log(searchResult);
   return (
     <>
       <Header>
@@ -64,30 +65,94 @@ export default function SearchPage() {
         />
       </Header>
       <main>
-        <div>
+        <div className={styles.top}>
           {topResult && (
-            <div>
-              <h2>Top result</h2>
-              <Link href={'artist/' + topResult.id}>
-                <Image
-                  src={topResult.images[1].url}
-                  width={topResult.images[1].height}
-                  height={topResult.images[1].height}
-                  alt=""
-                />
-                <span>{topResult.name}</span>
-                <span>Artist</span>
-              </Link>
+            <div className={styles.topResult}>
+              <h2 className={styles.topHeading}>Top result</h2>
+
+              <Playlist>
+                <Link
+                  href={'artist/' + topResult.id}
+                  className={styles.topResultAnchor}
+                >
+                  <Image
+                    src={topResult.images[1].url}
+                    width={topResult.images[1].height}
+                    height={topResult.images[1].height}
+                    alt=""
+                    className={styles.topResultAnchorImage}
+                  />
+                  <span className={styles.topResultAnchorName}>
+                    {topResult.name}
+                  </span>
+                  <span className={styles.topResultAnchorTag}>Artist</span>
+                </Link>
+              </Playlist>
             </div>
           )}
-          <div>
-            <h2>Songs</h2>
-            {searchResult?.tracks?.items &&
-              searchResult?.tracks?.items.length !== 0 && (
-                <Songs data={searchResult?.tracks?.items || []} />
-              )}
-          </div>
+
+          {searchResult?.tracks?.items && searchResult.tracks.items.length && (
+            <div className={styles.songs}>
+              <h2 className={styles.topHeading}>Songs</h2>
+              <Songs
+                data={searchResult?.tracks?.items?.slice(0, 4) || []}
+                hideHeaderLabels
+                hideIndexing
+              />
+            </div>
+          )}
         </div>
+        {searchResult?.albums?.items && searchResult.albums.items.length && (
+          <div className={styles.row}>
+            <h2 className={styles.rowHeading}>Albums</h2>
+            <div className={styles.rowItems}>
+              {searchResult.albums.items.map((album: any) => (
+                <Playlist key={album.id} playerOffset={[24, 97]}>
+                  <Link href={'/album/' + album.id}>
+                    <Card
+                      image={{
+                        src: album.images[1].url,
+                        width: album.images[1].width,
+                        height: album.images[1].height,
+                      }}
+                      title={album.name}
+                      subtitle={
+                        album.release_date.slice(
+                          0,
+                          album.release_date.indexOf('-')
+                        ) +
+                        ' • ' +
+                        album.artists[0].name
+                      }
+                    />
+                  </Link>
+                </Playlist>
+              ))}
+            </div>
+          </div>
+        )}
+        {searchResult?.playlists?.items && searchResult.playlists.items.length && (
+          <div className={styles.row}>
+            <h2 className={styles.rowHeading}>Playlists</h2>
+            <div className={styles.rowItems}>
+              {searchResult.playlists.items.map((playlist: any) => (
+                <Playlist key={playlist.id} playerOffset={[24, 81]}>
+                  <Link href={'/playlist/' + playlist.id}>
+                    <Card
+                      image={{
+                        src: playlist.images[0].url,
+                        width: playlist.images[0].height,
+                        height: playlist.images[0].height,
+                      }}
+                      title={playlist.name}
+                      subtitle={'By ' + playlist.owner.display_name}
+                    />
+                  </Link>
+                </Playlist>
+              ))}
+            </div>
+          </div>
+        )}
       </main>
     </>
   );

@@ -1,3 +1,76 @@
 .searchbarContainer {
   width: 364px;
 }
+
+.top {
+  margin-top: 24px;
+  display: flex;
+
+  &Heading {
+    font-size: 1.5rem;
+    color: #fff;
+    margin-bottom: 16px;
+  }
+}
+
+.topResult {
+  width: 416px;
+  flex-shrink: 0;
+  margin-right: 24px;
+}
+
+.songs {
+  flex-grow: 1;
+}
+
+.topResultAnchor {
+  display: flex;
+  align-items: start;
+  flex-direction: column;
+  padding: 20px;
+
+  &Image {
+    border-radius: 50%;
+    width: 92px;
+    height: 92px;
+    margin-bottom: 20px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+  }
+
+  &Name {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #fff;
+  }
+
+  &Tag {
+    margin-top: 15px;
+    border-radius: 100vw;
+    padding: 4px 12px;
+    font-weight: 700;
+    background-color: rgba(0, 0, 0, 0.2);
+    color: #fff;
+    font-size: 0.875rem;
+  }
+}
+
+.row {
+  margin-top: 40px;
+
+  &Heading {
+    color: #fff;
+    margin-bottom: 16px;
+  }
+
+  &Items {
+    display: flex;
+
+    & > div {
+      width: 100%;
+
+      &:not(:last-child) {
+        margin-right: 24px;
+      }
+    }
+  }
+}

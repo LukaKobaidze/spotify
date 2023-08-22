@@ -1,6 +1,12 @@
-export async function fetchSearch(accessToken: string, searchValue: string) {
+export async function fetchSearch(
+  accessToken: string,
+  searchValue: string,
+  limit?: number
+) {
   const res = await fetch(
-    `https://api.spotify.com/v1/search?q=${searchValue}&type=artist,track`,
+    `https://api.spotify.com/v1/search?q=${searchValue}&type=artist,track,album,playlist${
+      limit ? `&limit=${limit}` : ''
+    }`,
     {
       method: 'GET',
       headers: {

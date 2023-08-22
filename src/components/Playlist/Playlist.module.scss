@@ -1,0 +1,48 @@
+.container {
+  position: relative;
+  background-color: #181818;
+  border-radius: 6px;
+  transition: background-color 300ms;
+
+  &:hover {
+    background-color: #282828;
+
+    & > .button {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+}
+
+.button {
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+  box-shadow: 0 8px 8px rgba(0, 0, 0, 0.3);
+  background-color: #1ed760;
+  color: #000;
+  border-radius: 50%;
+  transform: translateY(8px);
+  opacity: 0;
+  transition: transform 300ms, opacity 300ms;
+
+  &:hover,
+  &:focus-visible {
+    background-color: #1fdf64;
+    transform: scale(1.04) !important;
+  }
+
+  &:focus-visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  &Icon {
+    transform: scale(1.3);
+  }
+}
