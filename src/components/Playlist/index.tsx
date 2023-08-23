@@ -1,5 +1,6 @@
 import { IconPlay } from '@/icons';
 import styles from './Playlist.module.scss';
+import PlayButton from '../PlayButton';
 
 interface Props {
   isActive?: boolean;
@@ -18,16 +19,14 @@ export default function Playlist(props: Props) {
       }`}
     >
       {children}
-      <button
+      <PlayButton
         className={styles.button}
         style={
           playerOffset
             ? { right: playerOffset[0], bottom: playerOffset[1] }
             : undefined
         }
-      >
-        <IconPlay className={styles.buttonIcon} />
-      </button>
+      />
     </div>
   );
 }

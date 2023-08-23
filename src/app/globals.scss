@@ -46,7 +46,17 @@ body {
   grid-template-rows: 1fr 80px;
 }
 
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  color: #fff;
+}
+
 .mainContentContainer {
+  position: relative;
   padding-bottom: 24px;
   padding-left: 24px;
   padding-right: 12px;

@@ -1,0 +1,11 @@
+.heading {
+  font-size: 24px;
+  margin-top: 25px;
+}
+
+.artistsGrid {
+  margin-top: 24px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(175px, 1fr));
+  gap: 24px;
+}

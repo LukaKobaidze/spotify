@@ -1,16 +1,16 @@
 'use client';
-import { useRouter, useSearchParams } from 'next/navigation';
-import { useContext, useEffect, useState } from 'react';
-import Header from '@/components/Header';
-import Searchbar from '@/components/Searchbar';
-import styles from './page.module.scss';
-import { SpotifyAccessContext } from '@/context/spotifyAccess.context';
-import { fetchSearch } from '@/helpers/requests';
-import Songs from '@/components/Songs';
 import Link from 'next/link';
 import Image from 'next/image';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { useContext, useEffect, useState } from 'react';
+import { fetchSearch } from '@/helpers/requests';
+import { SpotifyAccessContext } from '@/context/spotifyAccess.context';
+import Header from '@/components/Header';
+import Searchbar from '@/components/Searchbar';
+import Songs from '@/components/Songs';
 import Playlist from '@/components/Playlist';
 import Card from '@/components/Card';
+import styles from './page.module.scss';
 
 let timeout: NodeJS.Timeout;
 export default function SearchPage() {
@@ -52,7 +52,7 @@ export default function SearchPage() {
   }, [search, token]);
 
   const topResult = searchResult?.artists?.items[0];
-  console.log(searchResult);
+
   return (
     <>
       <Header>
@@ -131,12 +131,13 @@ export default function SearchPage() {
             </div>
           </div>
         )}
+
         {searchResult?.playlists?.items && searchResult.playlists.items.length && (
           <div className={styles.row}>
             <h2 className={styles.rowHeading}>Playlists</h2>
             <div className={styles.rowItems}>
               {searchResult.playlists.items.map((playlist: any) => (
-                <Playlist key={playlist.id} playerOffset={[24, 81]}>
+                <Playlist key={playlist.id} playerOffset={[24, 97]}>
                   <Link href={'/playlist/' + playlist.id}>
                     <Card
                       image={{
@@ -146,6 +147,30 @@ export default function SearchPage() {
                       }}
                       title={playlist.name}
                       subtitle={'By ' + playlist.owner.display_name}
+                    />
+                  </Link>
+                </Playlist>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {searchResult?.artists?.items && searchResult.artists.items.length && (
+          <div className={styles.row}>
+            <h2 className={styles.rowHeading}>Artists</h2>
+            <div className={styles.rowItems}>
+              {searchResult.artists.items.map((playlist: any) => (
+                <Playlist key={playlist.id} playerOffset={[24, 97]}>
+                  <Link href={'/artist/' + playlist.id}>
+                    <Card
+                      image={{
+                        src: playlist.images[0].url,
+                        width: playlist.images[0].height,
+                        height: playlist.images[0].height,
+                      }}
+                      title={playlist.name}
+                      subtitle="Artist"
+                      imageRounded
                     />
                   </Link>
                 </Playlist>

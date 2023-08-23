@@ -30,3 +30,48 @@ export async function fetchArtist(accessToken: string, id: string) {
 
   return res.json();
 }
+
+export async function fetchArtistTopTracks(accessToken: string, id: string) {
+  const res = await fetch(
+    `https://api.spotify.com/v1/artists/${id}/top-tracks?market=ES`,
+    {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + accessToken,
+      },
+    }
+  );
+
+  return res.json();
+}
+
+export async function fetchArtistAlbums(accessToken: string, id: string) {
+  const res = await fetch(
+    `https://api.spotify.com/v1/artists/${id}/albums?include_groups=album`,
+    {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + accessToken,
+      },
+    }
+  );
+
+  return res.json();
+}
+
+export async function fetchArtistRelatedArtists(accessToken: string, id: string) {
+  const res = await fetch(
+    `https://api.spotify.com/v1/artists/${id}/related-artists`,
+    {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + accessToken,
+      },
+    }
+  );
+
+  return res.json();
+}

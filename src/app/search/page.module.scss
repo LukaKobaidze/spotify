@@ -8,7 +8,6 @@
 
   &Heading {
     font-size: 1.5rem;
-    color: #fff;
     margin-bottom: 16px;
   }
 }
@@ -58,7 +57,6 @@
   margin-top: 40px;
 
   &Heading {
-    color: #fff;
     margin-bottom: 16px;
   }
 
@@ -66,7 +64,8 @@
     display: flex;
 
     & > div {
-      width: 100%;
+      width: 0;
+      flex: 1 1 0px;
 
       &:not(:last-child) {
         margin-right: 24px;
