@@ -5,8 +5,8 @@ import styles from './TrackTitle.module.scss';
 interface Props {
   trackName: string;
   artistName: string;
-  image: string;
-  imageSize: number;
+  image?: string;
+  imageSize?: number;
   classNameImage?: string;
   classNameTrack?: string;
   classNameArtist?: string;
@@ -25,13 +25,15 @@ export default function TrackTitle(props: Props) {
 
   return (
     <div className={styles.container}>
-      <Image
-        alt=""
-        src={image}
-        width={imageSize}
-        height={imageSize}
-        className={`${styles.image} ${classNameImage || ''}`}
-      />
+      {image && (
+        <Image
+          alt=""
+          src={image}
+          width={imageSize}
+          height={imageSize}
+          className={`${styles.image} ${classNameImage || ''}`}
+        />
+      )}
       <div className={styles.text}>
         <span className={`${styles.textTrack} ${classNameTrack || ''}`}>
           {trackName}

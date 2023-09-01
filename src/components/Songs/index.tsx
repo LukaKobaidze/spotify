@@ -9,16 +9,19 @@ import TrackTitle from '../TrackTitle';
 
 interface Props {
   data: any[];
+  album?: any;
   hideHeaderLabels?: boolean;
   hideIndexing?: boolean;
+  hideAlbum?: boolean;
 }
 
 export default function Songs(props: Props) {
-  const { data, hideHeaderLabels, hideIndexing } = props;
+  const { data, album, hideHeaderLabels, hideIndexing, hideAlbum } = props;
   const { track, isPlaying, playTrack } = useContext(PlayerContext);
 
   return (
     <table className={styles.tableContainer}>
+
       <tbody>
         <tr
           className={styles.header}
@@ -30,7 +33,7 @@ export default function Songs(props: Props) {
             </th>
           )}
           <th>Title</th>
-          <th>Album</th>
+          {!hideAlbum && <th>Album</th>}
           <th>
             <Tooltip
               text="Duration"
@@ -44,7 +47,7 @@ export default function Songs(props: Props) {
         </tr>
 
         {data?.map((mapTrack: any, i: number) => {
-          const image = mapTrack.album.images[2];
+          const image = !hideAlbum && mapTrack.album.images[2];
           const songIsPlaying = mapTrack.id === track?.id && isPlaying;
 
           return (
@@ -59,7 +62,7 @@ export default function Songs(props: Props) {
                   <button
                     className={styles.player}
                     onClick={() => {
-                      playTrack(mapTrack);
+                      playTrack({...mapTrack, album: album || mapTrack.album});
                     }}
                   >
                     {songIsPlaying ? <IconPause /> : <IconPlay />}
@@ -73,21 +76,30 @@ export default function Songs(props: Props) {
                     <button
                       className={styles.player}
                       onClick={() => {
-                        playTrack(mapTrack);
+                        playTrack({...mapTrack, album: album || mapTrack.album});
                       }}
                     >
                       {songIsPlaying ? <IconPause /> : <IconPlay />}
                     </button>
                   </div>
                 )}
-                <TrackTitle
-                  trackName={mapTrack.name}
-                  artistName={mapTrack.artists[0].name}
-                  image={image.url}
-                  imageSize={image.height}
-                />
+                {hideAlbum ? (
+                  <TrackTitle
+                    trackName={mapTrack.name}
+                    artistName={mapTrack.artists[0].name}
+                  />
+                ) : (
+                  <TrackTitle
+                    trackName={mapTrack.name}
+                    artistName={mapTrack.artists[0].name}
+                    image={image.url}
+                    imageSize={image.height}
+                  />
+                )}
               </td>
-              <td className={styles.tdAlbum}>{mapTrack.album.name}</td>
+              {!hideAlbum && (
+                <td className={styles.tdAlbum}>{mapTrack.album.name}</td>
+              )}
               <td className={styles.tdDuration}>
                 <Tooltip
                   text="Save to Your Library"

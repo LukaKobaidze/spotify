@@ -15,6 +15,7 @@ import Songs from '@/components/Songs';
 import Playlist from '@/components/Playlist';
 import Link from 'next/link';
 import Card from '@/components/Card';
+import { TrackType } from '@/types';
 
 interface Props {
   params: {
@@ -26,7 +27,7 @@ export default function ArtistPage({ params }: Props) {
   const { token } = useContext(SpotifyAccessContext);
 
   const [artistData, setArtistData] = useState<any>(null);
-  const [popularSongs, setPopularSongs] = useState<any>();
+  const [popularSongs, setPopularSongs] = useState<TrackType[]>();
   const [popularSongsSeeMore, setPopularSongsSeeMore] = useState(false);
   const [albums, setAlbums] = useState<any>();
   const [relatedArtists, setRelatedArtists] = useState<any>();
@@ -41,8 +42,6 @@ export default function ArtistPage({ params }: Props) {
       setRelatedArtists(resData.artists)
     );
   }, [token, params.id]);
-
-  console.log(relatedArtists);
 
   return (
     <>
