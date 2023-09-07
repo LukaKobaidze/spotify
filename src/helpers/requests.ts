@@ -61,7 +61,10 @@ export async function fetchArtistTopTracks(
   return res.json();
 }
 
-export async function fetchArtistAlbums(accessToken: string, id: string) {
+export async function fetchArtistAlbums(
+  accessToken: string,
+  id: string
+): Promise<DataType<AlbumType>> {
   const res = await fetch(
     `https://api.spotify.com/v1/artists/${id}/albums?include_groups=album`,
     {
@@ -76,7 +79,10 @@ export async function fetchArtistAlbums(accessToken: string, id: string) {
   return res.json();
 }
 
-export async function fetchArtistRelatedArtists(accessToken: string, id: string) {
+export async function fetchArtistRelatedArtists(
+  accessToken: string,
+  id: string
+): Promise<{ artists: ArtistType[] }> {
   const res = await fetch(
     `https://api.spotify.com/v1/artists/${id}/related-artists`,
     {
@@ -102,6 +108,14 @@ export async function fetchAlbum(
       Authorization: 'Bearer ' + accessToken,
     },
   });
+
+  return res.json();
+}
+
+export async function fetchLyrics(trackId: string) {
+  const res = await fetch(
+    `https://spotify-lyric-api.herokuapp.com/?url=https://open.spotify.com/track/${trackId}`
+  );
 
   return res.json();
 }

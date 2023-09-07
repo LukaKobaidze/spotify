@@ -1,10 +1,12 @@
 'use client';
+import { useLocalStorageState } from '@/hooks';
+import { TrackType } from '@/types';
 import { createContext, useState, useCallback } from 'react';
 
 interface Context {
-  track: any;
+  track: TrackType | null;
   isPlaying: boolean;
-  playTrack: (track?: any) => void;
+  playTrack: (track: TrackType) => void;
   togglePlaying: () => void;
   stopPlaying: () => void;
 }
@@ -20,13 +22,13 @@ const initial: Context = {
 export const PlayerContext = createContext(initial);
 
 export function PlayerContextProvider({ children }: { children: React.ReactNode }) {
-  const [track, setTrack] = useState(initial.track);
+  const [track, setTrack] = useLocalStorageState('player-track', initial.track);
   const [isPlaying, setIsPlaying] = useState(initial.isPlaying);
 
   const playTrack: Context['playTrack'] = useCallback((trackArg) => {
     setTrack(trackArg);
     setIsPlaying(true);
-  }, []);
+  }, [setTrack]);
 
   const togglePlaying: Context['togglePlaying'] = useCallback(() => {
     setIsPlaying((state) => !state);

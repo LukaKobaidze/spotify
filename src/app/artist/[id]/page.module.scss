@@ -1,4 +1,19 @@
+.header {
+  background-color: #181818 !important;
+}
+
+.bannerBackground {
+  background-color: #181818;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 335px;
+}
+
 .banner {
+  position: relative;
+  z-index: 2;
   color: #fff;
   display: flex;
   justify-content: space-between;
@@ -35,6 +50,16 @@
 .actions {
   margin-top: 24px;
   margin-bottom: 24px;
+}
+
+.popularSongsSeeMoreButton {
+  color: hsla(0, 0%, 100%, 0.7);
+  font-weight: 700;
+  padding: 16px;
+
+  &:hover {
+    color: #fff;
+  }
 }
 
 .row {

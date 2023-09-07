@@ -18,6 +18,11 @@
   font-size: 11px !important;
 }
 
+.left {
+  display: flex;
+  align-items: center;
+}
+
 .left,
 .right {
   width: 75%;
@@ -43,6 +48,10 @@
   & > *:not(:last-child) {
     margin-right: 7px;
   }
+}
+
+.likeButtonContainer {
+  margin-left: 8px;
 }
 
 .buttonPlayWrapper {
@@ -93,3 +102,4 @@
   accent-color: #fff;
   height: 5px;
 }
+

@@ -8,6 +8,7 @@ import styles from './page.module.scss';
 import Playlist from '@/components/Playlist';
 import Link from 'next/link';
 import Card from '@/components/Card';
+import { ArtistType } from '@/types';
 
 interface Props {
   params: {
@@ -18,7 +19,7 @@ interface Props {
 export default function ArtistRelatedPage({ params }: Props) {
   const { token } = useContext(SpotifyAccessContext);
 
-  const [relatedArtists, setRelatedArtists] = useState<any>();
+  const [relatedArtists, setRelatedArtists] = useState<ArtistType[]>();
 
   useEffect(() => {
     fetchArtistRelatedArtists(token, params.id).then((data) =>
@@ -33,7 +34,7 @@ export default function ArtistRelatedPage({ params }: Props) {
         <h1 className={styles.heading}>Fans also like</h1>
         {relatedArtists && (
           <div className={styles.artistsGrid}>
-            {relatedArtists.map((album: any) => (
+            {relatedArtists.map((album) => (
               <Playlist
                 key={album.id}
                 playerOffset={[24, 97]}

@@ -4,7 +4,8 @@ import { useRouter } from 'next/navigation';
 import Tooltip from '../Tooltip';
 import styles from './Header.module.scss';
 
-interface Props extends React.HTMLAttributes<HTMLDivElement> {}
+interface Props extends React.HTMLAttributes<HTMLDivElement> {
+}
 
 export default function Header(props: Props) {
   const { className, children, ...restProps } = props;
@@ -12,7 +13,7 @@ export default function Header(props: Props) {
   const router = useRouter();
 
   return (
-    <header className={`${styles.header} ${className || ''}`} {...restProps}>
+    <header className={`contentPadding ${styles.header} ${className || ''}`} {...restProps}>
       <div className={styles.history}>
         <Tooltip text="Go back" showOnHover>
           <button className={styles.historyButton} onClick={() => router.back()}>

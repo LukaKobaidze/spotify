@@ -15,7 +15,7 @@ import Songs from '@/components/Songs';
 import Playlist from '@/components/Playlist';
 import Link from 'next/link';
 import Card from '@/components/Card';
-import { TrackType } from '@/types';
+import { AlbumType, ArtistType, DataType, TrackType } from '@/types';
 
 interface Props {
   params: {
@@ -26,11 +26,11 @@ interface Props {
 export default function ArtistPage({ params }: Props) {
   const { token } = useContext(SpotifyAccessContext);
 
-  const [artistData, setArtistData] = useState<any>(null);
+  const [artistData, setArtistData] = useState<ArtistType | null>(null);
   const [popularSongs, setPopularSongs] = useState<TrackType[]>();
   const [popularSongsSeeMore, setPopularSongsSeeMore] = useState(false);
-  const [albums, setAlbums] = useState<any>();
-  const [relatedArtists, setRelatedArtists] = useState<any>();
+  const [albums, setAlbums] = useState<DataType<AlbumType>>();
+  const [relatedArtists, setRelatedArtists] = useState<ArtistType[]>();
 
   useEffect(() => {
     fetchArtist(token, params.id).then((resData) => setArtistData(resData));
@@ -43,10 +43,13 @@ export default function ArtistPage({ params }: Props) {
     );
   }, [token, params.id]);
 
+  console.log(relatedArtists);
+
   return (
     <>
-      <Header />
+      <Header className={styles.header} />
       <main>
+        <div className={styles.bannerBackground} />
         {artistData && (
           <div className={styles.banner}>
             <div>
@@ -74,13 +77,18 @@ export default function ArtistPage({ params }: Props) {
               <PlayButton className={styles.playButton} />
             </div>
 
-            <div className={styles.popularSongs}>
-              <h2>Popular</h2>
+            <div>
+              <div className={styles.rowHeader}>
+                <h2>Popular</h2>
+              </div>
               <Songs
                 data={popularSongsSeeMore ? popularSongs : popularSongs.slice(0, 5)}
                 hideHeaderLabels
               />
-              <button onClick={() => setPopularSongsSeeMore((state) => !state)}>
+              <button
+                className={styles.popularSongsSeeMoreButton}
+                onClick={() => setPopularSongsSeeMore((state) => !state)}
+              >
                 {popularSongsSeeMore ? 'Show less' : 'See more'}
               </button>
             </div>
@@ -96,7 +104,7 @@ export default function ArtistPage({ params }: Props) {
               </Link>
             </div>
             <div className={styles.rowItems}>
-              {albums.items.slice(0, 6).map((album: any) => (
+              {albums.items.slice(0, 6).map((album) => (
                 <Playlist
                   key={album.id}
                   playerOffset={[24, 97]}
@@ -135,20 +143,20 @@ export default function ArtistPage({ params }: Props) {
               </Link>
             </div>
             <div className={styles.rowItems}>
-              {relatedArtists.slice(0, 6).map((album: any) => (
+              {relatedArtists.slice(0, 6).map((artist) => (
                 <Playlist
-                  key={album.id}
+                  key={artist.id}
                   playerOffset={[24, 97]}
                   classNameWrapper={styles.rowItemsItem}
                 >
-                  <Link href={'/album/' + album.id}>
+                  <Link href={'/album/' + artist.id}>
                     <Card
                       image={{
-                        src: album.images[1].url,
-                        width: album.images[1].width,
-                        height: album.images[1].height,
+                        src: artist.images[1].url,
+                        width: artist.images[1].width,
+                        height: artist.images[1].height,
                       }}
-                      title={album.name}
+                      title={artist.name}
                       subtitle="Artist"
                       imageRounded
                     />

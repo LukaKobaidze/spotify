@@ -1,6 +1,4 @@
 .button {
-  width: 48px;
-  height: 48px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -9,6 +7,16 @@
   color: #000;
   border-radius: 50%;
   transition: transform 300ms, opacity 300ms;
+
+  &--normal {
+    width: 48px;
+    height: 48px;
+  }
+
+  &--large {
+    width: 56px;
+    height: 56px;
+  }
 
   &:hover,
   &:focus-visible {

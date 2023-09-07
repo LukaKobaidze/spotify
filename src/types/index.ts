@@ -1,3 +1,5 @@
+export type PartialBy<T, K extends keyof T> = Omit<T, K> & Partial<Pick<T, K>>
+
 export type DataType<T> = {
   href: string;
   items: T[];
@@ -28,7 +30,7 @@ export type ArtistType = {
 export type TrackType = {
   album: AlbumType;
   artists: ArtistType[];
-  duraton_ms: number;
+  duration_ms: number;
   explicit: boolean;
   external_ids?: {[key: string]: string}
   external_urls: { [key: string]: string };
@@ -47,7 +49,6 @@ export type TrackType = {
 export type AlbumType = {
   album_type: string;
   artists: Omit<ArtistType, 'followers' | 'genres' | 'images' | 'popularity'>[];
-  copyrights: { text: string; type: string }[];
   external_urls: { [key: string]: string };
   genres: string[];
   href: string;
@@ -60,10 +61,13 @@ export type AlbumType = {
   release_date_precision: string;
   total_tracks: number;
   tracks: DataType<Omit<TrackType, 'album'>>;
+  type: string;
+  copyrights?: { text: string; type: string }[];
   is_playable?: boolean;
   available_markets?: string[];
   external_ids?: { [key: string]: string };
   album_group?: string;
+  uri?: string;
 };
 
 export type PlaylistType = {

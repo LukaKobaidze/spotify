@@ -1,27 +1,33 @@
-import { useEffect, useContext, useState } from 'react';
+import { useContext } from 'react';
 import Image from 'next/image';
 import { msToTime } from '@/helpers/time';
-import { IconDuration, IconHeart, IconPause, IconPlay } from '@/icons';
+import { IconDuration, IconPause, IconPlay } from '@/icons';
 import Tooltip from '../Tooltip';
 import styles from './Songs.module.scss';
 import { PlayerContext } from '@/context/player.context';
 import TrackTitle from '../TrackTitle';
+import Link from 'next/link';
+import { AlbumType, PartialBy, TrackType } from '@/types';
+import { LibraryContext } from '@/context/library.context';
+import LikeButton from '../LikeButton';
 
-interface Props {
-  data: any[];
-  album?: any;
+type Props = {
+  data: PartialBy<TrackType, 'album'>[];
+  album?: AlbumType;
   hideHeaderLabels?: boolean;
   hideIndexing?: boolean;
   hideAlbum?: boolean;
-}
+};
 
 export default function Songs(props: Props) {
   const { data, album, hideHeaderLabels, hideIndexing, hideAlbum } = props;
   const { track, isPlaying, playTrack } = useContext(PlayerContext);
+  const { liked, onSaveToLiked } = useContext(LibraryContext);
+
+  console.log(data);
 
   return (
     <table className={styles.tableContainer}>
-
       <tbody>
         <tr
           className={styles.header}
@@ -46,9 +52,10 @@ export default function Songs(props: Props) {
           </th>
         </tr>
 
-        {data?.map((mapTrack: any, i: number) => {
-          const image = !hideAlbum && mapTrack.album.images[2];
+        {data?.map((mapTrack, i: number) => {
+          const image = mapTrack?.album?.images[mapTrack.album.images.length - 1];
           const songIsPlaying = mapTrack.id === track?.id && isPlaying;
+          const currentAlbum = album || mapTrack.album!;
 
           return (
             <tr
@@ -62,7 +69,10 @@ export default function Songs(props: Props) {
                   <button
                     className={styles.player}
                     onClick={() => {
-                      playTrack({...mapTrack, album: album || mapTrack.album});
+                      playTrack({
+                        ...mapTrack,
+                        album: currentAlbum,
+                      });
                     }}
                   >
                     {songIsPlaying ? <IconPause /> : <IconPlay />}
@@ -76,7 +86,7 @@ export default function Songs(props: Props) {
                     <button
                       className={styles.player}
                       onClick={() => {
-                        playTrack({...mapTrack, album: album || mapTrack.album});
+                        playTrack({ ...mapTrack, album: currentAlbum });
                       }}
                     >
                       {songIsPlaying ? <IconPause /> : <IconPlay />}
@@ -92,26 +102,27 @@ export default function Songs(props: Props) {
                   <TrackTitle
                     trackName={mapTrack.name}
                     artistName={mapTrack.artists[0].name}
-                    image={image.url}
-                    imageSize={image.height}
+                    image={image?.url}
+                    imageSize={image?.height}
                   />
                 )}
               </td>
               {!hideAlbum && (
-                <td className={styles.tdAlbum}>{mapTrack.album.name}</td>
+                <td className={styles.tdAlbum}>
+                  <Link
+                    className={styles.tdAlbumAnchor}
+                    href={'/album/' + currentAlbum.id}
+                  >
+                    {currentAlbum.name}
+                  </Link>
+                </td>
               )}
               <td className={styles.tdDuration}>
-                <Tooltip
-                  text="Save to Your Library"
-                  position="top"
-                  showOnHover
-                  offset={0}
-                  className={styles.buttonLikeWrapper}
-                >
-                  <button className={styles.buttonLike}>
-                    <IconHeart />
-                  </button>
-                </Tooltip>
+                <LikeButton
+                  active={liked.includes(mapTrack.id)}
+                  onClick={() => onSaveToLiked(mapTrack.id)}
+                  classNameContainer={styles.likeButtonContainer}
+                />
                 <div>{msToTime(mapTrack.duration_ms)}</div>
               </td>
             </tr>

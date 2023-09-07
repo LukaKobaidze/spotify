@@ -5,6 +5,7 @@ import { Inter } from 'next/font/google';
 import { SpotifyAccessProvider } from '@/context/spotifyAccess.context';
 import Player from '@/components/Player';
 import { PlayerContextProvider } from '@/context/player.context';
+import { LibraryContextProvider } from '@/context/library.context';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -17,13 +18,15 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <SpotifyAccessProvider>
       <PlayerContextProvider>
-        <html lang="en">
-          <body className={inter.className}>
-            <Sidebar className="sidebar" />
-            <div className="roundedContainer mainContentContainer">{children}</div>
-            <Player className="player" />
-          </body>
-        </html>
+        <LibraryContextProvider>
+          <html lang="en">
+            <body className={inter.className}>
+              <Sidebar className="sidebar" />
+              <div className="roundedContainer mainContentContainer">{children}</div>
+              <Player className="player" />
+            </body>
+          </html>
+        </LibraryContextProvider>
       </PlayerContextProvider>
     </SpotifyAccessProvider>
   );

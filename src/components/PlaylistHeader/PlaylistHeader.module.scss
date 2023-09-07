@@ -1,0 +1,39 @@
+.container {
+  display: flex;
+  align-items: flex-end;
+  color: #fff;
+}
+
+.imageMain {
+  margin-right: 24px;
+  width: 232px;
+  height: 232px;
+  box-shadow: 0 4px 60px rgba(0,0,0,.5);
+}
+
+.type {
+  font-size: 14px;
+}
+
+.title {
+  font-size: 72px;
+  margin-top: 6px;
+  margin-bottom: 9px;
+}
+
+.subtitle {
+  display: flex;
+  align-items: center;
+  font-size: 14px;
+
+  &Image {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    margin-right: 4px;
+  }
+
+  &Name {
+    font-weight: 600;
+  }
+}

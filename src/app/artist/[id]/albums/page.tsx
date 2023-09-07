@@ -7,6 +7,7 @@ import Header from '@/components/Header';
 import Playlist from '@/components/Playlist';
 import Link from 'next/link';
 import Card from '@/components/Card';
+import { AlbumType, DataType } from '@/types';
 
 interface Props {
   params: {
@@ -17,13 +18,12 @@ interface Props {
 export default function ArtistAlbumsPage({ params }: Props) {
   const { token } = useContext(SpotifyAccessContext);
 
-  const [albums, setAlbums] = useState<any>();
+  const [albums, setAlbums] = useState<DataType<AlbumType>>();
 
   useEffect(() => {
     fetchArtistAlbums(token, params.id).then((data) => setAlbums(data));
   }, [token, params.id]);
 
-  console.log(albums);
   return (
     <>
       <Header />
@@ -34,11 +34,8 @@ export default function ArtistAlbumsPage({ params }: Props) {
               <h1 className={styles.heading}>{albums.items[0].artists[0].name}</h1>
             </Link>
             <div className={styles.albumsGrid}>
-              {albums.items.map((album: any) => (
-                <Playlist
-                  key={album.id}
-                  playerOffset={[24, 97]}
-                >
+              {albums.items.map((album) => (
+                <Playlist key={album.id} playerOffset={[24, 97]}>
                   <Link href={'/album/' + album.id}>
                     <Card
                       image={{

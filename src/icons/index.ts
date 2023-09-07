@@ -1,5 +1,6 @@
 export { default as IconClear } from './clear.svg';
 export { default as IconDuration } from './duration.svg';
+export { default as IconFolderMusic } from './folder-music.svg';
 export { default as IconHeart } from './heart.svg';
 export { default as IconHeartFill } from './heart-fill.svg';
 export { default as IconHome } from './home.svg';
