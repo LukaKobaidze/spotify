@@ -1,18 +1,20 @@
+'use client';
 import { ArtistType } from '@/types';
-import styles from './PlaylistHeader.module.scss';
+import styles from './ItemHeader.module.scss';
 import Image from 'next/image';
 
 interface Props {
   image: { url: string; width: number; height: number };
-  type: 'Album' | 'Playlist';
+  type: 'Song' | 'Album' | 'Playlist';
   title: string;
   subtitle: React.ReactNode;
   artist: ArtistType;
   className?: string;
+  classNameImage?: string;
 }
 
-export default function PlaylistHeader(props: Props) {
-  const { image, type, title, subtitle, artist, className } = props;
+export default function ItemHeader(props: Props) {
+  const { image, type, title, subtitle, artist, className, classNameImage } = props;
 
   const artistImage = artist.images[artist.images.length - 1];
 
@@ -23,7 +25,7 @@ export default function PlaylistHeader(props: Props) {
         width={image.width}
         height={image.height}
         alt=""
-        className={styles.imageMain}
+        className={`${styles.imageMain} ${classNameImage || ''}`}
       />
       <div>
         <p className={styles.type}>{type}</p>

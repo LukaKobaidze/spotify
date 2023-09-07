@@ -96,12 +96,16 @@ export default function Songs(props: Props) {
                 {hideAlbum ? (
                   <TrackTitle
                     trackName={mapTrack.name}
+                    trackId={mapTrack.id}
                     artistName={mapTrack.artists[0].name}
+                    artistId={mapTrack.artists[0].id}
                   />
                 ) : (
                   <TrackTitle
                     trackName={mapTrack.name}
+                    trackId={mapTrack.id}
                     artistName={mapTrack.artists[0].name}
+                    artistId={mapTrack.artists[0].id}
                     image={image?.url}
                     imageSize={image?.height}
                   />

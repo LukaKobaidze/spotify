@@ -9,9 +9,10 @@ import PlayButton from '@/components/PlayButton';
 import Tooltip from '@/components/Tooltip';
 import { IconHeart } from '@/icons';
 import Songs from '@/components/Songs';
-import PlaylistHeader from '@/components/PlaylistHeader';
+import PlaylistHeader from '@/components/ItemHeader';
 import { AlbumType, ArtistType } from '@/types';
-import { msToTime } from '@/helpers/time';
+import { getAlbumReleaseYear, msToTime } from '@/helpers/time';
+import LikeButton from '@/components/LikeButton';
 
 interface Props {
   params: {
@@ -72,12 +73,7 @@ export default function AlbumPage({ params }: Props) {
                   position="top"
                   showOnHover
                 >
-                  <span>
-                    {albumData.release_date.slice(
-                      0,
-                      albumData.release_date.indexOf('-')
-                    )}
-                  </span>
+                  <span>{getAlbumReleaseYear(albumData.release_date)}</span>
                 </Tooltip>
                 &nbsp;•&nbsp;
                 <span>{albumData.tracks.items.length} songs,</span>
@@ -88,11 +84,7 @@ export default function AlbumPage({ params }: Props) {
         )}
         <div className={styles.actions}>
           <PlayButton variant="large" className={styles.playButton} />
-          <Tooltip text="Save to Your Library" position="top" showOnHover>
-            <button>
-              <IconHeart />
-            </button>
-          </Tooltip>
+          <LikeButton active={false} variant="large" />
         </div>
         {albumData?.tracks?.items.length && (
           <Songs data={albumData.tracks.items} album={albumData} hideAlbum />

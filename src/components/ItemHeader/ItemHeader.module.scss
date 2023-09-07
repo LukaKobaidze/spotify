@@ -2,13 +2,15 @@
   display: flex;
   align-items: flex-end;
   color: #fff;
+  height: 340px;
+  padding-bottom: 24px;
 }
 
 .imageMain {
   margin-right: 24px;
   width: 232px;
   height: 232px;
-  box-shadow: 0 4px 60px rgba(0,0,0,.5);
+  box-shadow: 0 4px 60px rgba(0, 0, 0, 0.5);
 }
 
 .type {

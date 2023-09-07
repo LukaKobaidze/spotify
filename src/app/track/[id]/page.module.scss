@@ -1,0 +1,63 @@
+.itemHeader {
+  height: 340px;
+  padding-bottom: 24px;
+
+  &Image {
+    width: 192px !important;
+    height: 192px !important;
+  }
+}
+
+.actions {
+  padding-top: 24px;
+  padding-bottom: 24px;
+  display: flex;
+
+  & > *:not(:last-child) {
+    margin-right: 25px;
+  }
+}
+
+.lyrics {
+  &Heading {
+    margin-bottom: 16px;
+  }
+
+  &Paragraph {
+    color: hsla(0, 0%, 100%, 0.7);
+    line-height: 1.7;
+  }
+}
+
+.albumWrapper {
+  margin-top: 40px;
+}
+
+.album {
+  display: flex;
+  align-items: center;
+  color: #fff;
+  border-radius: 8px;
+  overflow: hidden;
+  background-color: hsla(0, 0%, 100%, 0.1);
+
+  &:hover,
+  &:focus-visible {
+    background-color: hsla(0, 0%, 100%, 0.3);
+  }
+
+  &Image {
+    width: 80px;
+    height: 80px;
+    margin-right: 16px;
+  }
+
+  &Text {
+    font-size: 0.6875rem;
+    margin-bottom: 5px;
+  }
+
+  &Name {
+    font-size: 1rem;
+  }
+}

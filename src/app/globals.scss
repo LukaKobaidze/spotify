@@ -113,3 +113,10 @@ main {
 .layoutMainContent {
   display: flex;
 }
+
+.linkHoverUnderline {
+  &:hover {
+    text-decoration: underline;
+    color: #fff;
+  }
+}

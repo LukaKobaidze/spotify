@@ -1,4 +1,4 @@
-import { AlbumType, ArtistType, DataType, PlaylistType, TrackType } from '@/types';
+import { AlbumType, ArtistType, DataType, LyricsType, PlaylistType, TrackType } from '@/types';
 
 export type SearchDataType = {
   artists: DataType<ArtistType>;
@@ -112,9 +112,24 @@ export async function fetchAlbum(
   return res.json();
 }
 
-export async function fetchLyrics(trackId: string) {
+export async function fetchTrack(
+  accessToken: string,
+  id: string
+): Promise<TrackType> {
+  const res = await fetch(`https://api.spotify.com/v1/tracks/${id}?market=ES`, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: 'Bearer ' + accessToken,
+    },
+  });
+
+  return res.json();
+}
+
+export async function fetchLyrics(trackId: string): Promise<LyricsType> {
   const res = await fetch(
-    `https://spotify-lyric-api.herokuapp.com/?url=https://open.spotify.com/track/${trackId}`
+    `https://spotify-lyric-api.herokuapp.com/?url=https://open.spotify.com/track/${trackId}&format=lrc`
   );
 
   return res.json();

@@ -20,3 +20,7 @@ export function msToTime(milliseconds: number) {
 
   return h + ':' + m + ':' + s;
 }
+
+export function getAlbumReleaseYear(releaseDate: string) {
+  return releaseDate.slice(0, releaseDate.indexOf('-'));
+}

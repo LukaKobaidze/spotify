@@ -4,11 +4,18 @@ import styles from './LikeButton.module.scss';
 
 interface Props extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   active: boolean;
+  variant?: 'normal' | 'large';
   classNameContainer?: string;
 }
 
 export default function LikeButton(props: Props) {
-  const { active, classNameContainer, className, ...restProps } = props;
+  const {
+    active,
+    variant = 'normal',
+    classNameContainer,
+    className,
+    ...restProps
+  } = props;
 
   return (
     <Tooltip
@@ -18,7 +25,12 @@ export default function LikeButton(props: Props) {
       offset={0}
       className={classNameContainer}
     >
-      <button className={`${styles.buttonLike} ${className || ''}`} {...restProps}>
+      <button
+        className={`${styles.buttonLike} ${styles[`buttonLike--${variant}`]} ${
+          className || ''
+        }`}
+        {...restProps}
+      >
         {active ? <IconHeartFill className={styles.iconHeartFill} /> : <IconHeart />}
       </button>
     </Tooltip>
