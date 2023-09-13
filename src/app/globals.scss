@@ -103,6 +103,9 @@ main {
   color: rgb(192, 192, 192);
   transition: color 200ms;
   cursor: pointer;
+  display: flex;
+  align-items: center;
+  font-weight: 700;
 
   &:hover,
   &Active {

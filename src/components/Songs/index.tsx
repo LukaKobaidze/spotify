@@ -17,18 +17,18 @@ type Props = {
   hideHeaderLabels?: boolean;
   hideIndexing?: boolean;
   hideAlbum?: boolean;
+  disableBodyGap?: boolean;
 };
 
 export default function Songs(props: Props) {
-  const { data, album, hideHeaderLabels, hideIndexing, hideAlbum } = props;
+  const { data, album, hideHeaderLabels, hideIndexing, hideAlbum, disableBodyGap } =
+    props;
   const { track, isPlaying, playTrack } = useContext(PlayerContext);
   const { liked, onSaveToLiked } = useContext(LibraryContext);
 
-  console.log(data);
-
   return (
     <table className={styles.tableContainer}>
-      <tbody>
+      <thead>
         <tr
           className={styles.header}
           style={hideHeaderLabels ? { display: 'none' } : undefined}
@@ -51,7 +51,9 @@ export default function Songs(props: Props) {
             </Tooltip>
           </th>
         </tr>
+      </thead>
 
+      <tbody className={`${!disableBodyGap ? styles.tbodygap : ''}`}>
         {data?.map((mapTrack, i: number) => {
           const image = mapTrack?.album?.images[mapTrack.album.images.length - 1];
           const songIsPlaying = mapTrack.id === track?.id && isPlaying;

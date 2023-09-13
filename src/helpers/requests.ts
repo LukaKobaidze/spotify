@@ -1,4 +1,11 @@
-import { AlbumType, ArtistType, DataType, LyricsType, PlaylistType, TrackType } from '@/types';
+import {
+  AlbumType,
+  ArtistType,
+  DataType,
+  LyricsType,
+  PlaylistType,
+  TrackType,
+} from '@/types';
 
 export type SearchDataType = {
   artists: DataType<ArtistType>;
@@ -125,6 +132,32 @@ export async function fetchTrack(
   });
 
   return res.json();
+}
+
+export async function fetchSeveralTracks(
+  accessToken: string,
+  ids: string[],
+  abortController: AbortController
+): Promise<{ tracks: TrackType[] }[]> {
+  let fetchArr: Promise<{ tracks: TrackType[] }>[] = [];
+
+  for (let i = 0; i < ids.length; i += 50) {
+    fetchArr.push(
+      fetch(
+        `https://api.spotify.com/v1/tracks?ids=${ids.slice(i, i + 50).join(',')}`,
+        {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: 'Bearer ' + accessToken,
+          },
+          signal: abortController.signal,
+        }
+      ).then((res) => res.json())
+    );
+  }
+
+  return Promise.all(fetchArr);
 }
 
 export async function fetchLyrics(trackId: string): Promise<LyricsType> {

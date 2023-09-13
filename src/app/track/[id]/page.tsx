@@ -19,6 +19,7 @@ import { LibraryContext } from '@/context/library.context';
 import Link from 'next/link';
 import Image from 'next/image';
 import Songs from '@/components/Songs';
+import { PlayerContext } from '@/context/player.context';
 
 interface Props {
   params: {
@@ -29,6 +30,7 @@ interface Props {
 export default function TrackPage({ params }: Props) {
   const { token } = useContext(SpotifyAccessContext);
   const { liked, onSaveToLiked } = useContext(LibraryContext);
+  const { playTrack } = useContext(PlayerContext);
   const [trackData, setTrackData] = useState<TrackType>();
   const [artistData, setArtistData] = useState<ArtistType>();
   const [albumData, setAlbumData] = useState<AlbumType>();
@@ -48,8 +50,6 @@ export default function TrackPage({ params }: Props) {
       setLyrics(data);
     });
   }, [params.id]);
-
-  console.log(albumData);
 
   return (
     <>
@@ -90,7 +90,7 @@ export default function TrackPage({ params }: Props) {
               classNameImage={styles.itemHeaderImage}
             />
             <div className={styles.actions}>
-              <PlayButton variant="large" />
+              <PlayButton variant="large" onClick={() => playTrack(trackData)} />
               <LikeButton
                 active={liked.includes(trackData.id)}
                 variant="large"

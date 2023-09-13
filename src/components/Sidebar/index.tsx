@@ -1,4 +1,5 @@
 'use client';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import data from '@/data';
 import { usePathname } from 'next/navigation';
@@ -18,15 +19,63 @@ export default function Sidebar(props: Props) {
 
   const pathname = usePathname();
   const { liked } = useContext(LibraryContext);
+  const [isExpanded, setIsExpanded] = useState(false);
+  const [expandedSize, setExpandedSize] = useState(280);
+  const [isResizing, setIsResizing] = useState(false);
+
+  useEffect(() => {
+    const handleMouseMove = (e: MouseEvent) => {
+      if (e.pageX > 175) {
+        setIsExpanded(true);
+      } else {
+        setIsExpanded(false);
+      }
+
+      const sidebarSize = e.pageX - 7;
+
+      if (sidebarSize > 279) {
+        setExpandedSize(Math.min(sidebarSize, window.innerWidth - 416));
+      }
+    };
+
+    const handleMouseUp = () => {
+      setIsResizing(false);
+    };
+
+    if (isResizing) {
+      document.addEventListener('mousemove', handleMouseMove);
+      document.addEventListener('mouseup', handleMouseUp);
+    }
+
+    return () => {
+      document.removeEventListener('mouseup', handleMouseUp);
+      document.removeEventListener('mousemove', handleMouseMove);
+    };
+  }, [isResizing]);
 
   return (
-    <aside className={`${styles.sidebar} ${className || ''}`}>
+    <aside
+      className={`${styles.sidebar} ${isExpanded ? styles.expanded : ''} ${
+        className || ''
+      }`}
+      style={isExpanded ? { width: expandedSize } : undefined}
+    >
+      <button
+        className={`${styles.resize} ${isResizing ? styles.active : ''}`}
+        onMouseDown={() => setIsResizing(true)}
+      />
       <nav className={`roundedContainer ${styles.nav}`}>
         {data.mainNavigation.map(({ path, name, Icon, IconActive }) => {
           const isActive = pathname === path;
 
           return (
-            <Tooltip key={path} text={name} position="right" offset={-6} showOnHover>
+            <Tooltip
+              key={path}
+              text={name}
+              position="right"
+              offset={-6}
+              showOnHover={!isExpanded}
+            >
               <Link
                 href={path}
                 className={`textButton ${isActive ? 'textButtonActive' : ''}`}
@@ -40,6 +89,7 @@ export default function Sidebar(props: Props) {
                     className={`${styles.navIcon} ${styles[`navIcon${name}`]}`}
                   />
                 )}
+                <span className={styles.navLinkText}>{name}</span>
               </Link>
             </Tooltip>
           );
@@ -47,13 +97,17 @@ export default function Sidebar(props: Props) {
       </nav>
       <div className={`roundedContainer ${styles.library}`}>
         <Tooltip
-          text="Expand Your Library"
-          position="right"
+          text={isExpanded ? 'Collapse Your Library' : 'Expand Your Library'}
+          position={isExpanded ? 'top' : 'right'}
           className={styles.sidebarExpandButtonWrapper}
           showOnHover
         >
-          <button className={`textButton ${styles.sidebarExpandButton}`}>
+          <button
+            className={`textButton ${styles.sidebarExpandButton}`}
+            onClick={() => setIsExpanded((state) => !state)}
+          >
             <IconFolderMusic />
+            <span className={styles.sidebarExpandButtonText}>Your Library</span>
           </button>
         </Tooltip>
 
@@ -61,19 +115,32 @@ export default function Sidebar(props: Props) {
           text={
             <div className={styles.libraryItemTooltipText}>
               <div>Liked Songs</div>
-              <div className={styles.libraryItemTooltipTextSub}>Playlist • {liked.length} songs</div>
+              <div className={styles.libraryItemTooltipTextSub}>
+                Playlist • {liked.length} songs
+              </div>
             </div>
           }
           position="right"
-          showOnHover
+          showOnHover={!isExpanded}
+          className={styles.libraryItemAnchorWrapper}
         >
-          <Link href={'/playlist/liked'} className={styles.libraryItemAnchor}>
-            <Image
-              src="https://misc.scdn.co/liked-songs/liked-songs-640.png"
-              alt=""
-              fill
-              className={styles.libraryItemImage}
-            />
+          <Link href={'/liked'} className={styles.libraryItemAnchor}>
+            <div className={styles.libraryItemImageWrapper}>
+              <Image
+                src="https://misc.scdn.co/liked-songs/liked-songs-640.png"
+                alt=""
+                fill
+                className={styles.libraryItemImage}
+              />
+            </div>
+            <div
+              className={`${styles.libraryItemTooltipText} ${styles.libraryItemText}`}
+            >
+              <div className={styles.libraryItemTextName}>Liked Songs</div>
+              <div className={styles.libraryItemTooltipTextSub}>
+                Playlist • {liked.length} songs
+              </div>
+            </div>
           </Link>
         </Tooltip>
       </div>

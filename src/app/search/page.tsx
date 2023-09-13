@@ -52,7 +52,7 @@ export default function SearchPage() {
   }, [search, token]);
 
   const topResult = searchResult?.artists?.items[0];
-  console.log(searchResult);
+
   return (
     <>
       <Header>
@@ -98,6 +98,7 @@ export default function SearchPage() {
                 data={searchResult?.tracks?.items?.slice(0, 4) || []}
                 hideHeaderLabels
                 hideIndexing
+                disableBodyGap
               />
             </div>
           )}

@@ -2,7 +2,7 @@
   display: flex;
   align-items: flex-end;
   color: #fff;
-  height: 340px;
+  height: 276px;
   padding-bottom: 24px;
 }
 
@@ -11,6 +11,15 @@
   width: 232px;
   height: 232px;
   box-shadow: 0 4px 60px rgba(0, 0, 0, 0.5);
+}
+
+.artistAnchor {
+  display: flex;
+  align-items: center;
+
+  &:hover {
+    text-decoration: underline;
+  }
 }
 
 .type {
