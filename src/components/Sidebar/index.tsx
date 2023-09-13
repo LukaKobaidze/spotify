@@ -1,5 +1,5 @@
 'use client';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import data from '@/data';
 import { usePathname } from 'next/navigation';
@@ -9,6 +9,7 @@ import styles from './Sidebar.module.scss';
 import Image from 'next/image';
 import { useContext } from 'react';
 import { LibraryContext } from '@/context/library.context';
+import { LayoutContext } from '@/context/layout.context';
 
 interface Props {
   className?: string;
@@ -17,11 +18,14 @@ interface Props {
 export default function Sidebar(props: Props) {
   const { className } = props;
 
+  const { updateSidebarSize } = useContext(LayoutContext);
+
   const pathname = usePathname();
   const { liked } = useContext(LibraryContext);
   const [isExpanded, setIsExpanded] = useState(false);
   const [expandedSize, setExpandedSize] = useState(280);
   const [isResizing, setIsResizing] = useState(false);
+  const sidebarRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
@@ -53,12 +57,17 @@ export default function Sidebar(props: Props) {
     };
   }, [isResizing]);
 
+  useEffect(() => {
+    updateSidebarSize(sidebarRef.current?.clientWidth || 0);
+  }, [isExpanded, expandedSize, updateSidebarSize]);
+
   return (
     <aside
       className={`${styles.sidebar} ${isExpanded ? styles.expanded : ''} ${
         className || ''
       }`}
       style={isExpanded ? { width: expandedSize } : undefined}
+      ref={sidebarRef}
     >
       <button
         className={`${styles.resize} ${isResizing ? styles.active : ''}`}

@@ -1,7 +1,16 @@
+
 .container {
   display: flex;
   align-items: center;
   padding: 7px 8px 0 8px;
+}
+
+.trackTitle {
+  width: auto !important;
+
+  &Text {
+    width: auto !important;
+  }
 }
 
 .trackImage {

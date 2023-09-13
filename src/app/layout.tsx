@@ -6,6 +6,7 @@ import { SpotifyAccessProvider } from '@/context/spotifyAccess.context';
 import Player from '@/components/Player';
 import { PlayerContextProvider } from '@/context/player.context';
 import { LibraryContextProvider } from '@/context/library.context';
+import { LayoutContextProvider } from '@/context/layout.context';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -19,13 +20,17 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <SpotifyAccessProvider>
       <PlayerContextProvider>
         <LibraryContextProvider>
-          <html lang="en">
-            <body className={inter.className}>
-              <Sidebar className="sidebar" />
-              <div className="roundedContainer mainContentContainer">{children}</div>
-              <Player className="player" />
-            </body>
-          </html>
+          <LayoutContextProvider>
+            <html lang="en">
+              <body className={inter.className}>
+                <Sidebar className="sidebar" />
+                <div className="roundedContainer mainContentContainer">
+                  {children}
+                </div>
+                <Player className="player" />
+              </body>
+            </html>
+          </LayoutContextProvider>
         </LibraryContextProvider>
       </PlayerContextProvider>
     </SpotifyAccessProvider>

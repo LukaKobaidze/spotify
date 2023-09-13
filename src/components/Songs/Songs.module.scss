@@ -1,3 +1,5 @@
+
+
 .tbodygap::before {
   content: '@';
   display: block;
@@ -8,6 +10,7 @@
 .tableContainer {
   width: 100%;
   border-collapse: collapse;
+  min-width: 325px;
 }
 
 .header {
@@ -82,6 +85,10 @@
     height: 55.5px;
     padding: 0 16px;
   }
+}
+
+.tdTitle {
+  width: 100%;
 }
 
 .player {

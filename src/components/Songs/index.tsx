@@ -17,12 +17,20 @@ type Props = {
   hideHeaderLabels?: boolean;
   hideIndexing?: boolean;
   hideAlbum?: boolean;
+  hideAlbumColumn?: boolean;
   disableBodyGap?: boolean;
 };
 
 export default function Songs(props: Props) {
-  const { data, album, hideHeaderLabels, hideIndexing, hideAlbum, disableBodyGap } =
-    props;
+  const {
+    data,
+    album,
+    hideHeaderLabels,
+    hideIndexing,
+    hideAlbum,
+    hideAlbumColumn,
+    disableBodyGap,
+  } = props;
   const { track, isPlaying, playTrack } = useContext(PlayerContext);
   const { liked, onSaveToLiked } = useContext(LibraryContext);
 
@@ -39,7 +47,7 @@ export default function Songs(props: Props) {
             </th>
           )}
           <th>Title</th>
-          {!hideAlbum && <th>Album</th>}
+          {!hideAlbum && !hideAlbumColumn && <th>Album</th>}
           <th>
             <Tooltip
               text="Duration"
@@ -113,7 +121,7 @@ export default function Songs(props: Props) {
                   />
                 )}
               </td>
-              {!hideAlbum && (
+              {(!hideAlbum && !hideAlbumColumn) && (
                 <td className={styles.tdAlbum}>
                   <Link
                     className={styles.tdAlbumAnchor}

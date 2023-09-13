@@ -112,9 +112,13 @@ export default function Player(props: Props) {
           <>
             <TrackTitle
               trackName={track.name}
+              trackId={track.id}
               artistName={track.artists[0].name}
+              artistId={track.artists[0].id}
               image={track.album.images[1].url}
               imageSize={track.album.images[1].height}
+              className={styles.trackTitle}
+              classNameText={styles.trackTitleText}
               classNameImage={styles.trackImage}
               classNameTrack={styles.trackName}
               classNameArtist={styles.trackArtist}

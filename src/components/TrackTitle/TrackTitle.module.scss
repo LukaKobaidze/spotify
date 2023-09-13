@@ -1,23 +1,33 @@
 .container {
   display: flex;
   align-items: center;
+  width: 100%;
 }
 
 .image {
+  flex-shrink: 0;
   width: 40px;
   height: 40px;
   margin-right: 16px;
 }
 
 .text {
+  width: 45px;
+  flex-grow: 1;
   display: flex;
   flex-direction: column;
-
+  
   &Track {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
     color: #fff;
   }
-
+  
   &Artist {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
     font-size: 14px;
     margin-top: 5px;
   }

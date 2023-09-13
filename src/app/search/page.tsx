@@ -2,7 +2,7 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useEffect, useRef, useState } from 'react';
 import { SearchDataType, fetchSearch } from '@/helpers/requests';
 import { SpotifyAccessContext } from '@/context/spotifyAccess.context';
 import Header from '@/components/Header';
@@ -11,6 +11,7 @@ import Songs from '@/components/Songs';
 import Playlist from '@/components/Playlist';
 import Card from '@/components/Card';
 import styles from './page.module.scss';
+import { LayoutContext } from '@/context/layout.context';
 
 let timeout: NodeJS.Timeout;
 export default function SearchPage() {
@@ -18,8 +19,11 @@ export default function SearchPage() {
   const searchParams = useSearchParams();
 
   const { token } = useContext(SpotifyAccessContext);
+  const { sidebarSize } = useContext(LayoutContext);
   const [searchInput, setSearchInput] = useState(searchParams.get('value') || '');
   const [searchResult, setSearchResult] = useState<SearchDataType | null>(null);
+  const [mainViewWidth, setMainViewWidth] = useState(0);
+  const mainViewRef = useRef<HTMLElement>(null);
 
   const handleSearchbarSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -51,6 +55,20 @@ export default function SearchPage() {
     }
   }, [search, token]);
 
+  useEffect(() => {
+    const handleMainViewWidth = () => {
+      setMainViewWidth(mainViewRef.current?.clientWidth || 0);
+    };
+
+    handleMainViewWidth();
+    window.addEventListener('resize', handleMainViewWidth);
+
+    return () => {
+      window.removeEventListener('resize', handleMainViewWidth);
+    };
+  }, [sidebarSize]);
+
+  const itemRowLimit = Math.floor(mainViewWidth / 180);
   const topResult = searchResult?.artists?.items[0];
 
   return (
@@ -64,7 +82,7 @@ export default function SearchPage() {
           onClear={() => setSearchInput('')}
         />
       </Header>
-      <main>
+      <main ref={mainViewRef}>
         <div className={styles.top}>
           {topResult && (
             <div className={styles.topResult}>
@@ -99,15 +117,16 @@ export default function SearchPage() {
                 hideHeaderLabels
                 hideIndexing
                 disableBodyGap
+                hideAlbumColumn
               />
             </div>
           )}
         </div>
         {searchResult?.albums?.items && searchResult.albums.items.length && (
-          <div className={styles.row}>
+          <div className={`${styles.row} ${styles.albumsRow}`}>
             <h2 className={styles.rowHeading}>Albums</h2>
             <div className={styles.rowItems}>
-              {searchResult.albums.items.map((album) => (
+              {searchResult.albums.items.slice(0, itemRowLimit).map((album) => (
                 <Playlist key={album.id} playerOffset={[24, 97]}>
                   <Link href={'/album/' + album.id}>
                     <Card
@@ -137,21 +156,23 @@ export default function SearchPage() {
           <div className={styles.row}>
             <h2 className={styles.rowHeading}>Playlists</h2>
             <div className={styles.rowItems}>
-              {searchResult.playlists.items.map((playlist) => (
-                <Playlist key={playlist.id} playerOffset={[24, 97]}>
-                  <Link href={'/playlist/' + playlist.id}>
-                    <Card
-                      image={{
-                        src: playlist.images[0].url,
-                        width: playlist.images[0].height,
-                        height: playlist.images[0].height,
-                      }}
-                      title={playlist.name}
-                      subtitle={'By ' + playlist.owner.display_name}
-                    />
-                  </Link>
-                </Playlist>
-              ))}
+              {searchResult.playlists.items
+                .slice(0, itemRowLimit)
+                .map((playlist) => (
+                  <Playlist key={playlist.id} playerOffset={[24, 97]}>
+                    <Link href={'/playlist/' + playlist.id}>
+                      <Card
+                        image={{
+                          src: playlist.images[0].url,
+                          width: playlist.images[0].height,
+                          height: playlist.images[0].height,
+                        }}
+                        title={playlist.name}
+                        subtitle={'By ' + playlist.owner.display_name}
+                      />
+                    </Link>
+                  </Playlist>
+                ))}
             </div>
           </div>
         )}
@@ -160,7 +181,7 @@ export default function SearchPage() {
           <div className={styles.row}>
             <h2 className={styles.rowHeading}>Artists</h2>
             <div className={styles.rowItems}>
-              {searchResult.artists.items.map((artist) => (
+              {searchResult.artists.items.slice(0, itemRowLimit).map((artist) => (
                 <Playlist key={artist.id} playerOffset={[24, 97]}>
                   <Link href={'/artist/' + artist.id}>
                     <Card
