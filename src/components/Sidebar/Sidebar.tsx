@@ -3,7 +3,7 @@ import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import data from '@/data';
 import { usePathname } from 'next/navigation';
-import Tooltip from '../Tooltip';
+import Tooltip from '../Tooltip/Tooltip';
 import { IconFolderMusic } from '@/icons';
 import styles from './Sidebar.module.scss';
 import Image from 'next/image';

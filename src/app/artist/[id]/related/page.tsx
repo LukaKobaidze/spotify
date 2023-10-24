@@ -1,13 +1,13 @@
 'use client';
 
-import Header from '@/components/Header';
+import Header from '@/components/Header/Header';
 import { SpotifyAccessContext } from '@/context/spotifyAccess.context';
 import { fetchArtistRelatedArtists } from '@/helpers/requests';
 import { useContext, useEffect, useState } from 'react';
 import styles from './page.module.scss';
-import Playlist from '@/components/Playlist';
+import Playlist from '@/components/ItemPlayer/ItemPlayer';
 import Link from 'next/link';
-import Card from '@/components/Card';
+import Card from '@/components/Card/Card';
 import { ArtistType } from '@/types';
 
 interface Props {

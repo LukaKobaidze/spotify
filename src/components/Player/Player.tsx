@@ -10,12 +10,12 @@ import {
   IconVolumeLow,
   IconVolumeMute,
 } from '@/icons';
-import TrackTitle from '../TrackTitle';
+import TrackTitle from '../TrackTitle/TrackTitle';
 import styles from './Player.module.scss';
-import Tooltip from '../Tooltip';
+import Tooltip from '../Tooltip/Tooltip';
 import { msToTime } from '@/helpers/time';
 import { LibraryContext } from '@/context/library.context';
-import LikeButton from '../LikeButton';
+import LikeButton from '../LikeButton/LikeButton';
 
 const VOLUME_DEFAULT = 50;
 

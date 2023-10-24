@@ -2,14 +2,14 @@ import { useContext } from 'react';
 import Image from 'next/image';
 import { msToTime } from '@/helpers/time';
 import { IconDuration, IconPause, IconPlay } from '@/icons';
-import Tooltip from '../Tooltip';
+import Tooltip from '../Tooltip/Tooltip';
 import styles from './Songs.module.scss';
 import { PlayerContext } from '@/context/player.context';
-import TrackTitle from '../TrackTitle';
+import TrackTitle from '../TrackTitle/TrackTitle';
 import Link from 'next/link';
 import { AlbumType, PartialBy, TrackType } from '@/types';
 import { LibraryContext } from '@/context/library.context';
-import LikeButton from '../LikeButton';
+import LikeButton from '../LikeButton/LikeButton';
 
 type Props = {
   data: PartialBy<TrackType, 'album'>[];

@@ -8,13 +8,13 @@ import {
 } from '@/helpers/requests';
 import { SpotifyAccessContext } from '@/context/spotifyAccess.context';
 import styles from './page.module.scss';
-import Header from '@/components/Header';
+import Header from '@/components/Header/Header';
 import Image from 'next/image';
-import PlayButton from '@/components/PlayButton';
-import Songs from '@/components/Songs';
-import Playlist from '@/components/Playlist';
+import PlayButton from '@/components/PlayButton/PlayButton';
+import Songs from '@/components/Songs/Songs';
+import Playlist from '@/components/ItemPlayer/ItemPlayer';
 import Link from 'next/link';
-import Card from '@/components/Card';
+import Card from '@/components/Card/Card';
 import { AlbumType, ArtistType, DataType, TrackType } from '@/types';
 
 interface Props {

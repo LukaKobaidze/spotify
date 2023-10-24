@@ -1,8 +1,8 @@
 'use client';
-import Header from '@/components/Header';
-import ItemHeader from '@/components/ItemHeader';
-import PlayButton from '@/components/PlayButton';
-import Songs from '@/components/Songs';
+import Header from '@/components/Header/Header';
+import ItemHeader from '@/components/PlayerHeader/PlayerHeader';
+import PlayButton from '@/components/PlayButton/PlayButton';
+import Songs from '@/components/Songs/Songs';
 import { LibraryContext } from '@/context/library.context';
 import { SpotifyAccessContext } from '@/context/spotifyAccess.context';
 import { fetchSeveralTracks } from '@/helpers/requests';

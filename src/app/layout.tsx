@@ -1,12 +1,12 @@
-import Sidebar from '@/components/Sidebar';
-import './globals.scss';
+import Sidebar from '@/components/Sidebar/Sidebar';
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import { SpotifyAccessProvider } from '@/context/spotifyAccess.context';
-import Player from '@/components/Player';
+import Player from '@/components/Player/Player';
 import { PlayerContextProvider } from '@/context/player.context';
 import { LibraryContextProvider } from '@/context/library.context';
 import { LayoutContextProvider } from '@/context/layout.context';
+import './globals.scss';
 
 const inter = Inter({ subsets: ['latin'] });
 

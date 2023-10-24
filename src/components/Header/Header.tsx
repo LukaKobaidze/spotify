@@ -1,7 +1,7 @@
 'use client';
 import { IconKeyboardArrowLeft, IconKeyboardArrowRight } from '@/icons';
 import { useRouter } from 'next/navigation';
-import Tooltip from '../Tooltip';
+import Tooltip from '../Tooltip/Tooltip';
 import styles from './Header.module.scss';
 
 interface Props extends React.HTMLAttributes<HTMLDivElement> {

@@ -3,10 +3,10 @@ import { fetchArtistAlbums } from '@/helpers/requests';
 import styles from './page.module.scss';
 import { useContext, useEffect, useState } from 'react';
 import { SpotifyAccessContext } from '@/context/spotifyAccess.context';
-import Header from '@/components/Header';
-import Playlist from '@/components/Playlist';
+import Header from '@/components/Header/Header';
+import Playlist from '@/components/ItemPlayer/ItemPlayer';
 import Link from 'next/link';
-import Card from '@/components/Card';
+import Card from '@/components/Card/Card';
 import { AlbumType, DataType } from '@/types';
 
 interface Props {

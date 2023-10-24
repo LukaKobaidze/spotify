@@ -1,5 +1,5 @@
 import { IconHeart, IconHeartFill } from '@/icons';
-import Tooltip from '../Tooltip';
+import Tooltip from '../Tooltip/Tooltip';
 import styles from './LikeButton.module.scss';
 
 interface Props extends React.ButtonHTMLAttributes<HTMLButtonElement> {

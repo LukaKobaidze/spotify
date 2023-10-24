@@ -1,6 +1,6 @@
 'use client';
 import { ArtistType } from '@/types';
-import styles from './ItemHeader.module.scss';
+import styles from './PlayerHeader.module.scss';
 import Image from 'next/image';
 import Link from 'next/link';
 
@@ -14,7 +14,7 @@ interface Props {
   classNameImage?: string;
 }
 
-export default function ItemHeader(props: Props) {
+export default function PlayerHeader(props: Props) {
   const { image, type, title, subtitle, artist, className, classNameImage } = props;
 
   const artistImage = artist?.images[artist.images.length - 1];

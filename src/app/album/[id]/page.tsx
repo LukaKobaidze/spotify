@@ -1,18 +1,16 @@
 'use client';
-import Header from '@/components/Header';
+import Header from '@/components/Header/Header';
 import { SpotifyAccessContext } from '@/context/spotifyAccess.context';
 import { fetchAlbum, fetchArtist } from '@/helpers/requests';
 import { useContext, useEffect, useMemo, useState } from 'react';
 import styles from './page.module.scss';
-import Image from 'next/image';
-import PlayButton from '@/components/PlayButton';
-import Tooltip from '@/components/Tooltip';
-import { IconHeart } from '@/icons';
-import Songs from '@/components/Songs';
-import PlaylistHeader from '@/components/ItemHeader';
+import PlayButton from '@/components/PlayButton/PlayButton';
+import Tooltip from '@/components/Tooltip/Tooltip';
+import Songs from '@/components/Songs/Songs';
+import PlaylistHeader from '@/components/PlayerHeader/PlayerHeader';
 import { AlbumType, ArtistType } from '@/types';
 import { getAlbumReleaseYear, msToTime } from '@/helpers/time';
-import LikeButton from '@/components/LikeButton';
+import LikeButton from '@/components/LikeButton/LikeButton';
 
 interface Props {
   params: {

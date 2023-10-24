@@ -2,7 +2,7 @@
 import { Fragment, useContext, useEffect, useState } from 'react';
 import styles from './page.module.scss';
 import { SpotifyAccessContext } from '@/context/spotifyAccess.context';
-import Header from '@/components/Header';
+import Header from '@/components/Header/Header';
 import { AlbumType, ArtistType, LyricsType, TrackType } from '@/types';
 import {
   fetchAlbum,
@@ -10,15 +10,15 @@ import {
   fetchLyrics,
   fetchTrack,
 } from '@/helpers/requests';
-import ItemHeader from '@/components/ItemHeader';
+import ItemHeader from '@/components/PlayerHeader/PlayerHeader';
 import { getAlbumReleaseYear, msToTime } from '@/helpers/time';
-import Tooltip from '@/components/Tooltip';
-import PlayButton from '@/components/PlayButton';
-import LikeButton from '@/components/LikeButton';
+import Tooltip from '@/components/Tooltip/Tooltip';
+import PlayButton from '@/components/PlayButton/PlayButton';
+import LikeButton from '@/components/LikeButton/LikeButton';
 import { LibraryContext } from '@/context/library.context';
 import Link from 'next/link';
 import Image from 'next/image';
-import Songs from '@/components/Songs';
+import Songs from '@/components/Songs/Songs';
 import { PlayerContext } from '@/context/player.context';
 
 interface Props {

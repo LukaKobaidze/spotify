@@ -1,3 +1,7 @@
+.searchbarContainer {
+  width: 364px;
+}
+
 .formContainer {
   position: relative;
   display: flex;
@@ -34,7 +38,7 @@
 .searchButton {
   position: absolute;
   left: -4px;
-  transform: scale(.35);
+  transform: scale(0.35);
 }
 
 .clearButtonWrapper {

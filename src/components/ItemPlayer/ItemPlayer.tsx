@@ -1,6 +1,6 @@
 import { IconPlay } from '@/icons';
-import styles from './Playlist.module.scss';
-import PlayButton from '../PlayButton';
+import PlayButton from '../PlayButton/PlayButton';
+import styles from './ItemPlayer.module.scss';
 
 interface Props {
   isActive?: boolean;
@@ -9,7 +9,7 @@ interface Props {
   children?: React.ReactNode;
 }
 
-export default function Playlist(props: Props) {
+export default function ItemPlayer(props: Props) {
   const { isActive, playerOffset, classNameWrapper, children } = props;
 
   return (

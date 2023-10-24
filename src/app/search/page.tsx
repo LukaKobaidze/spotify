@@ -1,206 +1,38 @@
-'use client';
-import Link from 'next/link';
-import Image from 'next/image';
-import { useRouter, useSearchParams } from 'next/navigation';
-import { useContext, useEffect, useRef, useState } from 'react';
-import { SearchDataType, fetchSearch } from '@/helpers/requests';
-import { SpotifyAccessContext } from '@/context/spotifyAccess.context';
-import Header from '@/components/Header';
-import Searchbar from '@/components/Searchbar';
-import Songs from '@/components/Songs';
-import Playlist from '@/components/Playlist';
-import Card from '@/components/Card';
-import styles from './page.module.scss';
-import { LayoutContext } from '@/context/layout.context';
+import { cookies } from 'next/headers';
+import Header from '@/components/Header/Header';
+import Searchbar from './Searchbar';
+import SearchResult from './SearchResult';
 
-let timeout: NodeJS.Timeout;
-export default function SearchPage() {
-  const router = useRouter();
-  const searchParams = useSearchParams();
-
-  const { token } = useContext(SpotifyAccessContext);
-  const { sidebarSize } = useContext(LayoutContext);
-  const [searchInput, setSearchInput] = useState(searchParams.get('value') || '');
-  const [searchResult, setSearchResult] = useState<SearchDataType | null>(null);
-  const [mainViewWidth, setMainViewWidth] = useState(0);
-  const mainViewRef = useRef<HTMLElement>(null);
-
-  const handleSearchbarSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-
-    clearTimeout(timeout);
-    router.replace(`/search?value=${searchInput}`);
+interface Props {
+  searchParams?: {
+    value?: string;
   };
+}
 
-  useEffect(() => {
-    if (searchInput.trim().length === 0) {
-      router.replace('/search');
-    } else {
-      timeout = setTimeout(() => {
-        router.replace(`/search?value=${searchInput}`);
-      }, 200);
-    }
+export default async function SearchPage({ searchParams }: Props) {
+  const cookieStore = cookies();
+  const accessToken = cookieStore.get('access_token');
 
-    return () => {
-      clearTimeout(timeout);
-    };
-  }, [router, searchInput]);
-
-  const search = searchParams.get('value');
-  useEffect(() => {
-    if (!search) {
-      setSearchResult(null);
-    } else {
-      fetchSearch(token, search, 6).then((data) => setSearchResult(data));
-    }
-  }, [search, token]);
-
-  useEffect(() => {
-    const handleMainViewWidth = () => {
-      setMainViewWidth(mainViewRef.current?.clientWidth || 0);
-    };
-
-    handleMainViewWidth();
-    window.addEventListener('resize', handleMainViewWidth);
-
-    return () => {
-      window.removeEventListener('resize', handleMainViewWidth);
-    };
-  }, [sidebarSize]);
-
-  const itemRowLimit = Math.floor(mainViewWidth / 180);
-  const topResult = searchResult?.artists?.items[0];
+  const data =
+    !accessToken || !searchParams?.value
+      ? null
+      : await fetch(
+          `https://api.spotify.com/v1/search?q=${searchParams.value}&type=artist,track,album,playlist&limit=6`,
+          {
+            method: 'GET',
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: 'Bearer ' + accessToken.value,
+            },
+          }
+        ).then((data) => data.json());
 
   return (
     <>
       <Header>
-        <Searchbar
-          classNameContainer={styles.searchbarContainer}
-          value={searchInput}
-          onChange={(e) => setSearchInput(e.target.value)}
-          onFormSubmit={handleSearchbarSubmit}
-          onClear={() => setSearchInput('')}
-        />
+        <Searchbar initialValue={searchParams?.value || ''} />
       </Header>
-      <main ref={mainViewRef}>
-        <div className={styles.top}>
-          {topResult && (
-            <div className={styles.topResult}>
-              <h2 className={styles.topHeading}>Top result</h2>
-
-              <Playlist>
-                <Link
-                  href={'artist/' + topResult.id}
-                  className={styles.topResultAnchor}
-                >
-                  <Image
-                    src={topResult.images[1].url}
-                    width={topResult.images[1].height}
-                    height={topResult.images[1].height}
-                    alt=""
-                    className={styles.topResultAnchorImage}
-                  />
-                  <span className={styles.topResultAnchorName}>
-                    {topResult.name}
-                  </span>
-                  <span className={styles.topResultAnchorTag}>Artist</span>
-                </Link>
-              </Playlist>
-            </div>
-          )}
-
-          {searchResult?.tracks?.items && searchResult.tracks.items.length && (
-            <div className={styles.songs}>
-              <h2 className={styles.topHeading}>Songs</h2>
-              <Songs
-                data={searchResult?.tracks?.items?.slice(0, 4) || []}
-                hideHeaderLabels
-                hideIndexing
-                disableBodyGap
-                hideAlbumColumn
-              />
-            </div>
-          )}
-        </div>
-        {searchResult?.albums?.items && searchResult.albums.items.length && (
-          <div className={`${styles.row} ${styles.albumsRow}`}>
-            <h2 className={styles.rowHeading}>Albums</h2>
-            <div className={styles.rowItems}>
-              {searchResult.albums.items.slice(0, itemRowLimit).map((album) => (
-                <Playlist key={album.id} playerOffset={[24, 97]}>
-                  <Link href={'/album/' + album.id}>
-                    <Card
-                      image={{
-                        src: album.images[1].url,
-                        width: album.images[1].width,
-                        height: album.images[1].height,
-                      }}
-                      title={album.name}
-                      subtitle={
-                        album.release_date.slice(
-                          0,
-                          album.release_date.indexOf('-')
-                        ) +
-                        ' • ' +
-                        album.artists[0].name
-                      }
-                    />
-                  </Link>
-                </Playlist>
-              ))}
-            </div>
-          </div>
-        )}
-
-        {searchResult?.playlists?.items?.length && (
-          <div className={styles.row}>
-            <h2 className={styles.rowHeading}>Playlists</h2>
-            <div className={styles.rowItems}>
-              {searchResult.playlists.items
-                .slice(0, itemRowLimit)
-                .map((playlist) => (
-                  <Playlist key={playlist.id} playerOffset={[24, 97]}>
-                    <Link href={'/playlist/' + playlist.id}>
-                      <Card
-                        image={{
-                          src: playlist.images[0].url,
-                          width: playlist.images[0].height,
-                          height: playlist.images[0].height,
-                        }}
-                        title={playlist.name}
-                        subtitle={'By ' + playlist.owner.display_name}
-                      />
-                    </Link>
-                  </Playlist>
-                ))}
-            </div>
-          </div>
-        )}
-
-        {searchResult?.artists.items.length && (
-          <div className={styles.row}>
-            <h2 className={styles.rowHeading}>Artists</h2>
-            <div className={styles.rowItems}>
-              {searchResult.artists.items.slice(0, itemRowLimit).map((artist) => (
-                <Playlist key={artist.id} playerOffset={[24, 97]}>
-                  <Link href={'/artist/' + artist.id}>
-                    <Card
-                      image={{
-                        src: artist.images[0]?.url,
-                        width: artist.images[0]?.width,
-                        height: artist.images[0]?.height,
-                      }}
-                      title={artist.name}
-                      subtitle="Artist"
-                      imageRounded
-                    />
-                  </Link>
-                </Playlist>
-              ))}
-            </div>
-          </div>
-        )}
-      </main>
+      <main>{data && <SearchResult data={data} />}</main>
     </>
   );
 }
