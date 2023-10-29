@@ -1,0 +1,9 @@
+.actions {
+  padding-top: 24px;
+  padding-bottom: 24px;
+  display: flex;
+
+  & > *:not(:last-child) {
+    margin-right: 25px;
+  }
+}

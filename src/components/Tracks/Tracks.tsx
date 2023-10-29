@@ -1,27 +1,37 @@
+'use client';
 import { useContext } from 'react';
-import Image from 'next/image';
 import { msToTime } from '@/helpers/time';
-import { IconDuration, IconPause, IconPlay } from '@/icons';
+import {
+  IconAdd,
+  IconAlbum,
+  IconDuration,
+  IconPause,
+  IconPlay,
+  IconRemove,
+  IconUser,
+} from '@/icons';
 import Tooltip from '../Tooltip/Tooltip';
-import styles from './Songs.module.scss';
+import styles from './Tracks.module.scss';
 import { PlayerContext } from '@/context/player.context';
 import TrackTitle from '../TrackTitle/TrackTitle';
 import Link from 'next/link';
-import { AlbumType, PartialBy, TrackType } from '@/types';
+import { Optional } from '@/types';
 import { LibraryContext } from '@/context/library.context';
 import LikeButton from '../LikeButton/LikeButton';
+import { AlbumType, TrackType } from '@/services/spotify';
+import { MenuContext } from '@/context/menu.context';
 
 type Props = {
-  data: PartialBy<TrackType, 'album'>[];
+  data: Optional<TrackType, 'album'>[];
   album?: AlbumType;
   hideHeaderLabels?: boolean;
   hideIndexing?: boolean;
   hideAlbum?: boolean;
   hideAlbumColumn?: boolean;
-  disableBodyGap?: boolean;
+  bodyGap?: number;
 };
 
-export default function Songs(props: Props) {
+export default function Tracks(props: Props) {
   const {
     data,
     album,
@@ -29,11 +39,46 @@ export default function Songs(props: Props) {
     hideIndexing,
     hideAlbum,
     hideAlbumColumn,
-    disableBodyGap,
+    bodyGap = 16,
   } = props;
   const { track, isPlaying, playTrack } = useContext(PlayerContext);
   const { liked, onSaveToLiked } = useContext(LibraryContext);
+  const { renderMenu } = useContext(MenuContext);
 
+  const handleTrackRightClick = (
+    e: React.MouseEvent<HTMLElement>,
+    track: Optional<TrackType, 'album'>
+  ) => {
+    e.preventDefault();
+
+    const trackAlbum = track.album || album!;
+    renderMenu({
+      items: [
+        {
+          type: 'button',
+          name: liked.includes(track.id)
+            ? { Icon: IconRemove, text: 'Remove from your Liked Songs' }
+            : { Icon: IconAdd, text: 'Save to your Liked Songs' },
+          action: () => {
+            onSaveToLiked(track.id);
+          },
+        },
+        {
+          type: 'link',
+          href: `/album/${trackAlbum.id}`,
+          name: { text: 'Go to album', Icon: IconAlbum },
+        },
+        {
+          type: 'link',
+          href: `/artist/${track.artists[0].id}`,
+          name: { text: 'Go to artist', Icon: IconUser },
+        },
+      ],
+      windowPos: { x: e.pageX, y: e.pageY },
+    });
+  };
+
+  const tbodyStyle = { '--tbody-gap': bodyGap + 'px' } as React.CSSProperties;
   return (
     <table className={styles.tableContainer}>
       <thead>
@@ -61,18 +106,19 @@ export default function Songs(props: Props) {
         </tr>
       </thead>
 
-      <tbody className={`${!disableBodyGap ? styles.tbodygap : ''}`}>
+      <tbody className={styles.tbody} style={tbodyStyle}>
         {data?.map((mapTrack, i: number) => {
           const image = mapTrack?.album?.images[mapTrack.album.images.length - 1];
-          const songIsPlaying = mapTrack.id === track?.id && isPlaying;
+          const trackIsPlaying = mapTrack.id === track?.id && isPlaying;
           const currentAlbum = album || mapTrack.album!;
 
           return (
             <tr
               key={mapTrack.id}
               className={`${styles.songRow} ${
-                songIsPlaying ? styles.isPlaying : ''
+                trackIsPlaying ? styles.isPlaying : ''
               }`}
+              onContextMenu={(e) => handleTrackRightClick(e, mapTrack)}
             >
               {!hideIndexing && (
                 <td className={styles.index}>
@@ -85,7 +131,7 @@ export default function Songs(props: Props) {
                       });
                     }}
                   >
-                    {songIsPlaying ? <IconPause /> : <IconPlay />}
+                    {trackIsPlaying ? <IconPause /> : <IconPlay />}
                   </button>
                   <span className={styles.indexSpan}>{i + 1} </span>
                 </td>
@@ -99,7 +145,7 @@ export default function Songs(props: Props) {
                         playTrack({ ...mapTrack, album: currentAlbum });
                       }}
                     >
-                      {songIsPlaying ? <IconPause /> : <IconPlay />}
+                      {trackIsPlaying ? <IconPause /> : <IconPlay />}
                     </button>
                   </div>
                 )}
@@ -121,7 +167,7 @@ export default function Songs(props: Props) {
                   />
                 )}
               </td>
-              {(!hideAlbum && !hideAlbumColumn) && (
+              {!hideAlbum && !hideAlbumColumn && (
                 <td className={styles.tdAlbum}>
                   <Link
                     className={styles.tdAlbumAnchor}

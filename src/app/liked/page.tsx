@@ -2,33 +2,38 @@
 import Header from '@/components/Header/Header';
 import ItemHeader from '@/components/PlayerHeader/PlayerHeader';
 import PlayButton from '@/components/PlayButton/PlayButton';
-import Songs from '@/components/Songs/Songs';
+import Tracks from '@/components/Tracks';
 import { LibraryContext } from '@/context/library.context';
-import { SpotifyAccessContext } from '@/context/spotifyAccess.context';
-import { fetchSeveralTracks } from '@/helpers/requests';
-import { TrackType } from '@/types';
+import { TrackType, fetchSeveralTracks } from '@/services/spotify';
 import { useContext, useEffect, useState } from 'react';
 import styles from './page.module.scss';
 
 let abortController = new AbortController();
-export default function LikedPage() {
-  const { token } = useContext(SpotifyAccessContext);
-  const { liked } = useContext(LibraryContext);
 
-  const [songsData, setSongsData] = useState<TrackType[]>();
+export default function LikedPage() {
+  const { liked } = useContext(LibraryContext);
+  const [accessToken, setAccessToken] = useState<string | null>(null);
+  const [tracksData, setTracksData] = useState<TrackType[]>();
+
+  useEffect(() => {
+    fetch('/api/access-token')
+      .then((res) => res.json())
+      .then((data) => setAccessToken(data));
+  }, []);
 
   useEffect(() => {
     abortController.abort();
     abortController = new AbortController();
 
-    fetchSeveralTracks(token, liked, abortController).then((data) => {
-      console.log(data);
-      setSongsData(data.flatMap((d) => d.tracks));
-    });
-  }, [token, liked]);
+    if (accessToken) {
+      fetchSeveralTracks(accessToken, liked, abortController).then((data) => {
+        setTracksData(data.flatMap((d) => d.tracks));
+      });
+    }
+  }, [accessToken, liked]);
 
   useEffect(() => {
-    setSongsData((state) => {
+    setTracksData((state) => {
       if (!state || state.length < liked.length) return state;
 
       const copy = state.slice();
@@ -61,7 +66,7 @@ export default function LikedPage() {
         <div className={styles.playButtonWrapper}>
           <PlayButton variant="large" />
         </div>
-        {songsData && <Songs data={songsData} />}
+        {tracksData && <Tracks data={tracksData} />}
       </main>
     </>
   );

@@ -1,10 +1,10 @@
-
-
-.tbodygap::before {
-  content: '@';
-  display: block;
-  line-height: 16px;
-  text-indent: -99999px;
+.tbody {
+  &::before {
+    content: '@';
+    display: block;
+    line-height: var(--tbody-gap);
+    text-indent: -99999px;
+  }
 }
 
 .tableContainer {
@@ -88,7 +88,7 @@
 }
 
 .tdTitle {
-  width: 100%;
+  width: 45%;
 }
 
 .player {
@@ -143,6 +143,7 @@
 }
 
 .tdAlbum {
+  white-space: nowrap;
   font-size: 13px;
 
   &Anchor {

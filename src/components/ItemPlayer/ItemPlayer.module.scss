@@ -16,8 +16,6 @@
 
 .button {
   position: absolute;
-  bottom: 20px;
-  right: 20px;
   transform: translateY(8px);
   opacity: 0;
 
@@ -25,5 +23,14 @@
     opacity: 1;
     transform: translateY(0);
   }
-}
 
+  &--1 {
+    bottom: 97px;
+    right: 24px;
+  }
+
+  &--2 {
+    bottom: 20px;
+    right: 20px;
+  }
+}

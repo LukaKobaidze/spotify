@@ -16,14 +16,14 @@
   flex-grow: 1;
   display: flex;
   flex-direction: column;
-  
+
   &Track {
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
     color: #fff;
   }
-  
+
   &Artist {
     overflow: hidden;
     text-overflow: ellipsis;

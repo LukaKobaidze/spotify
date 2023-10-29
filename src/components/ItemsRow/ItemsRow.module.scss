@@ -1,0 +1,27 @@
+.header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 16px;
+
+  &Anchor {
+    font-weight: 700;
+    font-size: 0.875rem;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}
+
+.items {
+  display: flex;
+
+  & > * {
+    width: 0;
+    flex: 1 1 0px;
+
+    &:not(:last-child) {
+      margin-right: 24px;
+    }
+  }
+}

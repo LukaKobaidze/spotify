@@ -33,23 +33,10 @@
   &Image {
     border-radius: 6px;
     margin-right: 30px;
-    width: 275px;
-    height: 275px;
+    width: 255px;
+    height: 255px;
+    object-fit: cover;
   }
-}
-
-.playButton {
-  width: 56px;
-  height: 56px;
-
-  & > svg {
-    transform: scale(1.55);
-  }
-}
-
-.actions {
-  margin-top: 24px;
-  margin-bottom: 24px;
 }
 
 .popularSongsSeeMoreButton {
@@ -59,41 +46,5 @@
 
   &:hover {
     color: #fff;
-  }
-}
-
-.row {
-  &Header {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 24px;
-    margin-top: 40px;
-  }
-  &Heading {
-  }
-
-  &ShowAll {
-    font-weight: 700;
-    font-size: 0.875rem;
-
-    &:hover {
-      text-decoration: underline;
-    }
-  }
-
-  &Items {
-    display: flex;
-    // display: grid;
-    // grid-template-columns: repeat(auto-fit, minmax(175px, 1fr));
-    // gap: 24px;
-
-    &Item {
-      width: 0;
-      flex: 1 1 0px;
-
-      &:not(:last-child) {
-        margin-right: 24px;
-      }
-    }
   }
 }

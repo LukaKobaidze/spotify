@@ -1,4 +1,5 @@
 import { cookies } from 'next/headers';
+import { fetchSearch } from '@/services/spotify';
 import Header from '@/components/Header/Header';
 import Searchbar from './Searchbar';
 import SearchResult from './SearchResult';
@@ -11,21 +12,12 @@ interface Props {
 
 export default async function SearchPage({ searchParams }: Props) {
   const cookieStore = cookies();
-  const accessToken = cookieStore.get('access_token');
+  const accessToken = cookieStore.get('access_token')?.value;
 
   const data =
     !accessToken || !searchParams?.value
       ? null
-      : await fetch(
-          `https://api.spotify.com/v1/search?q=${searchParams.value}&type=artist,track,album,playlist&limit=6`,
-          {
-            method: 'GET',
-            headers: {
-              'Content-Type': 'application/json',
-              Authorization: 'Bearer ' + accessToken.value,
-            },
-          }
-        ).then((data) => data.json());
+      : await fetchSearch(accessToken, searchParams.value);
 
   return (
     <>

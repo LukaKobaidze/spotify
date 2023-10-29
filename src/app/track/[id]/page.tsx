@@ -1,25 +1,14 @@
-'use client';
-import { Fragment, useContext, useEffect, useState } from 'react';
-import styles from './page.module.scss';
-import { SpotifyAccessContext } from '@/context/spotifyAccess.context';
-import Header from '@/components/Header/Header';
-import { AlbumType, ArtistType, LyricsType, TrackType } from '@/types';
-import {
-  fetchAlbum,
-  fetchArtist,
-  fetchLyrics,
-  fetchTrack,
-} from '@/helpers/requests';
-import ItemHeader from '@/components/PlayerHeader/PlayerHeader';
+import { cookies } from 'next/headers';
+import { fetchAlbum, fetchArtist, fetchTrack } from '@/services/spotify';
+import { fetchLyrics } from '@/services/genius';
 import { getAlbumReleaseYear, msToTime } from '@/helpers/time';
-import Tooltip from '@/components/Tooltip/Tooltip';
-import PlayButton from '@/components/PlayButton/PlayButton';
-import LikeButton from '@/components/LikeButton/LikeButton';
-import { LibraryContext } from '@/context/library.context';
-import Link from 'next/link';
-import Image from 'next/image';
-import Songs from '@/components/Songs/Songs';
-import { PlayerContext } from '@/context/player.context';
+import Header from '@/components/Header';
+import PlayerHeader from '@/components/PlayerHeader';
+import Tracks from '@/components/Tracks';
+import Tooltip from '@/components/Tooltip';
+import Actions from './Actions';
+import styles from './page.module.scss';
+import TrackListHeader from '@/components/TrackListHeader';
 
 interface Props {
   params: {
@@ -27,29 +16,20 @@ interface Props {
   };
 }
 
-export default function TrackPage({ params }: Props) {
-  const { token } = useContext(SpotifyAccessContext);
-  const { liked, onSaveToLiked } = useContext(LibraryContext);
-  const { playTrack } = useContext(PlayerContext);
-  const [trackData, setTrackData] = useState<TrackType>();
-  const [artistData, setArtistData] = useState<ArtistType>();
-  const [albumData, setAlbumData] = useState<AlbumType>();
-  const [lyrics, setLyrics] = useState<LyricsType>();
+export default async function TrackPage({ params }: Props) {
+  const cookieStore = cookies();
+  const accessToken = cookieStore.get('access_token')?.value;
 
-  useEffect(() => {
-    fetchTrack(token, params.id).then((data) => {
-      setTrackData(data);
-
-      fetchArtist(token, data.artists[0].id).then((data) => setArtistData(data));
-      fetchAlbum(token, data.album.id).then((data) => setAlbumData(data));
-    });
-  }, [token, params.id]);
-
-  useEffect(() => {
-    fetchLyrics(params.id).then((data) => {
-      setLyrics(data);
-    });
-  }, [params.id]);
+  const trackData = accessToken ? await fetchTrack(accessToken, params.id) : null;
+  const artistData = trackData
+    ? await fetchArtist(accessToken!, trackData.artists[0].id)
+    : null;
+  const albumData = trackData
+    ? await fetchAlbum(accessToken!, trackData.album.id)
+    : null;
+  const lyrics = trackData
+    ? await fetchLyrics(trackData.name, trackData.artists[0].name)
+    : null;
 
   return (
     <>
@@ -57,7 +37,7 @@ export default function TrackPage({ params }: Props) {
       <main>
         {trackData && artistData && (
           <>
-            <ItemHeader
+            <PlayerHeader
               artist={artistData}
               image={trackData.album.images[1]}
               type="Song"
@@ -89,54 +69,32 @@ export default function TrackPage({ params }: Props) {
               className={styles.itemHeader}
               classNameImage={styles.itemHeaderImage}
             />
-            <div className={styles.actions}>
-              <PlayButton variant="large" onClick={() => playTrack(trackData)} />
-              <LikeButton
-                active={liked.includes(trackData.id)}
-                variant="large"
-                onClick={() => onSaveToLiked(trackData.id)}
-              />
-            </div>
+            <Actions trackData={trackData} />
           </>
         )}
 
-        {lyrics && (
-          <div className={styles.lyrics}>
-            <h2 className={styles.lyricsHeading}>Lyrics</h2>
-            <div>
-              {!lyrics.error ? (
-                lyrics.lines.map((line) =>
-                  !line.words ? (
-                    <Fragment key={line.timeTag} />
-                  ) : (
-                    <p key={line.timeTag} className={styles.lyricsParagraph}>
-                      {line.words}
-                    </p>
-                  )
-                )
-              ) : (
-                <p>Unavailable...</p>
-              )}
-            </div>
+        <div className={styles.lyrics}>
+          <h2>Lyrics</h2>
+          <div>
+            {lyrics ? (
+              lyrics.split('\n').map((line, i) => (
+                <>
+                  {line[0] === '[' && <br />}
+                  <p key={i} className={styles.lyricsParagraph}>
+                    {line}
+                  </p>
+                </>
+              ))
+            ) : (
+              <p>Unavailable...</p>
+            )}
           </div>
-        )}
+        </div>
 
         {albumData && (
           <div className={styles.albumWrapper}>
-            <Link href={`/album/${albumData.id}`} className={styles.album}>
-              <Image
-                src={albumData.images[1].url}
-                width={albumData.images[1].width}
-                height={albumData.images[1].height}
-                alt=""
-                className={styles.albumImage}
-              />
-              <div>
-                <p className={styles.albumText}>From the album</p>
-                <h3 className={styles.albumName}>{albumData.name}</h3>
-              </div>
-            </Link>
-            <Songs
+            <TrackListHeader data={albumData} />
+            <Tracks
               data={albumData.tracks.items}
               album={albumData}
               hideHeaderLabels

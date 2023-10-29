@@ -6,10 +6,11 @@ import { usePathname } from 'next/navigation';
 import Tooltip from '../Tooltip/Tooltip';
 import { IconFolderMusic } from '@/icons';
 import styles from './Sidebar.module.scss';
-import Image from 'next/image';
 import { useContext } from 'react';
 import { LibraryContext } from '@/context/library.context';
 import { LayoutContext } from '@/context/layout.context';
+import LibraryItem from './LibraryItem';
+import { TooltipAttribute } from '@/types';
 
 interface Props {
   className?: string;
@@ -21,7 +22,7 @@ export default function Sidebar(props: Props) {
   const { updateSidebarSize } = useContext(LayoutContext);
 
   const pathname = usePathname();
-  const { liked } = useContext(LibraryContext);
+  const { liked, libraryItems } = useContext(LibraryContext);
   const [isExpanded, setIsExpanded] = useState(false);
   const [expandedSize, setExpandedSize] = useState(280);
   const [isResizing, setIsResizing] = useState(false);
@@ -78,29 +79,25 @@ export default function Sidebar(props: Props) {
           const isActive = pathname === path;
 
           return (
-            <Tooltip
+            <Link
               key={path}
-              text={name}
-              position="right"
-              offset={-6}
-              showOnHover={!isExpanded}
+              href={path}
+              className={`textButton ${isActive ? 'textButtonActive' : ''}`}
+              tooltip={JSON.stringify({
+                position: 'right',
+                text: name,
+                offset: 6,
+              } as TooltipAttribute)}
             >
-              <Link
-                href={path}
-                className={`textButton ${isActive ? 'textButtonActive' : ''}`}
-              >
-                {isActive ? (
-                  <IconActive
-                    className={`${styles.navIcon} ${styles[`navIcon${name}`]}`}
-                  />
-                ) : (
-                  <Icon
-                    className={`${styles.navIcon} ${styles[`navIcon${name}`]}`}
-                  />
-                )}
-                <span className={styles.navLinkText}>{name}</span>
-              </Link>
-            </Tooltip>
+              {isActive ? (
+                <IconActive
+                  className={`${styles.navIcon} ${styles[`navIcon${name}`]}`}
+                />
+              ) : (
+                <Icon className={`${styles.navIcon} ${styles[`navIcon${name}`]}`} />
+              )}
+              <span className={styles.navLinkText}>{name}</span>
+            </Link>
           );
         })}
       </nav>
@@ -120,38 +117,23 @@ export default function Sidebar(props: Props) {
           </button>
         </Tooltip>
 
-        <Tooltip
-          text={
-            <div className={styles.libraryItemTooltipText}>
-              <div>Liked Songs</div>
-              <div className={styles.libraryItemTooltipTextSub}>
-                Playlist • {liked.length} songs
-              </div>
-            </div>
-          }
-          position="right"
-          showOnHover={!isExpanded}
-          className={styles.libraryItemAnchorWrapper}
-        >
-          <Link href={'/liked'} className={styles.libraryItemAnchor}>
-            <div className={styles.libraryItemImageWrapper}>
-              <Image
-                src="https://misc.scdn.co/liked-songs/liked-songs-640.png"
-                alt=""
-                fill
-                className={styles.libraryItemImage}
-              />
-            </div>
-            <div
-              className={`${styles.libraryItemTooltipText} ${styles.libraryItemText}`}
-            >
-              <div className={styles.libraryItemTextName}>Liked Songs</div>
-              <div className={styles.libraryItemTooltipTextSub}>
-                Playlist • {liked.length} songs
-              </div>
-            </div>
-          </Link>
-        </Tooltip>
+        <div className={styles.libraryItemsWrapper}>
+          <LibraryItem
+            data={{
+              id: '',
+              title: 'Liked Songs',
+              trackLength: liked.length,
+              type: 'playlist',
+              image: 'https://misc.scdn.co/liked-songs/liked-songs-640.png',
+            }}
+            isExpanded={isExpanded}
+            linkHref="/liked"
+          />
+
+          {libraryItems.map((item) => (
+            <LibraryItem key={item.id} data={item} isExpanded={isExpanded} />
+          ))}
+        </div>
       </div>
     </aside>
   );

@@ -1,15 +1,12 @@
-
 .top {
   margin-top: 24px;
   display: flex;
   flex-wrap: wrap;
 
-
   &Heading {
     font-size: 1.5rem;
     margin-bottom: 16px;
   }
-
 }
 
 .topResult {
@@ -28,7 +25,7 @@
   align-items: start;
   flex-direction: column;
   padding: 20px;
-  
+
   &Image {
     border-radius: 50%;
     width: 92px;
@@ -36,13 +33,13 @@
     margin-bottom: 20px;
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
   }
-  
+
   &Name {
     font-size: 2rem;
     font-weight: 700;
     color: #fff;
   }
-  
+
   &Tag {
     margin-top: 15px;
     border-radius: 100vw;
@@ -56,24 +53,6 @@
 
 .row {
   margin-top: 40px;
-
-
-  &Heading {
-    margin-bottom: 16px;
-  }
-  
-  &Items {
-    display: flex;
-    
-    & > div {
-      width: 0;
-      flex: 1 1 0px;
-      
-      &:not(:last-child) {
-        margin-right: 24px;
-      }
-    }
-  }
 }
 
 .albumsRow {

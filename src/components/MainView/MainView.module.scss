@@ -1,0 +1,7 @@
+.mainView {
+  position: relative;
+  padding-bottom: var(--main-content-padding);
+  flex-grow: 1;
+  grid-area: main;
+  overflow: auto;
+}

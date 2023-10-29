@@ -39,7 +39,10 @@
 
 .subtitle {
   font-size: 14px;
-  margin-top: 10px;
+  margin-top: 7px;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
 }
 
 .userIconWrapper {

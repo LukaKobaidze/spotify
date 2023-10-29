@@ -1,0 +1,14 @@
+.actions {
+  margin-top: 24px;
+  margin-bottom: 24px;
+}
+
+
+.playButton {
+  width: 56px;
+  height: 56px;
+
+  & > svg {
+    transform: scale(1.55);
+  }
+}

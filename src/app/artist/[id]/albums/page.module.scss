@@ -8,10 +8,3 @@
 .heading {
   font-size: 24px;
 }
-
-.albumsGrid {
-  margin-top: 24px;
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(175px, 1fr));
-  gap: 24px;
-}

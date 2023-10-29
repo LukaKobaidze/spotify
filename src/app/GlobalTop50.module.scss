@@ -1,0 +1,9 @@
+.seeMore {
+  display: inline-block;
+  margin-top: 10px;
+  font-weight: 500;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}

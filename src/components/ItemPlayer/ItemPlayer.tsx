@@ -3,14 +3,23 @@ import PlayButton from '../PlayButton/PlayButton';
 import styles from './ItemPlayer.module.scss';
 
 interface Props {
+  variant?: '1' | '2';
+  customPos?: { bottom?: number; right?: number };
+  playerButtonClassName?: string;
   isActive?: boolean;
-  playerOffset?: [number, number];
   classNameWrapper?: string;
   children?: React.ReactNode;
 }
 
 export default function ItemPlayer(props: Props) {
-  const { isActive, playerOffset, classNameWrapper, children } = props;
+  const {
+    variant = '1',
+    customPos,
+    playerButtonClassName,
+    isActive,
+    classNameWrapper,
+    children,
+  } = props;
 
   return (
     <div
@@ -20,10 +29,15 @@ export default function ItemPlayer(props: Props) {
     >
       {children}
       <PlayButton
-        className={styles.button}
+        className={`${styles.button} ${styles[`button--${variant}`]} ${
+          playerButtonClassName || ''
+        }`}
         style={
-          playerOffset
-            ? { right: playerOffset[0], bottom: playerOffset[1] }
+          customPos
+            ? {
+                bottom: customPos.bottom,
+                right: customPos.right,
+              }
             : undefined
         }
       />

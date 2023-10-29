@@ -1,11 +1,11 @@
 'use client';
-import { ArtistType } from '@/types';
+import { ArtistType } from '@/services/spotify';
 import styles from './PlayerHeader.module.scss';
 import Image from 'next/image';
 import Link from 'next/link';
 
 interface Props {
-  image: { url: string; width: number; height: number };
+  image: { url: string; width: number | null; height: number | null };
   type: 'Song' | 'Album' | 'Playlist';
   title: string;
   subtitle: React.ReactNode;
@@ -21,13 +21,16 @@ export default function PlayerHeader(props: Props) {
 
   return (
     <div className={`${styles.container} ${className || ''}`}>
-      <Image
-        src={image.url}
-        width={image.width}
-        height={image.height}
-        alt=""
-        className={`${styles.imageMain} ${classNameImage || ''}`}
-      />
+      <div className={styles.imageMainWrapper}>
+        <Image
+          src={image.url}
+          width={image.width || undefined}
+          height={image.height || undefined}
+          alt=""
+          fill={!image.width}
+          className={`${styles.imageMain} ${classNameImage || ''}`}
+        />
+      </div>
       <div>
         <p className={styles.type}>{type}</p>
         <h1 className={styles.title}>{title}</h1>

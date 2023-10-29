@@ -21,6 +21,20 @@ export function msToTime(milliseconds: number) {
   return h + ':' + m + ':' + s;
 }
 
+export function msToTimeFormatted(milliseconds: number) {
+  const time = msToTime(milliseconds).split(':');
+
+  if (time.length === 3) {
+    const [hr, min, sec] = time;
+
+    return `${hr} hour ${min} min ${sec} sec`;
+  } else {
+    const [min, sec] = time;
+
+    return `${min} min ${sec} sec`;
+  }
+}
+
 export function getAlbumReleaseYear(releaseDate: string) {
   return releaseDate.slice(0, releaseDate.indexOf('-'));
 }

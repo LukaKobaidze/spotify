@@ -1,14 +1,11 @@
-'use client';
-
-import Header from '@/components/Header/Header';
-import { SpotifyAccessContext } from '@/context/spotifyAccess.context';
-import { fetchArtistRelatedArtists } from '@/helpers/requests';
-import { useContext, useEffect, useState } from 'react';
-import styles from './page.module.scss';
-import Playlist from '@/components/ItemPlayer/ItemPlayer';
+import { cookies } from 'next/headers';
 import Link from 'next/link';
-import Card from '@/components/Card/Card';
-import { ArtistType } from '@/types';
+import { fetchArtistRelatedArtists } from '@/services/spotify';
+import Header from '@/components/Header';
+import ItemsGrid from '@/components/ItemsGrid';
+import ItemPlayer from '@/components/ItemPlayer';
+import Card from '@/components/Card';
+import styles from './page.module.scss';
 
 interface Props {
   params: {
@@ -16,16 +13,13 @@ interface Props {
   };
 }
 
-export default function ArtistRelatedPage({ params }: Props) {
-  const { token } = useContext(SpotifyAccessContext);
+export default async function ArtistRelatedPage({ params }: Props) {
+  const cookieStore = cookies();
+  const accessToken = cookieStore.get('access_token')?.value;
 
-  const [relatedArtists, setRelatedArtists] = useState<ArtistType[]>();
-
-  useEffect(() => {
-    fetchArtistRelatedArtists(token, params.id).then((data) =>
-      setRelatedArtists(data.artists)
-    );
-  }, [token, params.id]);
+  const relatedArtists = accessToken
+    ? (await fetchArtistRelatedArtists(accessToken, params.id)).artists
+    : null;
 
   return (
     <>
@@ -33,27 +27,15 @@ export default function ArtistRelatedPage({ params }: Props) {
       <main>
         <h1 className={styles.heading}>Fans also like</h1>
         {relatedArtists && (
-          <div className={styles.artistsGrid}>
+          <ItemsGrid>
             {relatedArtists.map((album) => (
-              <Playlist
-                key={album.id}
-                playerOffset={[24, 97]}
-              >
-                <Link href={'/album/' + album.id}>
-                  <Card
-                    image={{
-                      src: album.images[1].url,
-                      width: album.images[1].width,
-                      height: album.images[1].height,
-                    }}
-                    title={album.name}
-                    subtitle="Artist"
-                    imageRounded
-                  />
+              <ItemPlayer key={album.id}>
+                <Link href={'/artist/' + album.id}>
+                  <Card data={album} subtitle="Artist" imageRounded />
                 </Link>
-              </Playlist>
+              </ItemPlayer>
             ))}
-          </div>
+          </ItemsGrid>
         )}
       </main>
     </>

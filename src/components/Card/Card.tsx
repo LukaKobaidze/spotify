@@ -1,37 +1,80 @@
+'use client';
 import Image from 'next/image';
 import styles from './Card.module.scss';
-import { IconUser } from '@/icons';
+import { IconAdd, IconRemove, IconUser } from '@/icons';
+import { AlbumType, ArtistType, PlaylistType } from '@/services/spotify';
+import { useContext } from 'react';
+import { MenuContext } from '@/context/menu.context';
+import { LibraryContext } from '@/context/library.context';
 
 interface Props {
-  image: { src: string; width: number; height: number };
-  title: string;
+  data: AlbumType | PlaylistType | ArtistType;
   subtitle: string;
+  subtitleMaxLines?: number;
   imageRounded?: boolean;
 }
 
 export default function Card(props: Props) {
-  const { image, title, subtitle, imageRounded } = props;
+  const { data, subtitle, subtitleMaxLines, imageRounded } = props;
+
+  const { renderMenu } = useContext(MenuContext);
+  const { onSaveToLibrary, onRemoveFromYourLibrary, libraryHas } =
+    useContext(LibraryContext);
+
+  const image = data.images[1] || data.images[0];
+
+  const handleCardRightClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    e.preventDefault();
+
+    const isAdded = libraryHas(data);
+
+    renderMenu({
+      windowPos: { x: e.pageX, y: e.pageY },
+      items: [
+        {
+          type: 'button',
+          name: isAdded
+            ? { Icon: IconRemove, text: 'Remove from your library' }
+            : { Icon: IconAdd, text: 'Add to Your Library' },
+          action: () => {
+            onSaveToLibrary(data);
+          },
+        },
+      ],
+    });
+  };
 
   return (
-    <div className={styles.card}>
+    <div className={styles.card} onContextMenu={handleCardRightClick}>
       <div className={styles.imageWrapper}>
-        {image.src ? (
+        {image.url ? (
           <Image
             alt=""
             className={`${styles.image} ${imageRounded ? styles.rounded : ''}`}
-            {...image}
+            src={image.url}
+            width={image.width}
+            height={image.height}
             fill={!image.width || !image.height}
           />
         ) : (
-          <div className={`${styles.image} ${imageRounded ? styles.rounded : ''} ${styles.userIconWrapper}`}>
+          <div
+            className={`${styles.image} ${imageRounded ? styles.rounded : ''} ${
+              styles.userIconWrapper
+            }`}
+          >
             <IconUser className={styles.userIcon} />
           </div>
         )}
       </div>
-      <h3 className={styles.title} title={title}>
-        {title}
+      <h3 className={styles.title} title={data.name}>
+        {data.name}
       </h3>
-      <span className={styles.subtitle}>{subtitle}</span>
+      <span
+        className={styles.subtitle}
+        style={subtitleMaxLines ? { WebkitLineClamp: 2, lineClamp: 2 } : undefined}
+      >
+        {subtitle}
+      </span>
     </div>
   );
 }

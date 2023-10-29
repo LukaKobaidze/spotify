@@ -33,7 +33,6 @@ export default function Searchbar(props: Props) {
   }, [router, searchedValue]);
 
   const handleSearchSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    console.log('submit');
     e.preventDefault();
 
     clearTimeout(routeSearchUpdateTimeout);

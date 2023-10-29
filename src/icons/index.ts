@@ -1,3 +1,5 @@
+export { default as IconAdd } from './add.svg';
+export { default as IconAlbum } from './album.svg';
 export { default as IconClear } from './clear.svg';
 export { default as IconDuration } from './duration.svg';
 export { default as IconFolderMusic } from './folder-music.svg';
@@ -10,9 +12,11 @@ export { default as IconSearchFill } from './search-fill.svg';
 export { default as IconKeyboardArrowLeft } from './keyboard_arrow_left.svg';
 export { default as IconKeyboardArrowRight } from './keyboard_arrow_right.svg';
 export { default as IconPlay } from './play.svg';
+export { default as IconRemove } from './remove.svg';
 export { default as IconPause } from './pause.svg';
 export { default as IconSkipNext } from './skip_next.svg';
 export { default as IconSkipPrevious } from './skip_previous.svg';
+export { default as IconSquare } from './square.svg';
 export { default as IconUser } from './user.svg';
 export { default as IconVolumeHigh } from './volume-high.svg';
 export { default as IconVolumeLow } from './volume-low.svg';

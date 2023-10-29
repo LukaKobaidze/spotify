@@ -1,13 +1,11 @@
-'use client';
-import { fetchArtistAlbums } from '@/helpers/requests';
-import styles from './page.module.scss';
-import { useContext, useEffect, useState } from 'react';
-import { SpotifyAccessContext } from '@/context/spotifyAccess.context';
-import Header from '@/components/Header/Header';
-import Playlist from '@/components/ItemPlayer/ItemPlayer';
+import { cookies } from 'next/headers';
 import Link from 'next/link';
-import Card from '@/components/Card/Card';
-import { AlbumType, DataType } from '@/types';
+import { fetchArtistAlbums } from '@/services/spotify';
+import Header from '@/components/Header';
+import ItemsGrid from '@/components/ItemsGrid';
+import ItemPlayer from '@/components/ItemPlayer';
+import Card from '@/components/Card';
+import styles from './page.module.scss';
 
 interface Props {
   params: {
@@ -15,14 +13,13 @@ interface Props {
   };
 }
 
-export default function ArtistAlbumsPage({ params }: Props) {
-  const { token } = useContext(SpotifyAccessContext);
+export default async function ArtistAlbumsPage({ params }: Props) {
+  const cookieStore = cookies();
+  const accessToken = cookieStore.get('access_token')?.value;
 
-  const [albums, setAlbums] = useState<DataType<AlbumType>>();
-
-  useEffect(() => {
-    fetchArtistAlbums(token, params.id).then((data) => setAlbums(data));
-  }, [token, params.id]);
+  const albums = accessToken
+    ? await fetchArtistAlbums(accessToken, params.id)
+    : null;
 
   return (
     <>
@@ -33,17 +30,12 @@ export default function ArtistAlbumsPage({ params }: Props) {
             <Link href={`/artist/${params.id}`} className={styles.headingAnchor}>
               <h1 className={styles.heading}>{albums.items[0].artists[0].name}</h1>
             </Link>
-            <div className={styles.albumsGrid}>
+            <ItemsGrid>
               {albums.items.map((album) => (
-                <Playlist key={album.id} playerOffset={[24, 97]}>
+                <ItemPlayer key={album.id}>
                   <Link href={'/album/' + album.id}>
                     <Card
-                      image={{
-                        src: album.images[1].url,
-                        width: album.images[1].width,
-                        height: album.images[1].height,
-                      }}
-                      title={album.name}
+                      data={album}
                       subtitle={
                         album.release_date.slice(
                           0,
@@ -54,9 +46,9 @@ export default function ArtistAlbumsPage({ params }: Props) {
                       }
                     />
                   </Link>
-                </Playlist>
+                </ItemPlayer>
               ))}
-            </div>
+            </ItemsGrid>
           </>
         )}
       </main>
