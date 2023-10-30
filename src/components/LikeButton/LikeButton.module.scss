@@ -2,7 +2,9 @@
   padding: 10px;
 
   &--normal {
-    transform: scale(0.6);
+    & > svg {
+      transform: scale(0.6);
+    }
   }
 }
 

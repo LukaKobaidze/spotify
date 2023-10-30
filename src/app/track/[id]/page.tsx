@@ -58,7 +58,6 @@ export default async function TrackPage({ params }: Props) {
                       }
                     )}
                     position="top"
-                    showOnHover
                   >
                     <span>{getAlbumReleaseYear(trackData.album.release_date)}</span>
                   </Tooltip>

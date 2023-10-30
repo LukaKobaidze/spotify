@@ -10,7 +10,6 @@ import './globals.scss';
 import { MenuContextProvider } from '@/context/menu.context';
 import { cookies } from 'next/headers';
 import VerifyAuth from '@/components/VerifyAuth/VerifyAuth';
-import GlobalTooltipHandler from '@/components/GlobalTooltipHandler';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -35,8 +34,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                 <Sidebar className="sidebar" />
                 <MainView>{children}</MainView>
                 <Player className="player" />
-
-                <GlobalTooltipHandler />
               </body>
             </html>
           </LayoutContextProvider>

@@ -2,7 +2,7 @@
 import { useRouter } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
 import { IconClear, IconSearch } from '@/icons';
-import Tooltip from '@/components/Tooltip/Tooltip';
+import TooltipNew from '@/components/Tooltip';
 import styles from './Searchbar.module.scss';
 
 interface Props {
@@ -52,7 +52,7 @@ export default function Searchbar(props: Props) {
       </button>
 
       {searchedValue?.toString() && (
-        <Tooltip text="Clear" showOnHover className={styles.clearButtonWrapper}>
+        <TooltipNew text="Clear" position="bottom">
           <button
             type="button"
             className={styles.clearButton}
@@ -63,7 +63,7 @@ export default function Searchbar(props: Props) {
           >
             <IconClear />
           </button>
-        </Tooltip>
+        </TooltipNew>
       )}
     </form>
   );

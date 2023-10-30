@@ -1,14 +1,12 @@
 import { cookies } from 'next/headers';
 import { fetchAlbum, fetchArtist } from '@/services/spotify';
-import { getAlbumReleaseYear, msToTime, msToTimeFormatted } from '@/helpers/time';
-import Header from '@/components/Header/Header';
-import PlayerHeader from '@/components/PlayerHeader/PlayerHeader';
-import PlayButton from '@/components/PlayButton/PlayButton';
+import { getAlbumReleaseYear, msToTimeFormatted } from '@/helpers/time';
+import Header from '@/components/Header';
+import PlayerHeader from '@/components/PlayerHeader';
 import Tracks from '@/components/Tracks';
-import Tooltip from '@/components/Tooltip/Tooltip';
-import LikeButton from '@/components/LikeButton/LikeButton';
+import AlbumPlaylistActions from '@/components/AlbumPlaylistActions';
+import TooltipNew from '@/components/Tooltip';
 import styles from './page.module.scss';
-import AlbumPlaylistActions from '@/components/AlbumPlaylistActions/AlbumPlaylistActions';
 
 interface Props {
   params: {
@@ -38,7 +36,7 @@ export default async function AlbumPage({ params }: Props) {
             subtitle={
               <>
                 &nbsp;•&nbsp;
-                <Tooltip
+                <TooltipNew
                   text={new Date(albumData.release_date).toLocaleDateString(
                     'en-us',
                     {
@@ -49,10 +47,9 @@ export default async function AlbumPage({ params }: Props) {
                     }
                   )}
                   position="top"
-                  showOnHover
                 >
                   <span>{getAlbumReleaseYear(albumData.release_date)}</span>
-                </Tooltip>
+                </TooltipNew>
                 &nbsp;•&nbsp;
                 <span>{albumData.tracks.items.length} songs,</span>
                 <span className={styles.albumDuration}>

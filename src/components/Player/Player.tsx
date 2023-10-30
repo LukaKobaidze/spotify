@@ -126,7 +126,7 @@ export default function Player(props: Props) {
             <LikeButton
               active={liked.includes(track.id)}
               onClick={() => onSaveToLiked(track.id)}
-              classNameContainer={styles.likeButtonContainer}
+              className={styles.likeButton}
             />
           </>
         )}
@@ -139,18 +139,12 @@ export default function Player(props: Props) {
               <IconSkipPrevious className={styles.buttonSkipIcon} />
             </button>
           </Tooltip>
-          <Tooltip
-            text="Play"
-            position="top"
-            offset={12}
-            showOnHover
-            className={styles.buttonPlayWrapper}
-          >
+          <Tooltip text="Play" position="top" offset={12}>
             <button className={styles.buttonPlay} onClick={() => togglePlaying()}>
               {isPlaying ? <IconPause /> : <IconPlay />}
             </button>
           </Tooltip>
-          <Tooltip text="Next" position="top" showOnHover>
+          <Tooltip text="Next" position="top">
             <button className={styles.buttonSkip}>
               <IconSkipNext className={styles.buttonSkipIcon} />
             </button>
@@ -181,7 +175,7 @@ export default function Player(props: Props) {
       </div>
 
       <div className={styles.right}>
-        <Tooltip text={isMuted ? 'Unmute' : 'Mute'} position="top" showOnHover>
+        <Tooltip text={isMuted ? 'Unmute' : 'Mute'} position="top">
           <button onClick={handleMuteClick}>
             {isMuted ? (
               <IconVolumeMute />

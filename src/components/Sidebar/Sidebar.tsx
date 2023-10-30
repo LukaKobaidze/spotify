@@ -11,6 +11,7 @@ import { LibraryContext } from '@/context/library.context';
 import { LayoutContext } from '@/context/layout.context';
 import LibraryItem from './LibraryItem';
 import { TooltipAttribute } from '@/types';
+import TooltipNew from '../Tooltip/Tooltip';
 
 interface Props {
   className?: string;
@@ -79,43 +80,41 @@ export default function Sidebar(props: Props) {
           const isActive = pathname === path;
 
           return (
-            <Link
-              key={path}
-              href={path}
-              className={`textButton ${isActive ? 'textButtonActive' : ''}`}
-              tooltip={JSON.stringify({
-                position: 'right',
-                text: name,
-                offset: 6,
-              } as TooltipAttribute)}
-            >
-              {isActive ? (
-                <IconActive
-                  className={`${styles.navIcon} ${styles[`navIcon${name}`]}`}
-                />
-              ) : (
-                <Icon className={`${styles.navIcon} ${styles[`navIcon${name}`]}`} />
-              )}
-              <span className={styles.navLinkText}>{name}</span>
-            </Link>
+            <TooltipNew key={path} text={name} position="right">
+              <Link
+                href={path}
+                className={`textButton ${isActive ? 'textButtonActive' : ''}`}
+              >
+                {isActive ? (
+                  <IconActive
+                    className={`${styles.navIcon} ${styles[`navIcon${name}`]}`}
+                  />
+                ) : (
+                  <Icon
+                    className={`${styles.navIcon} ${styles[`navIcon${name}`]}`}
+                  />
+                )}
+                <span className={styles.navLinkText}>{name}</span>
+              </Link>
+            </TooltipNew>
           );
         })}
       </nav>
       <div className={`roundedContainer ${styles.library}`}>
-        <Tooltip
-          text={isExpanded ? 'Collapse Your Library' : 'Expand Your Library'}
-          position={isExpanded ? 'top' : 'right'}
-          className={styles.sidebarExpandButtonWrapper}
-          showOnHover
-        >
-          <button
-            className={`textButton ${styles.sidebarExpandButton}`}
-            onClick={() => setIsExpanded((state) => !state)}
+        <div className={styles.sidebarExpandButtonWrapper}>
+          <TooltipNew
+            text={isExpanded ? 'Collapse Your Library' : 'Expand Your Library'}
+            position={isExpanded ? 'top' : 'right'}
           >
-            <IconFolderMusic />
-            <span className={styles.sidebarExpandButtonText}>Your Library</span>
-          </button>
-        </Tooltip>
+            <button
+              className={`textButton ${styles.sidebarExpandButton}`}
+              onClick={() => setIsExpanded((state) => !state)}
+            >
+              <IconFolderMusic />
+              <span className={styles.sidebarExpandButtonText}>Your Library</span>
+            </button>
+          </TooltipNew>
+        </div>
 
         <div className={styles.libraryItemsWrapper}>
           <LibraryItem

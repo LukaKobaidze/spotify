@@ -94,13 +94,10 @@ export default function Tracks(props: Props) {
           <th>Title</th>
           {!hideAlbum && !hideAlbumColumn && <th>Album</th>}
           <th>
-            <Tooltip
-              text="Duration"
-              position="top"
-              showOnHover
-              className={styles.thDurationWrapper}
-            >
-              <IconDuration />
+            <Tooltip text="Duration" position="top">
+              <div className={styles.thDurationWrapper}>
+                <IconDuration />
+              </div>
             </Tooltip>
           </th>
         </tr>
@@ -181,7 +178,7 @@ export default function Tracks(props: Props) {
                 <LikeButton
                   active={liked.includes(mapTrack.id)}
                   onClick={() => onSaveToLiked(mapTrack.id)}
-                  classNameContainer={styles.likeButtonContainer}
+                  className={styles.likeButton}
                 />
                 <div>{msToTime(mapTrack.duration_ms)}</div>
               </td>

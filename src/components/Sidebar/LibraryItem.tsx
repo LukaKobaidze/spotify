@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import Tooltip from '../Tooltip';
+import Tooltip from '@/components/Tooltip';
 import Image from 'next/image';
 import { useContext } from 'react';
 import { MenuContext } from '@/context/menu.context';
@@ -45,37 +45,38 @@ export default function LibraryItem(props: LibraryItemProps) {
   };
 
   return (
-    <Tooltip
-      text={
-        <div className={styles.tooltipText}>
-          <div>{data.title}</div>
-          <div className={styles.tooltipTextSub}>{description}</div>
-        </div>
-      }
-      position="right"
-      showOnHover={!isExpanded}
-      className={`${styles.item} ${isExpanded ? styles.expanded : ''}`}
-    >
-      <Link
-        href={linkHref || `/${data.type}/${data.id}`}
-        className={styles.itemAnchor}
-        onContextMenu={handleItemRightClick}
+    <div className={`${styles.item} ${isExpanded ? styles.expanded : ''}`}>
+      <Tooltip
+        text={
+          <div className={styles.tooltipText}>
+            <div>{data.title}</div>
+            <div className={styles.tooltipTextSub}>{description}</div>
+          </div>
+        }
+        position="right"
+        disabled={isExpanded}
       >
-        <div className={styles.itemImageWrapper}>
-          <Image
-            src={data.image}
-            alt=""
-            fill
-            className={`${styles.itemImage} ${
-              data.type === 'artist' ? styles.itemImageArtist : ''
-            }`}
-          />
-        </div>
-        <div className={`${styles.tooltipText} ${styles.itemText}`}>
-          <div className={styles.itemTextName}>{data.title}</div>
-          <div className={styles.tooltipTextSub}>{description}</div>
-        </div>
-      </Link>
-    </Tooltip>
+        <Link
+          href={linkHref || `/${data.type}/${data.id}`}
+          className={styles.itemAnchor}
+          onContextMenu={handleItemRightClick}
+        >
+          <div className={styles.itemImageWrapper}>
+            <Image
+              src={data.image}
+              alt=""
+              fill
+              className={`${styles.itemImage} ${
+                data.type === 'artist' ? styles.itemImageArtist : ''
+              }`}
+            />
+          </div>
+          <div className={`${styles.tooltipText} ${styles.itemText}`}>
+            <div className={styles.itemTextName}>{data.title}</div>
+            <div className={styles.tooltipTextSub}>{description}</div>
+          </div>
+        </Link>
+      </Tooltip>
+    </div>
   );
 }
