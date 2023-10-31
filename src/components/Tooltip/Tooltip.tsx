@@ -42,6 +42,7 @@ export default function Tooltip(props: Props) {
     }
 
     return () => {
+      clearTimeout(delayTimeout);
       element.removeEventListener('mouseenter', handleMouseEnter);
       element.removeEventListener('mouseleave', handleMouseLeave);
     };

@@ -1,10 +1,10 @@
 .sidebar {
+  overflow: hidden;
   position: relative;
+  margin-right: var(--layout-gap);
   display: flex;
   flex-direction: column;
   width: 72px;
-  margin-right: var(--layout-gap);
-  overflow: hidden;
 
   &.expanded {
     width: 280px;
@@ -22,10 +22,9 @@
 .resize {
   position: absolute;
   top: 0;
-  right: 0;
+  right: -4px;
   width: 10px;
   height: 100%;
-  transform: translateX(50%);
   cursor: e-resize;
 
   &::before {
@@ -37,10 +36,9 @@
   }
 
   &:hover,
-  &:focus-visible,
   &.active {
     &::before {
-      background-color: #fff;
+      background-color: rgba(255, 255, 255, 0.5);
     }
   }
 }

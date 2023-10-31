@@ -13,6 +13,8 @@ import LibraryItem from './LibraryItem';
 import { TooltipAttribute } from '@/types';
 import TooltipNew from '../Tooltip/Tooltip';
 
+const SIDEBAR_EXPANDED_MIN = 280;
+
 interface Props {
   className?: string;
 }
@@ -25,7 +27,7 @@ export default function Sidebar(props: Props) {
   const pathname = usePathname();
   const { liked, libraryItems } = useContext(LibraryContext);
   const [isExpanded, setIsExpanded] = useState(false);
-  const [expandedSize, setExpandedSize] = useState(280);
+  const [expandedSize, setExpandedSize] = useState(SIDEBAR_EXPANDED_MIN);
   const [isResizing, setIsResizing] = useState(false);
   const sidebarRef = useRef<HTMLElement>(null);
 
@@ -39,25 +41,49 @@ export default function Sidebar(props: Props) {
 
       const sidebarSize = e.pageX - 7;
 
-      if (sidebarSize > 279) {
+      if (sidebarSize > SIDEBAR_EXPANDED_MIN - 1) {
         setExpandedSize(Math.min(sidebarSize, window.innerWidth - 416));
       }
     };
-
     const handleMouseUp = () => {
       setIsResizing(false);
+    };
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'ArrowRight') {
+        if (isExpanded) {
+          setExpandedSize((expandedSizeState) =>
+            Math.min(expandedSizeState + 10, window.innerWidth - 416)
+          );
+        } else {
+          setIsExpanded(true);
+        }
+      } else if (e.key === 'ArrowLeft' && isExpanded) {
+        setExpandedSize((state) => {
+          const stateNext = state - 10;
+
+          if (stateNext < SIDEBAR_EXPANDED_MIN) {
+            setIsExpanded(false);
+            return SIDEBAR_EXPANDED_MIN;
+          }
+
+          return stateNext;
+        });
+      }
     };
 
     if (isResizing) {
       document.addEventListener('mousemove', handleMouseMove);
       document.addEventListener('mouseup', handleMouseUp);
+      document.addEventListener('keydown', handleKeyDown);
     }
 
     return () => {
       document.removeEventListener('mouseup', handleMouseUp);
       document.removeEventListener('mousemove', handleMouseMove);
+      document.removeEventListener('keydown', handleKeyDown);
     };
-  }, [isResizing]);
+  }, [isResizing, isExpanded]);
 
   useEffect(() => {
     updateSidebarSize(sidebarRef.current?.clientWidth || 0);
@@ -71,10 +97,6 @@ export default function Sidebar(props: Props) {
       style={isExpanded ? { width: expandedSize } : undefined}
       ref={sidebarRef}
     >
-      <button
-        className={`${styles.resize} ${isResizing ? styles.active : ''}`}
-        onMouseDown={() => setIsResizing(true)}
-      />
       <nav className={`roundedContainer ${styles.nav}`}>
         {data.mainNavigation.map(({ path, name, Icon, IconActive }) => {
           const isActive = pathname === path;
@@ -134,6 +156,12 @@ export default function Sidebar(props: Props) {
           ))}
         </div>
       </div>
+      <button
+        className={`${styles.resize} ${isResizing ? styles.active : ''}`}
+        onMouseDown={() => setIsResizing(true)}
+        onFocus={() => setIsResizing(true)}
+        onBlur={() => setIsResizing(false)}
+      />
     </aside>
   );
 }
