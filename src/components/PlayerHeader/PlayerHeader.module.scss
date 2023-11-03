@@ -2,11 +2,20 @@
   display: flex;
   align-items: flex-end;
   color: #fff;
-  height: 276px;
+  min-height: 276px;
   padding-bottom: 24px;
+
+  &Background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 500px;
+  }
 }
 
 .imageMainWrapper {
+  flex-shrink: 0;
   position: relative;
   margin-right: 24px;
   width: 232px;
@@ -17,6 +26,10 @@
 .imageMain {
   width: 100%;
   height: 100%;
+}
+
+.textWrapper {
+  z-index: 2;
 }
 
 .artistAnchor {
@@ -33,7 +46,6 @@
 }
 
 .title {
-  font-size: 72px;
   margin-top: 6px;
   margin-bottom: 9px;
 }
@@ -42,6 +54,7 @@
   display: flex;
   align-items: center;
   font-size: 14px;
+  white-space: nowrap;
 
   &Image {
     width: 24px;
@@ -52,5 +65,15 @@
 
   &Name {
     font-weight: 600;
+  }
+
+  &--breakpoint-1 {
+    font-size: 12px;
+
+    .subtitleImage {
+      width: 20px;
+      height: 20px;
+      margin-right: 3px;
+    }
   }
 }

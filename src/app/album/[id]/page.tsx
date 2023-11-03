@@ -4,8 +4,8 @@ import { getAlbumReleaseYear, msToTimeFormatted } from '@/helpers/time';
 import Header from '@/components/Header';
 import PlayerHeader from '@/components/PlayerHeader';
 import Tracks from '@/components/Tracks';
-import AlbumPlaylistActions from '@/components/AlbumPlaylistActions';
-import TooltipNew from '@/components/Tooltip';
+import AlbumPlaylistActions from '@/components/AlbumPlaylistTrackActions';
+import Tooltip from '@/components/Tooltip';
 import styles from './page.module.scss';
 
 interface Props {
@@ -25,7 +25,7 @@ export default async function AlbumPage({ params }: Props) {
 
   return (
     <>
-      <Header />
+      <Header backgroundOpacity={0.55} />
       <main>
         {albumData && artistData && (
           <PlayerHeader
@@ -36,7 +36,7 @@ export default async function AlbumPage({ params }: Props) {
             subtitle={
               <>
                 &nbsp;•&nbsp;
-                <TooltipNew
+                <Tooltip
                   text={new Date(albumData.release_date).toLocaleDateString(
                     'en-us',
                     {
@@ -49,7 +49,7 @@ export default async function AlbumPage({ params }: Props) {
                   position="top"
                 >
                   <span>{getAlbumReleaseYear(albumData.release_date)}</span>
-                </TooltipNew>
+                </Tooltip>
                 &nbsp;•&nbsp;
                 <span>{albumData.tracks.items.length} songs,</span>
                 <span className={styles.albumDuration}>

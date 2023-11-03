@@ -3,15 +3,13 @@ import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import data from '@/data';
 import { usePathname } from 'next/navigation';
-import Tooltip from '../Tooltip/Tooltip';
 import { IconFolderMusic } from '@/icons';
 import styles from './Sidebar.module.scss';
 import { useContext } from 'react';
 import { LibraryContext } from '@/context/library.context';
 import { LayoutContext } from '@/context/layout.context';
 import LibraryItem from './LibraryItem';
-import { TooltipAttribute } from '@/types';
-import TooltipNew from '../Tooltip/Tooltip';
+import Tooltip from '../Tooltip';
 
 const SIDEBAR_EXPANDED_MIN = 280;
 
@@ -102,7 +100,7 @@ export default function Sidebar(props: Props) {
           const isActive = pathname === path;
 
           return (
-            <TooltipNew key={path} text={name} position="right">
+            <Tooltip key={path} text={name} position="right">
               <Link
                 href={path}
                 className={`textButton ${isActive ? 'textButtonActive' : ''}`}
@@ -118,13 +116,13 @@ export default function Sidebar(props: Props) {
                 )}
                 <span className={styles.navLinkText}>{name}</span>
               </Link>
-            </TooltipNew>
+            </Tooltip>
           );
         })}
       </nav>
       <div className={`roundedContainer ${styles.library}`}>
         <div className={styles.sidebarExpandButtonWrapper}>
-          <TooltipNew
+          <Tooltip
             text={isExpanded ? 'Collapse Your Library' : 'Expand Your Library'}
             position={isExpanded ? 'top' : 'right'}
           >
@@ -135,7 +133,7 @@ export default function Sidebar(props: Props) {
               <IconFolderMusic />
               <span className={styles.sidebarExpandButtonText}>Your Library</span>
             </button>
-          </TooltipNew>
+          </Tooltip>
         </div>
 
         <div className={styles.libraryItemsWrapper}>

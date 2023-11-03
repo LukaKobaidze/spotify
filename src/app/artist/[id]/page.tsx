@@ -6,10 +6,12 @@ import {
   fetchArtistRelatedArtists,
   fetchArtistTopTracks,
 } from '@/services/spotify';
+import ColorThief from 'colorthief';
 import Header from '@/components/Header';
 import TopTracks from './TopTracks';
 import Rows from './Rows';
 import styles from './page.module.scss';
+import Hero from './Hero';
 
 interface Props {
   params: {
@@ -34,28 +36,14 @@ export default async function ArtistPage({ params }: Props) {
 
   return (
     <>
-      <Header className={styles.header} />
+      <Header backgroundOpacity={0.55} />
       <main>
-        <div className={styles.bannerBackground} />
         {artistData && (
-          <div className={styles.banner}>
-            <div>
-              <h1 className={styles.bannerHeading}>{artistData.name}</h1>
-              <p className={styles.bannerFollowers}>
-                {artistData.followers.total.toLocaleString()} followers
-              </p>
-            </div>
-
-            {artistData.images && (
-              <Image
-                src={artistData.images[1].url}
-                width={artistData.images[1].width}
-                height={artistData.images[1].height}
-                alt=""
-                className={styles.bannerImage}
-              />
-            )}
-          </div>
+          <Hero
+            name={artistData.name}
+            image={artistData.images[1] || artistData.images[0]}
+            totalFollowers={artistData.followers.total}
+          />
         )}
 
         {topTracks && <TopTracks data={topTracks} />}

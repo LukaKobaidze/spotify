@@ -2,7 +2,7 @@
 import { useRouter } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
 import { IconClear, IconSearch } from '@/icons';
-import TooltipNew from '@/components/Tooltip';
+import Tooltip from '@/components/Tooltip';
 import styles from './Searchbar.module.scss';
 
 interface Props {
@@ -46,13 +46,14 @@ export default function Searchbar(props: Props) {
         className={styles.input}
         value={searchedValue}
         onChange={(e) => setSearchedValue(e.target.value)}
+        placeholder='What do you want to listen to?'
       />
       <button type="submit" className={styles.searchButton}>
         <IconSearch />
       </button>
 
       {searchedValue?.toString() && (
-        <TooltipNew text="Clear" position="bottom">
+        <Tooltip text="Clear" position="bottom">
           <button
             type="button"
             className={styles.clearButton}
@@ -63,7 +64,7 @@ export default function Searchbar(props: Props) {
           >
             <IconClear />
           </button>
-        </TooltipNew>
+        </Tooltip>
       )}
     </form>
   );

@@ -1,20 +1,41 @@
 'use client';
+import { createContext, useState, useCallback, useEffect } from 'react';
+import { Optional } from '@/types';
+import { AlbumType, TrackType } from '@/services/spotify';
 import { useLocalStorageState } from '@/hooks';
-import { TrackType } from '@/types';
-import { createContext, useState, useCallback } from 'react';
+
+export type PlayerTrackType = {
+  list: Optional<TrackType, 'album'>[];
+  currentlyPlaying: number;
+  listAlbum?: Omit<
+    AlbumType,
+    | 'external_ids'
+    | 'genres'
+    | 'label'
+    | 'popularity'
+    | 'tracks'
+    | 'copyrights'
+    | 'available_markets'
+    | 'album_group'
+  >;
+};
 
 interface Context {
-  track: TrackType | null;
+  playerTrack: PlayerTrackType;
   isPlaying: boolean;
-  playTrack: (track: TrackType) => void;
+  playTrack: (track: PlayerTrackType) => void;
+  playPreviousTrack: () => void;
+  playNextTrack: () => void;
   togglePlaying: () => void;
   stopPlaying: () => void;
 }
 
 const initial: Context = {
-  track: null,
+  playerTrack: { list: [], currentlyPlaying: 0 },
   isPlaying: false,
   playTrack: () => {},
+  playPreviousTrack: () => {},
+  playNextTrack: () => {},
   togglePlaying: () => {},
   stopPlaying: () => {},
 };
@@ -22,13 +43,37 @@ const initial: Context = {
 export const PlayerContext = createContext(initial);
 
 export function PlayerContextProvider({ children }: { children: React.ReactNode }) {
-  const [track, setTrack] = useLocalStorageState('player-track', initial.track);
+  const [playerTrack, setPlayerTrack] = useLocalStorageState(
+    'player-tracks',
+    initial.playerTrack
+  );
   const [isPlaying, setIsPlaying] = useState(initial.isPlaying);
 
-  const playTrack: Context['playTrack'] = useCallback((trackArg) => {
-    setTrack(trackArg);
+  const playTrack: Context['playTrack'] = useCallback(
+    (playerTrackArg) => {
+      setPlayerTrack(playerTrackArg);
+      setIsPlaying(true);
+    },
+    [setPlayerTrack]
+  );
+
+  const playPreviousTrack: Context['playPreviousTrack'] = useCallback(() => {
+    setPlayerTrack((state) => ({
+      ...state,
+      currentlyPlaying: Math.max(state.currentlyPlaying - 1, 0),
+    }));
+  }, [setPlayerTrack]);
+
+  const playNextTrack: Context['playNextTrack'] = useCallback(() => {
+    setPlayerTrack((state) => ({
+      ...state,
+      currentlyPlaying:
+        state.currentlyPlaying === state.list.length - 1
+          ? 0
+          : state.currentlyPlaying + 1,
+    }));
     setIsPlaying(true);
-  }, [setTrack]);
+  }, [setPlayerTrack]);
 
   const togglePlaying: Context['togglePlaying'] = useCallback(() => {
     setIsPlaying((state) => !state);
@@ -40,7 +85,15 @@ export function PlayerContextProvider({ children }: { children: React.ReactNode 
 
   return (
     <PlayerContext.Provider
-      value={{ track, isPlaying, playTrack, stopPlaying, togglePlaying }}
+      value={{
+        playerTrack,
+        isPlaying,
+        playTrack,
+        playPreviousTrack,
+        playNextTrack,
+        stopPlaying,
+        togglePlaying,
+      }}
     >
       {children}
     </PlayerContext.Provider>

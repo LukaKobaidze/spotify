@@ -1,8 +1,10 @@
 import { cookies } from 'next/headers';
-import { fetchSearch } from '@/services/spotify';
+import { fetchSearch, fetchSeveralBrowseCategories } from '@/services/spotify';
 import Header from '@/components/Header/Header';
 import Searchbar from './Searchbar';
 import SearchResult from './SearchResult';
+import BrowseCategories from './BrowseCategories';
+import ConsoleLogToClient from '@/components/ConsoleLogToClient/ConsoleLogToClient';
 
 interface Props {
   searchParams?: {
@@ -14,7 +16,10 @@ export default async function SearchPage({ searchParams }: Props) {
   const cookieStore = cookies();
   const accessToken = cookieStore.get('access_token')?.value;
 
-  const data =
+  const browseCategoriesData = accessToken
+    ? await fetchSeveralBrowseCategories(accessToken, 50)
+    : null;
+  const searchResultData =
     !accessToken || !searchParams?.value
       ? null
       : await fetchSearch(accessToken, searchParams.value);
@@ -24,7 +29,13 @@ export default async function SearchPage({ searchParams }: Props) {
       <Header>
         <Searchbar initialValue={searchParams?.value || ''} />
       </Header>
-      <main>{data && <SearchResult data={data} />}</main>
+      <main>
+        {searchResultData ? (
+          <SearchResult data={searchResultData} />
+        ) : (
+          <BrowseCategories data={browseCategoriesData} />
+        )}
+      </main>
     </>
   );
 }

@@ -25,12 +25,22 @@ interface Props {
 
 export default function Player(props: Props) {
   const { className } = props;
-  const { track, isPlaying, stopPlaying, togglePlaying } = useContext(PlayerContext);
+  const {
+    playerTrack,
+    playPreviousTrack,
+    playNextTrack,
+    isPlaying,
+    stopPlaying,
+    togglePlaying,
+  } = useContext(PlayerContext);
   const [currentTime, setCurrentTime] = useState(0);
   const [volume, setVolume] = useState(VOLUME_DEFAULT);
   const [isMuted, setIsMuted] = useState(false);
   const audio = useRef<HTMLAudioElement>(null);
   const { liked, onSaveToLiked } = useContext(LibraryContext);
+
+  const track = playerTrack.list[playerTrack.currentlyPlaying];
+  const trackAlbum = playerTrack.listAlbum || track?.album;
 
   useEffect(() => {
     audio.current?.load();
@@ -108,15 +118,15 @@ export default function Player(props: Props) {
   return (
     <div className={`${styles.container} ${className || ''}`}>
       <div className={styles.left}>
-        {track && (
+        {track && trackAlbum && (
           <>
             <TrackTitle
               trackName={track.name}
               trackId={track.id}
               artistName={track.artists[0].name}
               artistId={track.artists[0].id}
-              image={track.album.images[1].url}
-              imageSize={track.album.images[1].height}
+              image={trackAlbum.images[1].url}
+              imageSize={trackAlbum.images[1].height}
               className={styles.trackTitle}
               classNameText={styles.trackTitleText}
               classNameImage={styles.trackImage}
@@ -134,8 +144,8 @@ export default function Player(props: Props) {
 
       <div className={styles.middle}>
         <div className={styles.middleTop}>
-          <Tooltip text="Previous" position="top" showOnHover>
-            <button className={styles.buttonSkip}>
+          <Tooltip text="Previous" position="top">
+            <button className={styles.buttonSkip} onClick={playPreviousTrack}>
               <IconSkipPrevious className={styles.buttonSkipIcon} />
             </button>
           </Tooltip>
@@ -145,7 +155,7 @@ export default function Player(props: Props) {
             </button>
           </Tooltip>
           <Tooltip text="Next" position="top">
-            <button className={styles.buttonSkip}>
+            <button className={styles.buttonSkip} onClick={playNextTrack}>
               <IconSkipNext className={styles.buttonSkipIcon} />
             </button>
           </Tooltip>
@@ -156,6 +166,10 @@ export default function Player(props: Props) {
             onEnded={() => {
               setCurrentTime(audio.current?.duration || 0);
               stopPlaying();
+
+              if (playerTrack.list.length - 1 !== playerTrack.currentlyPlaying) {
+                playNextTrack();
+              }
             }}
             preload="true"
           >

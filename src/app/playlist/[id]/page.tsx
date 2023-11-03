@@ -5,7 +5,7 @@ import PlayerHeader from '@/components/PlayerHeader';
 import styles from './page.module.scss';
 import ConsoleLogToClient from '@/components/ConsoleLogToClient/ConsoleLogToClient';
 import Tracks from '@/components/Tracks';
-import AlbumPlaylistActions from '@/components/AlbumPlaylistActions/AlbumPlaylistActions';
+import AlbumPlaylistActions from '@/components/AlbumPlaylistTrackActions/AlbumPlaylistTrackActions';
 
 interface Props {
   params: { id: string };

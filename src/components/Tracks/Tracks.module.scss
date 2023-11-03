@@ -1,16 +1,22 @@
-.tbody {
-  &::before {
-    content: '@';
-    display: block;
-    line-height: var(--tbody-gap);
-    text-indent: -99999px;
-  }
-}
-
 .tableContainer {
   width: 100%;
   border-collapse: collapse;
   min-width: 325px;
+  table-layout: fixed;
+}
+
+.thead-hide {
+  opacity: 0;
+  border: 0 none;
+  height: 0;
+
+  & * {
+    margin: 0 !important;
+    padding: 0 !important;
+    border: 0 none !important;
+    height: 0px !important;
+    line-height: 0 !important;
+  }
 }
 
 .header {
@@ -25,10 +31,18 @@
   }
 }
 
+.tbody {
+  &::before {
+    content: '@';
+    display: block;
+    line-height: var(--tbody-gap);
+    text-indent: -99999px;
+  }
+}
+
 .index {
   position: relative;
-  width: 16px;
-  max-width: 16px;
+  width: 32px;
   text-align: left;
 
   &Span {
@@ -143,10 +157,20 @@
 }
 
 .tdAlbum {
-  white-space: nowrap;
-  font-size: 13px;
+  &Wrapper {
+    width: 70%;
+    overflow: hidden;
+    padding: 3px;
+  }
 
   &Anchor {
+    display: block;
+    width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: 0.875rem;
+
     &:hover {
       text-decoration: underline;
     }

@@ -1,7 +1,7 @@
 'use client';
 import { createContext } from 'react';
 import { useLocalStorageState } from '@/hooks';
-import { AlbumType, ArtistType, PlaylistType } from '@/services/spotify';
+import { AlbumType, ArtistType, PlaylistType, TrackType } from '@/services/spotify';
 import { LibraryItemProps } from '@/components/Sidebar/LibraryItem';
 
 type ItemType = AlbumType | PlaylistType | ArtistType;
@@ -17,7 +17,7 @@ interface Context {
   onSaveToLibrary: (item: ItemType) => void;
 
   onRemoveFromYourLibrary: (id: string) => void;
-  libraryHas: (item: ItemType) => boolean;
+  libraryHas: (item: ItemType | TrackType) => boolean;
 }
 
 const initial: Context = {
@@ -93,6 +93,10 @@ export function LibraryContextProvider({ children }: { children: React.ReactNode
   };
 
   const libraryHas: Context['libraryHas'] = (argItem) => {
+    if (argItem.type === 'track') {
+      return liked.includes(argItem.id);
+    }
+
     return libraryItems.some((item) => item.id === argItem.id);
   };
 

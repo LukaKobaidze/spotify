@@ -47,7 +47,7 @@ export default function Card(props: Props) {
   return (
     <div className={styles.card} onContextMenu={handleCardRightClick}>
       <div className={styles.imageWrapper}>
-        {image.url ? (
+        {image?.url ? (
           <Image
             alt=""
             className={`${styles.image} ${imageRounded ? styles.rounded : ''}`}

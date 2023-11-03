@@ -1,6 +1,8 @@
 .actions {
+  position: relative;
   display: flex;
   padding: 24px 0;
+  z-index: 2;
 }
 
 .playButton {

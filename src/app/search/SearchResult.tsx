@@ -44,7 +44,7 @@ export default function SearchResult(props: Props) {
         )}
 
         {data.tracks?.items && data.tracks.items.length && (
-          <div className={styles.songs}>
+          <div className={styles.tracksWrapper}>
             <h2 className={styles.topHeading}>Songs</h2>
             <Tracks
               data={data.tracks?.items?.slice(0, 4) || []}
@@ -52,6 +52,7 @@ export default function SearchResult(props: Props) {
               hideHeaderLabels
               hideIndexing
               hideAlbumColumn
+              className={styles.tracks}
             />
           </div>
         )}

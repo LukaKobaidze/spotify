@@ -219,11 +219,11 @@ export async function fetchPlaylist(
   return res.json();
 }
 
-export type PlaylistSearchType = PlaylistType & {
+export type PlaylistWithNoTracksType = PlaylistType & {
   tracks: { href: string; total: number };
 };
 
-export type FeaturedPlaylistsType = DataType<PlaylistSearchType>;
+export type FeaturedPlaylistsType = DataType<PlaylistWithNoTracksType>;
 
 export async function fetchFeaturedPlaylists(
   accessToken: string,
@@ -237,13 +237,25 @@ export async function fetchFeaturedPlaylists(
   return (await res.json()).playlists;
 }
 
+export async function fetchCategoryPlaylists(
+  categoryId: string,
+  accessToken: string
+): Promise<DataType<PlaylistWithNoTracksType>> {
+  const res = await fetch(
+    `${API_URL}/browse/categories/${categoryId}/playlists`,
+    defaultOptionsGET(accessToken)
+  );
+
+  return (await res.json()).playlists;
+}
+
 /* Search */
 
 export type SearchDataType = {
   artists: DataType<ArtistType>;
   tracks: DataType<TrackType>;
   albums: DataType<AlbumType>;
-  playlists: DataType<PlaylistSearchType>;
+  playlists: DataType<PlaylistWithNoTracksType>;
 };
 export async function fetchSearch(
   accessToken: string,
@@ -254,6 +266,39 @@ export async function fetchSearch(
     `${API_URL}/search?q=${searchValue}&type=artist,track,album,playlist${
       limit ? `&limit=${limit}` : ''
     }`,
+    defaultOptionsGET(accessToken)
+  );
+
+  return res.json();
+}
+
+// Browse Category
+
+export type BrowseCategoryType = {
+  href: string;
+  icons: ImageType[];
+  id: string;
+  name: string;
+};
+
+export async function fetchSeveralBrowseCategories(
+  accessToken: string,
+  limit?: number
+): Promise<DataType<BrowseCategoryType>> {
+  const res = await fetch(
+    `${API_URL}/browse/categories${limit ? `?limit=${limit}` : ''}`,
+    defaultOptionsGET(accessToken)
+  );
+
+  return (await res.json()).categories;
+}
+
+export async function fetchSingleBrowseCategory(
+  id: string,
+  accessToken: string
+): Promise<BrowseCategoryType> {
+  const res = await fetch(
+    `${API_URL}/browse/categories/${id}`,
     defaultOptionsGET(accessToken)
   );
 

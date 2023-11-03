@@ -1,32 +1,39 @@
 'use client';
 import { useRouter } from 'next/navigation';
 import { IconKeyboardArrowLeft, IconKeyboardArrowRight } from '@/icons';
-import TooltipNew from '../Tooltip';
+import Tooltip from '@/components/Tooltip';
 import styles from './Header.module.scss';
 
-interface Props extends React.HTMLAttributes<HTMLDivElement> {}
+interface Props extends React.HTMLAttributes<HTMLDivElement> {
+  backgroundOpacity?: number;
+}
 
 export default function Header(props: Props) {
-  const { className, children, ...restProps } = props;
+  const { backgroundOpacity, className, children, ...restProps } = props;
 
   const router = useRouter();
 
   return (
     <header
       className={`contentPadding ${styles.header} ${className || ''}`}
+      style={
+        backgroundOpacity
+          ? { backgroundColor: `rgba(0, 0, 0, ${backgroundOpacity})` }
+          : undefined
+      }
       {...restProps}
     >
       <div className={styles.history}>
-        <TooltipNew text="Go back" position="bottom">
+        <Tooltip text="Go back" position="bottom">
           <button className={styles.historyButton} onClick={() => router.back()}>
             <IconKeyboardArrowLeft />
           </button>
-        </TooltipNew>
-        <TooltipNew text="Go forward" position="bottom">
+        </Tooltip>
+        <Tooltip text="Go forward" position="bottom">
           <button className={styles.historyButton} onClick={() => router.forward()}>
             <IconKeyboardArrowRight />
           </button>
-        </TooltipNew>
+        </Tooltip>
       </div>
       {children}
     </header>

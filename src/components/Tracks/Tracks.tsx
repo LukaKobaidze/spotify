@@ -29,6 +29,7 @@ type Props = {
   hideAlbum?: boolean;
   hideAlbumColumn?: boolean;
   bodyGap?: number;
+  className?: string;
 };
 
 export default function Tracks(props: Props) {
@@ -40,8 +41,9 @@ export default function Tracks(props: Props) {
     hideAlbum,
     hideAlbumColumn,
     bodyGap = 16,
+    className,
   } = props;
-  const { track, isPlaying, playTrack } = useContext(PlayerContext);
+  const { playerTrack, isPlaying, playTrack } = useContext(PlayerContext);
   const { liked, onSaveToLiked } = useContext(LibraryContext);
   const { renderMenu } = useContext(MenuContext);
 
@@ -80,12 +82,9 @@ export default function Tracks(props: Props) {
 
   const tbodyStyle = { '--tbody-gap': bodyGap + 'px' } as React.CSSProperties;
   return (
-    <table className={styles.tableContainer}>
-      <thead>
-        <tr
-          className={styles.header}
-          style={hideHeaderLabels ? { display: 'none' } : undefined}
-        >
+    <table className={`${styles.tableContainer} ${className || ''}`}>
+      <thead className={hideHeaderLabels ? styles['thead-hide'] : ''}>
+        <tr className={styles.header}>
           {!hideIndexing && (
             <th className={styles.index}>
               <span className={styles.indexSpan}>#</span>
@@ -106,8 +105,17 @@ export default function Tracks(props: Props) {
       <tbody className={styles.tbody} style={tbodyStyle}>
         {data?.map((mapTrack, i: number) => {
           const image = mapTrack?.album?.images[mapTrack.album.images.length - 1];
-          const trackIsPlaying = mapTrack.id === track?.id && isPlaying;
+          const trackIsPlaying =
+            isPlaying &&
+            mapTrack.id === playerTrack.list[playerTrack.currentlyPlaying]?.id;
           const currentAlbum = album || mapTrack.album!;
+
+          const handlePlayTrack = () =>
+            playTrack({
+              list: data,
+              listAlbum: currentAlbum,
+              currentlyPlaying: i,
+            });
 
           return (
             <tr
@@ -119,15 +127,7 @@ export default function Tracks(props: Props) {
             >
               {!hideIndexing && (
                 <td className={styles.index}>
-                  <button
-                    className={styles.player}
-                    onClick={() => {
-                      playTrack({
-                        ...mapTrack,
-                        album: currentAlbum,
-                      });
-                    }}
-                  >
+                  <button className={styles.player} onClick={handlePlayTrack}>
                     {trackIsPlaying ? <IconPause /> : <IconPlay />}
                   </button>
                   <span className={styles.indexSpan}>{i + 1} </span>
@@ -136,12 +136,7 @@ export default function Tracks(props: Props) {
               <td className={styles.tdTitle}>
                 {hideIndexing && (
                   <div className={styles.playerOnImageWrapper}>
-                    <button
-                      className={styles.player}
-                      onClick={() => {
-                        playTrack({ ...mapTrack, album: currentAlbum });
-                      }}
-                    >
+                    <button className={styles.player} onClick={handlePlayTrack}>
                       {trackIsPlaying ? <IconPause /> : <IconPlay />}
                     </button>
                   </div>
@@ -166,12 +161,14 @@ export default function Tracks(props: Props) {
               </td>
               {!hideAlbum && !hideAlbumColumn && (
                 <td className={styles.tdAlbum}>
-                  <Link
-                    className={styles.tdAlbumAnchor}
-                    href={'/album/' + currentAlbum.id}
-                  >
-                    {currentAlbum.name}
-                  </Link>
+                  <div className={styles.tdAlbumWrapper}>
+                    <Link
+                      className={styles.tdAlbumAnchor}
+                      href={'/album/' + currentAlbum.id}
+                    >
+                      {currentAlbum.name}
+                    </Link>
+                  </div>
                 </td>
               )}
               <td className={styles.tdDuration}>

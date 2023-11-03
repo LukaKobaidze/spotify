@@ -1,4 +1,3 @@
-import { IconPlay } from '@/icons';
 import PlayButton from '../PlayButton/PlayButton';
 import styles from './ItemPlayer.module.scss';
 

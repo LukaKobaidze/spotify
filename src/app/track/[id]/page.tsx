@@ -6,9 +6,9 @@ import Header from '@/components/Header';
 import PlayerHeader from '@/components/PlayerHeader';
 import Tracks from '@/components/Tracks';
 import Tooltip from '@/components/Tooltip';
-import Actions from './Actions';
-import styles from './page.module.scss';
 import TrackListHeader from '@/components/TrackListHeader';
+import AlbumPlaylistActions from '@/components/AlbumPlaylistTrackActions';
+import styles from './page.module.scss';
 
 interface Props {
   params: {
@@ -33,7 +33,7 @@ export default async function TrackPage({ params }: Props) {
 
   return (
     <>
-      <Header />
+      <Header backgroundOpacity={0.5} />
       <main>
         {trackData && artistData && (
           <>
@@ -65,10 +65,8 @@ export default async function TrackPage({ params }: Props) {
                   <span>{msToTime(trackData.duration_ms)}</span>
                 </>
               }
-              className={styles.itemHeader}
-              classNameImage={styles.itemHeaderImage}
             />
-            <Actions trackData={trackData} />
+            {albumData && <AlbumPlaylistActions data={trackData} />}
           </>
         )}
 
