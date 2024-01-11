@@ -18,8 +18,7 @@ export default function Card(props: Props) {
   const { data, subtitle, subtitleMaxLines, imageRounded } = props;
 
   const { renderMenu } = useContext(MenuContext);
-  const { onSaveToLibrary, onRemoveFromYourLibrary, libraryHas } =
-    useContext(LibraryContext);
+  const { onSaveToLibrary, libraryHas } = useContext(LibraryContext);
 
   const image = data.images[1] || data.images[0];
 
@@ -48,14 +47,23 @@ export default function Card(props: Props) {
     <div className={styles.card} onContextMenu={handleCardRightClick}>
       <div className={styles.imageWrapper}>
         {image?.url ? (
-          <Image
-            alt=""
-            className={`${styles.image} ${imageRounded ? styles.rounded : ''}`}
-            src={image.url}
-            width={image.width}
-            height={image.height}
-            fill={!image.width || !image.height}
-          />
+          !image.width || !image.height ? (
+            <Image
+              alt=""
+              className={`${styles.image} ${imageRounded ? styles.rounded : ''}`}
+              src={image.url}
+              fill
+              sizes="100vw"
+            />
+          ) : (
+            <Image
+              alt=""
+              className={`${styles.image} ${imageRounded ? styles.rounded : ''}`}
+              src={image.url}
+              width={image.width}
+              height={image.height}
+            />
+          )
         ) : (
           <div
             className={`${styles.image} ${imageRounded ? styles.rounded : ''} ${

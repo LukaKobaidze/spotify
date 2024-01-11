@@ -16,6 +16,7 @@ import Tooltip from '../Tooltip/Tooltip';
 import { msToTime } from '@/helpers/time';
 import { LibraryContext } from '@/context/library.context';
 import LikeButton from '../LikeButton/LikeButton';
+import { LayoutContext } from '@/context/layout.context';
 
 const VOLUME_DEFAULT = 50;
 
@@ -33,14 +34,15 @@ export default function Player(props: Props) {
     stopPlaying,
     togglePlaying,
   } = useContext(PlayerContext);
+  const { windowSize } = useContext(LayoutContext);
   const [currentTime, setCurrentTime] = useState(0);
   const [volume, setVolume] = useState(VOLUME_DEFAULT);
   const [isMuted, setIsMuted] = useState(false);
   const audio = useRef<HTMLAudioElement>(null);
   const { liked, onSaveToLiked } = useContext(LibraryContext);
 
-  const track = playerTrack.list[playerTrack.currentlyPlaying];
-  const trackAlbum = playerTrack.listAlbum || track?.album;
+  const track = playerTrack?.list[playerTrack.currentlyPlaying];
+  const trackAlbum = playerTrack?.listAlbum || track?.album;
 
   useEffect(() => {
     audio.current?.load();
@@ -96,13 +98,11 @@ export default function Player(props: Props) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isMuted]);
 
-  const handlePlaybackChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handlePlaybackChange = (time: number) => {
     if (!audio.current) return;
 
-    const updated = Number(e.target.value || 0);
-
-    audio.current.currentTime = updated;
-    setCurrentTime(updated);
+    audio.current.currentTime = time;
+    setCurrentTime(time);
   };
 
   const handleVolumeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -145,7 +145,13 @@ export default function Player(props: Props) {
       <div className={styles.middle}>
         <div className={styles.middleTop}>
           <Tooltip text="Previous" position="top">
-            <button className={styles.buttonSkip} onClick={playPreviousTrack}>
+            <button
+              className={styles.buttonSkip}
+              onClick={() => {
+                playPreviousTrack();
+                handlePlaybackChange(0);
+              }}
+            >
               <IconSkipPrevious className={styles.buttonSkipIcon} />
             </button>
           </Tooltip>
@@ -167,7 +173,7 @@ export default function Player(props: Props) {
               setCurrentTime(audio.current?.duration || 0);
               stopPlaying();
 
-              if (playerTrack.list.length - 1 !== playerTrack.currentlyPlaying) {
+              if (playerTrack!.list.length - 1 !== playerTrack!.currentlyPlaying) {
                 playNextTrack();
               }
             }}
@@ -175,22 +181,28 @@ export default function Player(props: Props) {
           >
             <source src={track?.preview_url} />
           </audio>
-          <span>{timerCurrent}</span>
+          <span className={styles.playbackTimerCurrent}>{timerCurrent}</span>
           <input
             type="range"
             min={0}
             value={currentTime}
             max={Math.ceil(audio.current?.duration || 0)}
-            onChange={handlePlaybackChange}
+            onChange={(e) => handlePlaybackChange(Number(e.target.value || 0))}
             className={styles.playbackRange}
           />
-          <span>{msToTime((audio.current?.duration || 0) * 1000)}</span>
+          <span className={styles.playbackDuration}>
+            {msToTime((audio.current?.duration || 0) * 1000)}
+          </span>
         </div>
       </div>
 
-      <div className={styles.right}>
-        <Tooltip text={isMuted ? 'Unmute' : 'Mute'} position="top">
-          <button onClick={handleMuteClick}>
+      <div className={styles.volume}>
+        <Tooltip
+          disabled={windowSize < 751}
+          text={isMuted ? 'Unmute' : 'Mute'}
+          position="top"
+        >
+          <button className={styles.volumeMuteButton} onClick={handleMuteClick}>
             {isMuted ? (
               <IconVolumeMute />
             ) : volume <= 50 ? (
@@ -201,14 +213,16 @@ export default function Player(props: Props) {
           </button>
         </Tooltip>
 
-        <input
-          type="range"
-          min={0}
-          value={isMuted ? 0 : volume}
-          max={100}
-          onChange={handleVolumeChange}
-          className={styles.volumeRange}
-        />
+        <div className={styles.volumeRangeWrapper}>
+          <input
+            type="range"
+            min={0}
+            value={isMuted ? 0 : volume}
+            max={100}
+            onChange={handleVolumeChange}
+            className={styles.volumeRange}
+          />
+        </div>
       </div>
     </div>
   );

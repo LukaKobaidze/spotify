@@ -5,6 +5,7 @@ import { AlbumType, TrackType } from '@/services/spotify';
 import { useLocalStorageState } from '@/hooks';
 
 export type PlayerTrackType = {
+  typeAndId: string;
   list: Optional<TrackType, 'album'>[];
   currentlyPlaying: number;
   listAlbum?: Omit<
@@ -21,9 +22,9 @@ export type PlayerTrackType = {
 };
 
 interface Context {
-  playerTrack: PlayerTrackType;
+  playerTrack: PlayerTrackType | null;
   isPlaying: boolean;
-  playTrack: (track: PlayerTrackType) => void;
+  playTrack: (track: Optional<PlayerTrackType, 'currentlyPlaying'>) => void;
   playPreviousTrack: () => void;
   playNextTrack: () => void;
   togglePlaying: () => void;
@@ -31,7 +32,7 @@ interface Context {
 }
 
 const initial: Context = {
-  playerTrack: { list: [], currentlyPlaying: 0 },
+  playerTrack: null,
   isPlaying: false,
   playTrack: () => {},
   playPreviousTrack: () => {},
@@ -51,27 +52,69 @@ export function PlayerContextProvider({ children }: { children: React.ReactNode 
 
   const playTrack: Context['playTrack'] = useCallback(
     (playerTrackArg) => {
-      setPlayerTrack(playerTrackArg);
-      setIsPlaying(true);
+      setPlayerTrack((state) => {
+        if (
+          state?.typeAndId === playerTrackArg.typeAndId &&
+          !playerTrackArg.currentlyPlaying
+        ) {
+          setIsPlaying(!isPlaying);
+          return {
+            ...playerTrackArg,
+            currentlyPlaying: state.currentlyPlaying,
+          };
+        }
+
+        setIsPlaying(true);
+        return {
+          ...playerTrackArg,
+          currentlyPlaying: playerTrackArg.currentlyPlaying || 0,
+        };
+      });
     },
-    [setPlayerTrack]
+    [setPlayerTrack, isPlaying]
   );
 
   const playPreviousTrack: Context['playPreviousTrack'] = useCallback(() => {
-    setPlayerTrack((state) => ({
-      ...state,
-      currentlyPlaying: Math.max(state.currentlyPlaying - 1, 0),
-    }));
+    setPlayerTrack((state) => {
+      if (state === null) return null;
+
+      let previousTrack = -1;
+      for (let i = state.currentlyPlaying - 1; i >= 0; i--) {
+        if (state.list[i].preview_url) {
+          previousTrack = i;
+          break;
+        }
+      }
+
+      return {
+        ...state,
+        currentlyPlaying: previousTrack === -1 ? state.currentlyPlaying : previousTrack,
+      };
+    });
   }, [setPlayerTrack]);
 
   const playNextTrack: Context['playNextTrack'] = useCallback(() => {
-    setPlayerTrack((state) => ({
-      ...state,
-      currentlyPlaying:
-        state.currentlyPlaying === state.list.length - 1
-          ? 0
-          : state.currentlyPlaying + 1,
-    }));
+    setPlayerTrack((state) => {
+      if (state === null) return null;
+
+      let nextTrackIndex = state.list
+        .slice(state.currentlyPlaying + 1)
+        .findIndex((track) => track.preview_url);
+
+      if (nextTrackIndex === -1) {
+        return {
+          ...state,
+          currentlyPlaying: state.list.findIndex((track) => track.preview_url),
+        };
+      } else {
+        nextTrackIndex += state.currentlyPlaying + 1;
+      }
+
+      return {
+        ...state,
+        currentlyPlaying: nextTrackIndex,
+      };
+    });
     setIsPlaying(true);
   }, [setPlayerTrack]);
 
@@ -82,6 +125,10 @@ export function PlayerContextProvider({ children }: { children: React.ReactNode 
   const stopPlaying: Context['stopPlaying'] = useCallback(() => {
     setIsPlaying(false);
   }, []);
+
+  useEffect(() => {
+    console.log(playerTrack);
+  }, [playerTrack]);
 
   return (
     <PlayerContext.Provider

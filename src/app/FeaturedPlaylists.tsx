@@ -1,32 +1,29 @@
 'use client';
-import Card from '@/components/Card';
-import ItemPlayer from '@/components/ItemPlayer';
-import ItemsRow from '@/components/ItemsRow';
 import { FeaturedPlaylistsType } from '@/services/spotify';
-import Link from 'next/link';
+import ItemsRow from '@/components/ItemsRow';
+import PlaylistItem from '@/components/PlaylistItem/PlaylistItem';
 
 interface Props {
   data: FeaturedPlaylistsType;
+  accessToken: string | undefined;
   className?: string;
 }
 
-export default function FeaturedPlaylists({ data, className }: Props) {
+export default function FeaturedPlaylists(props: Props) {
+  const { data, accessToken, className } = props;
+
   return (
     <ItemsRow heading="Featured Playlists" className={className}>
       {(renderAmount) => {
-        return data.items.slice(0, renderAmount).map((playlist) => {
-          return (
-            <ItemPlayer key={playlist.id} customPos={{ bottom: 114 }}>
-              <Link href={'/playlist/' + playlist.id}>
-                <Card
-                  data={playlist}
-                  subtitle={playlist.description}
-                  subtitleMaxLines={2}
-                />
-              </Link>
-            </ItemPlayer>
-          );
-        });
+        return data.items
+          .slice(0, renderAmount)
+          .map((playlist) => (
+            <PlaylistItem
+              key={playlist.id}
+              data={playlist}
+              accessToken={accessToken}
+            />
+          ));
       }}
     </ItemsRow>
   );

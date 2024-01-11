@@ -43,7 +43,7 @@ export function MenuContextProvider({ children }: { children: React.ReactNode })
       {children}
       {menuPropsState &&
         createPortal(
-          <AlertOutsideClick event="mousedown" onOutsideClick={removeMenu}>
+          <AlertOutsideClick event="click" onOutsideClick={removeMenu}>
             <Menu {...menuPropsState} />
           </AlertOutsideClick>,
           document.body

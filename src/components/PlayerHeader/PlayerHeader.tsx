@@ -10,7 +10,7 @@ import styles from './PlayerHeader.module.scss';
 
 interface Props {
   image: { url: string; width: number | null; height: number | null };
-  type: 'Song' | 'Album' | 'Playlist';
+  type: 'Song' | 'Album' | 'Playlist' | 'Single';
   title: string;
   subtitle: React.ReactNode;
   artist?: ArtistType;
@@ -28,8 +28,6 @@ export default function PlayerHeader(props: Props) {
 
   const artistImage = artist?.images[artist.images.length - 1];
   const imageSize = Math.max(Math.min(mainViewSize / 2.8, 232), 160);
-
-  console.log(backgroundColorRGB);
 
   return (
     <div className={`${styles.container} ${className || ''}`}>
@@ -54,6 +52,7 @@ export default function PlayerHeader(props: Props) {
           height={image.height || undefined}
           alt=""
           fill={!image.width}
+          sizes={!image.width ? '100vw' : undefined}
           className={`${styles.imageMain} ${classNameImage || ''}`}
           onLoad={(e) => {
             const colorThief = new ColorThief();

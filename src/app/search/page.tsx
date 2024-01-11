@@ -4,7 +4,6 @@ import Header from '@/components/Header/Header';
 import Searchbar from './Searchbar';
 import SearchResult from './SearchResult';
 import BrowseCategories from './BrowseCategories';
-import ConsoleLogToClient from '@/components/ConsoleLogToClient/ConsoleLogToClient';
 
 interface Props {
   searchParams?: {
@@ -31,7 +30,10 @@ export default async function SearchPage({ searchParams }: Props) {
       </Header>
       <main>
         {searchResultData ? (
-          <SearchResult data={searchResultData} />
+          <SearchResult
+            searchValue={searchParams?.value || ''}
+            data={searchResultData}
+          />
         ) : (
           <BrowseCategories data={browseCategoriesData} />
         )}

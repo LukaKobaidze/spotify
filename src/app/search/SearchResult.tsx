@@ -10,10 +10,11 @@ import ItemsRow from '@/components/ItemsRow/ItemsRow';
 
 interface Props {
   data: SearchDataType;
+  searchValue: string;
 }
 
 export default function SearchResult(props: Props) {
-  const { data } = props;
+  const { data, searchValue } = props;
 
   const topResult = data.artists?.items[0];
 
@@ -47,6 +48,7 @@ export default function SearchResult(props: Props) {
           <div className={styles.tracksWrapper}>
             <h2 className={styles.topHeading}>Songs</h2>
             <Tracks
+              typeAndId={'search' + searchValue}
               data={data.tracks?.items?.slice(0, 4) || []}
               bodyGap={0}
               hideHeaderLabels

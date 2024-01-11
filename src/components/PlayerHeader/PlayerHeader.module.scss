@@ -2,7 +2,7 @@
   display: flex;
   align-items: flex-end;
   color: #fff;
-  min-height: 276px;
+  padding-top: 20px;
   padding-bottom: 24px;
 
   &Background {
@@ -11,6 +11,8 @@
     left: 0;
     width: 100%;
     height: 500px;
+    pointer-events: none;
+    user-select: none;
   }
 }
 
@@ -52,9 +54,9 @@
 
 .subtitle {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   font-size: 14px;
-  white-space: nowrap;
 
   &Image {
     width: 24px;

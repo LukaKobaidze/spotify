@@ -11,6 +11,7 @@ export { default as IconSearch } from './search.svg';
 export { default as IconSearchFill } from './search-fill.svg';
 export { default as IconKeyboardArrowLeft } from './keyboard_arrow_left.svg';
 export { default as IconKeyboardArrowRight } from './keyboard_arrow_right.svg';
+export { default as IconMore } from './more.svg';
 export { default as IconPlay } from './play.svg';
 export { default as IconRemove } from './remove.svg';
 export { default as IconPause } from './pause.svg';

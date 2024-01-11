@@ -100,10 +100,10 @@ export default function Sidebar(props: Props) {
           const isActive = pathname === path;
 
           return (
-            <Tooltip key={path} text={name} position="right">
+            <Tooltip key={path} text={name} position="right" disabled={isExpanded}>
               <Link
                 href={path}
-                className={`textButton ${isActive ? 'textButtonActive' : ''}`}
+                className={`textButton ${isActive ? 'textButtonActive' : ''} ${styles.navLink}`}
               >
                 {isActive ? (
                   <IconActive

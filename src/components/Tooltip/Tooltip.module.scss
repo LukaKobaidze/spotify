@@ -17,6 +17,10 @@
   white-space: nowrap;
   animation: fadeIn 100ms;
 
+  @media (pointer: coarse) {
+    display: none;
+  }
+
   &::before {
     content: '';
     width: var(--pointer-size);

@@ -26,7 +26,7 @@ export default function MainView({ children }: Props) {
   }, [sidebarSize, updateMainViewSize]);
 
   return (
-    <div className={`roundedContainer ${styles.mainView}`} ref={mainViewRef}>
+    <div id="main-view" className={`roundedContainer ${styles.mainView}`} ref={mainViewRef}>
       {children}
     </div>
   );

@@ -7,7 +7,7 @@ import PlayerHeader from '@/components/PlayerHeader';
 import Tracks from '@/components/Tracks';
 import Tooltip from '@/components/Tooltip';
 import TrackListHeader from '@/components/TrackListHeader';
-import AlbumPlaylistActions from '@/components/AlbumPlaylistTrackActions';
+import AlbumPlaylistTrackActions from '@/components/AlbumPlaylistTrackActions';
 import styles from './page.module.scss';
 
 interface Props {
@@ -66,7 +66,9 @@ export default async function TrackPage({ params }: Props) {
                 </>
               }
             />
-            {albumData && <AlbumPlaylistActions data={trackData} />}
+            {albumData && (
+              <AlbumPlaylistTrackActions data={trackData} trackList={[trackData]} />
+            )}
           </>
         )}
 
@@ -92,6 +94,7 @@ export default async function TrackPage({ params }: Props) {
           <div className={styles.albumWrapper}>
             <TrackListHeader data={albumData} />
             <Tracks
+              typeAndId={'album' + albumData.id}
               data={albumData.tracks.items}
               album={albumData}
               hideHeaderLabels

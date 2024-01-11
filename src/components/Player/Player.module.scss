@@ -4,14 +4,6 @@
   padding: 7px 8px 0 8px;
 }
 
-.trackTitle {
-  width: auto !important;
-
-  &Text {
-    width: auto !important;
-  }
-}
-
 .trackImage {
   width: 56px !important;
   height: 56px !important;
@@ -26,14 +18,21 @@
   font-size: 11px !important;
 }
 
+.left,
+.volume {
+  width: 30%;
+}
+
 .left {
   display: flex;
   align-items: center;
-}
 
-.left,
-.right {
-  width: 75%;
+  @media (max-width: 750px) {
+    width: 0;
+    flex-grow: 1;
+    max-width: 300px;
+    min-width: 200px;
+  }
 }
 
 .middle {
@@ -41,14 +40,27 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  width: 100%;
+  width: 40%;
+  min-width: 300px;
 
   &Top {
     display: flex;
   }
+
+  @media (max-width: 750px) {
+    min-width: initial;
+    max-width: 300px;
+    width: 0;
+    flex-grow: 1;
+    margin-right: 10px;
+
+    &Top {
+      margin-bottom: 9px;
+    }
+  }
 }
 
-.right {
+.volume {
   display: flex;
   align-items: center;
   justify-content: flex-end;
@@ -56,10 +68,58 @@
   & > *:not(:last-child) {
     margin-right: 7px;
   }
+
+  &Range {
+    margin-top: 2px;
+    width: 93px;
+    accent-color: #fff;
+    height: 5px;
+    cursor: pointer;
+  }
+
+  @media (max-width: 750px) {
+    position: relative;
+    display: block;
+    margin-left: auto;
+    width: auto;
+    margin-left: auto;
+
+    @media (pointer: fine) {
+      &:hover {
+        & > .volumeRangeWrapper {
+          display: block;
+        }
+      }
+    }
+
+    .volumeRangeWrapper {
+      background-color: #121212;
+      padding: 10px 10px 10px 10px;
+      position: absolute;
+      top: 0;
+      left: calc(50% - 2px);
+      transform: translate(-50%, -100%);
+      border-radius: 5px;
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+      border: 1px solid #000;
+      display: none;
+      z-index: 2;
+    }
+    .volumeRange {
+      appearance: slider-vertical;
+      height: 93px;
+      width: 5px;
+    }
+  }
 }
 
 .likeButton {
   margin-left: 8px;
+
+  @media (max-width: 750px) {
+    margin-left: 2px;
+    padding: 5px !important;
+  }
 }
 
 .buttonSkip {
@@ -99,11 +159,29 @@
       accent-color: rgb(29, 185, 84);
     }
   }
-}
 
-.volumeRange {
-  margin-top: 2px;
-  width: 93px;
-  accent-color: #fff;
-  height: 5px;
+  @media (max-width: 750px) {
+    position: relative;
+
+    &TimerCurrent, &Duration {
+      position: absolute;
+      top: -5px;
+      transform: translateY(-100%);
+    }
+
+    &TimerCurrent {
+      left: 0;
+    }
+
+    &Duration {
+      right: 0;
+    }
+
+    &Range {
+      margin: 0;
+    }
+    
+  }
+
+
 }

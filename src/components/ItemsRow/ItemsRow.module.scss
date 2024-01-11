@@ -19,6 +19,7 @@
   & > * {
     width: 0;
     flex: 1 1 0px;
+    max-width: 300px;
 
     &:not(:last-child) {
       margin-right: 24px;

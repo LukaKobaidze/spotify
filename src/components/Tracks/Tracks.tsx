@@ -1,27 +1,32 @@
 'use client';
-import { useContext } from 'react';
+import { useState, useContext, useRef, useEffect } from 'react';
 import { msToTime } from '@/helpers/time';
 import {
   IconAdd,
   IconAlbum,
   IconDuration,
+  IconMore,
   IconPause,
   IconPlay,
   IconRemove,
   IconUser,
 } from '@/icons';
-import Tooltip from '../Tooltip/Tooltip';
-import styles from './Tracks.module.scss';
-import { PlayerContext } from '@/context/player.context';
-import TrackTitle from '../TrackTitle/TrackTitle';
-import Link from 'next/link';
 import { Optional } from '@/types';
-import { LibraryContext } from '@/context/library.context';
-import LikeButton from '../LikeButton/LikeButton';
-import { AlbumType, TrackType } from '@/services/spotify';
+import { LayoutContext } from '@/context/layout.context';
 import { MenuContext } from '@/context/menu.context';
+import { PlayerContext } from '@/context/player.context';
+import { LibraryContext } from '@/context/library.context';
+import { AlbumType, TrackType } from '@/services/spotify';
+import Link from 'next/link';
+import Tooltip from '../Tooltip';
+import TrackTitle from '../TrackTitle';
+import LikeButton from '../LikeButton';
+import AlertOutsideClick from '../AlertOutsideClick';
+import styles from './Tracks.module.scss';
+import ConsoleLogToClient from '../ConsoleLogToClient/ConsoleLogToClient';
 
 type Props = {
+  typeAndId: string;
   data: Optional<TrackType, 'album'>[];
   album?: AlbumType;
   hideHeaderLabels?: boolean;
@@ -34,6 +39,7 @@ type Props = {
 
 export default function Tracks(props: Props) {
   const {
+    typeAndId,
     data,
     album,
     hideHeaderLabels,
@@ -43,18 +49,22 @@ export default function Tracks(props: Props) {
     bodyGap = 16,
     className,
   } = props;
+
   const { playerTrack, isPlaying, playTrack } = useContext(PlayerContext);
   const { liked, onSaveToLiked } = useContext(LibraryContext);
   const { renderMenu } = useContext(MenuContext);
+  const { mainViewSize } = useContext(LayoutContext);
+  const [containerWidth, setContainerWidth] = useState(0);
+  const [trackActive, setTrackActive] = useState<number | null>(null);
+  const tableRef = useRef<HTMLTableElement>(null);
 
-  const handleTrackRightClick = (
-    e: React.MouseEvent<HTMLElement>,
-    track: Optional<TrackType, 'album'>
+  const handleRenderTrackMenu = (
+    track: Optional<TrackType, 'album'>,
+    windowPos: { x: number; y: number }
   ) => {
-    e.preventDefault();
-
     const trackAlbum = track.album || album!;
-    renderMenu({
+
+    return renderMenu({
       items: [
         {
           type: 'button',
@@ -76,13 +86,32 @@ export default function Tracks(props: Props) {
           name: { text: 'Go to artist', Icon: IconUser },
         },
       ],
-      windowPos: { x: e.pageX, y: e.pageY },
+
+      windowPos,
     });
   };
 
+  const handleTrackRightClick = (
+    e: React.MouseEvent<HTMLElement>,
+    track: Optional<TrackType, 'album'>
+  ) => {
+    e.preventDefault();
+
+    handleRenderTrackMenu(track, { x: e.pageX, y: e.pageY });
+  };
+
   const tbodyStyle = { '--tbody-gap': bodyGap + 'px' } as React.CSSProperties;
+
+  useEffect(() => {
+    if (tableRef.current) {
+      setContainerWidth(tableRef.current.clientWidth);
+    }
+  }, [mainViewSize]);
+
+  const renderHideAlbumColumn = hideAlbumColumn || containerWidth < 600;
+
   return (
-    <table className={`${styles.tableContainer} ${className || ''}`}>
+    <table ref={tableRef} className={`${styles.tableContainer} ${className || ''}`}>
       <thead className={hideHeaderLabels ? styles['thead-hide'] : ''}>
         <tr className={styles.header}>
           {!hideIndexing && (
@@ -91,7 +120,7 @@ export default function Tracks(props: Props) {
             </th>
           )}
           <th>Title</th>
-          {!hideAlbum && !hideAlbumColumn && <th>Album</th>}
+          {!hideAlbum && !renderHideAlbumColumn && <th>Album</th>}
           <th>
             <Tooltip text="Duration" position="top">
               <div className={styles.thDurationWrapper}>
@@ -102,87 +131,105 @@ export default function Tracks(props: Props) {
         </tr>
       </thead>
 
-      <tbody className={styles.tbody} style={tbodyStyle}>
-        {data?.map((mapTrack, i: number) => {
-          const image = mapTrack?.album?.images[mapTrack.album.images.length - 1];
-          const trackIsPlaying =
-            isPlaying &&
-            mapTrack.id === playerTrack.list[playerTrack.currentlyPlaying]?.id;
-          const currentAlbum = album || mapTrack.album!;
+      <AlertOutsideClick event="click" onOutsideClick={() => setTrackActive(null)}>
+        <tbody className={styles.tbody} style={tbodyStyle}>
+          {data?.map((mapTrack, trackIndex: number) => {
+            const image = mapTrack?.album?.images[mapTrack.album.images.length - 1];
+            const trackIsPlaying =
+              playerTrack &&
+              isPlaying &&
+              mapTrack.id === playerTrack.list[playerTrack.currentlyPlaying]?.id;
+            const currentAlbum = album || mapTrack.album!;
 
-          const handlePlayTrack = () =>
-            playTrack({
-              list: data,
-              listAlbum: currentAlbum,
-              currentlyPlaying: i,
-            });
+            const handlePlayTrack = () =>
+              playTrack({
+                typeAndId: typeAndId,
+                list: data,
+                currentlyPlaying: trackIndex,
+                listAlbum: album || undefined,
+              });
 
-          return (
-            <tr
-              key={mapTrack.id}
-              className={`${styles.songRow} ${
-                trackIsPlaying ? styles.isPlaying : ''
-              }`}
-              onContextMenu={(e) => handleTrackRightClick(e, mapTrack)}
-            >
-              {!hideIndexing && (
-                <td className={styles.index}>
-                  <button className={styles.player} onClick={handlePlayTrack}>
-                    {trackIsPlaying ? <IconPause /> : <IconPlay />}
-                  </button>
-                  <span className={styles.indexSpan}>{i + 1} </span>
-                </td>
-              )}
-              <td className={styles.tdTitle}>
-                {hideIndexing && (
-                  <div className={styles.playerOnImageWrapper}>
+            return (
+              <tr
+                key={mapTrack.id}
+                className={`${styles.songRow} ${
+                  trackIsPlaying ? styles.isPlaying : ''
+                } ${trackIndex === trackActive ? styles.active : ''}`}
+                onContextMenu={(e) => handleTrackRightClick(e, mapTrack)}
+                onClick={() => setTrackActive(trackIndex)}
+              >
+                {!hideIndexing && (
+                  <td className={styles.index}>
                     <button className={styles.player} onClick={handlePlayTrack}>
                       {trackIsPlaying ? <IconPause /> : <IconPlay />}
                     </button>
-                  </div>
+                    <span className={styles.indexSpan}>{trackIndex + 1} </span>
+                  </td>
                 )}
-                {hideAlbum ? (
-                  <TrackTitle
-                    trackName={mapTrack.name}
-                    trackId={mapTrack.id}
-                    artistName={mapTrack.artists[0].name}
-                    artistId={mapTrack.artists[0].id}
-                  />
-                ) : (
-                  <TrackTitle
-                    trackName={mapTrack.name}
-                    trackId={mapTrack.id}
-                    artistName={mapTrack.artists[0].name}
-                    artistId={mapTrack.artists[0].id}
-                    image={image?.url}
-                    imageSize={image?.height}
-                  />
-                )}
-              </td>
-              {!hideAlbum && !hideAlbumColumn && (
-                <td className={styles.tdAlbum}>
-                  <div className={styles.tdAlbumWrapper}>
-                    <Link
-                      className={styles.tdAlbumAnchor}
-                      href={'/album/' + currentAlbum.id}
-                    >
-                      {currentAlbum.name}
-                    </Link>
-                  </div>
+                <td className={styles.tdTitle}>
+                  {hideIndexing && (
+                    <div className={styles.playerOnImageWrapper}>
+                      <button className={styles.player} onClick={handlePlayTrack}>
+                        {trackIsPlaying ? <IconPause /> : <IconPlay />}
+                      </button>
+                    </div>
+                  )}
+                  {hideAlbum ? (
+                    <TrackTitle
+                      trackName={mapTrack.name}
+                      trackId={mapTrack.id}
+                      artistName={mapTrack.artists[0].name}
+                      artistId={mapTrack.artists[0].id}
+                    />
+                  ) : (
+                    <TrackTitle
+                      trackName={mapTrack.name}
+                      trackId={mapTrack.id}
+                      artistName={mapTrack.artists[0].name}
+                      artistId={mapTrack.artists[0].id}
+                      image={image?.url}
+                      imageSize={image?.height}
+                    />
+                  )}
                 </td>
-              )}
-              <td className={styles.tdDuration}>
-                <LikeButton
-                  active={liked.includes(mapTrack.id)}
-                  onClick={() => onSaveToLiked(mapTrack.id)}
-                  className={styles.likeButton}
-                />
-                <div>{msToTime(mapTrack.duration_ms)}</div>
-              </td>
-            </tr>
-          );
-        })}
-      </tbody>
+                {!hideAlbum && !renderHideAlbumColumn && (
+                  <td className={styles.tdAlbum}>
+                    <div className={styles.tdAlbumWrapper}>
+                      <Link
+                        className={styles.tdAlbumAnchor}
+                        href={'/album/' + currentAlbum.id}
+                      >
+                        {currentAlbum.name}
+                      </Link>
+                    </div>
+                  </td>
+                )}
+                <td className={styles.tdDuration}>
+                  <LikeButton
+                    active={liked.includes(mapTrack.id)}
+                    onClick={() => onSaveToLiked(mapTrack.id)}
+                    className={`${styles.likeButton} ${
+                      containerWidth < 500 ? styles['likeButton--breakpoint-1'] : ''
+                    }`}
+                  />
+                  <div>{msToTime(mapTrack.duration_ms)}</div>
+                  <button
+                    className={styles.moreButton}
+                    onClick={(e) => {
+                      const element = e.target as HTMLButtonElement;
+                      const rect = element.getBoundingClientRect();
+
+                      handleRenderTrackMenu(mapTrack, { x: rect.left, y: rect.top });
+                    }}
+                  >
+                    <IconMore />
+                  </button>
+                </td>
+              </tr>
+            );
+          })}
+        </tbody>
+      </AlertOutsideClick>
     </table>
   );
 }

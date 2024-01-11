@@ -1,8 +1,9 @@
 .tableContainer {
-  width: 100%;
   border-collapse: collapse;
-  min-width: 325px;
   table-layout: fixed;
+  min-width: 325px;
+  width: 100%;
+  user-select: none;
 }
 
 .thead-hide {
@@ -82,6 +83,16 @@
     & .indexSpan {
       opacity: 0;
     }
+
+    & .moreButton {
+      opacity: 1;
+    }
+  }
+
+  &.active {
+    &::after {
+      background-color: rgba(255, 255, 255, 0.2);
+    }
   }
 
   &.isPlaying {
@@ -153,19 +164,18 @@
   display: flex;
   justify-content: flex-end;
   align-items: center;
-  margin-right: 40px;
 }
 
 .tdAlbum {
   &Wrapper {
-    width: 70%;
     overflow: hidden;
     padding: 3px;
   }
 
   &Anchor {
     display: block;
-    width: 100%;
+    max-width: 100%;
+    width: max-content;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -179,4 +189,18 @@
 
 .likeButton {
   margin-right: 20px;
+
+  &--breakpoint-1 {
+    margin-right: 5px;
+  }
+}
+
+.moreButton {
+  margin-left: 16px;
+  height: 100%;
+  opacity: 0;
+
+  @media (pointer: coarse) {
+    opacity: 1;
+  }
 }

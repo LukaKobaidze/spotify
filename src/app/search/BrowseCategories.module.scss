@@ -5,7 +5,8 @@
   border-radius: 8px;
   overflow: hidden;
 
-  &:hover {
+  &:hover,
+  &:focus-visible {
     & > .categoryImage {
       filter: brightness(120%);
       transform: translate(-50%, -50%) scale(1.05);

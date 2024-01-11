@@ -4,7 +4,7 @@ import { getAlbumReleaseYear, msToTimeFormatted } from '@/helpers/time';
 import Header from '@/components/Header';
 import PlayerHeader from '@/components/PlayerHeader';
 import Tracks from '@/components/Tracks';
-import AlbumPlaylistActions from '@/components/AlbumPlaylistTrackActions';
+import AlbumPlaylistTrackActions from '@/components/AlbumPlaylistTrackActions';
 import Tooltip from '@/components/Tooltip';
 import styles from './page.module.scss';
 
@@ -31,7 +31,7 @@ export default async function AlbumPage({ params }: Props) {
           <PlayerHeader
             image={albumData.images[1]}
             title={albumData.name}
-            type="Album"
+            type={albumData.tracks.total === 1 ? 'Single' : 'Album'}
             artist={artistData}
             subtitle={
               <>
@@ -65,9 +65,20 @@ export default async function AlbumPage({ params }: Props) {
             }
           />
         )}
-        {albumData && <AlbumPlaylistActions data={albumData} />}
+        {albumData && (
+          <AlbumPlaylistTrackActions
+            data={albumData}
+            trackList={albumData.tracks.items}
+            listAlbum={albumData}
+          />
+        )}
         {albumData?.tracks?.items.length && (
-          <Tracks data={albumData.tracks.items} album={albumData} hideAlbum />
+          <Tracks
+            typeAndId={'album' + params.id}
+            data={albumData.tracks.items}
+            album={albumData}
+            hideAlbum
+          />
         )}
       </main>
     </>

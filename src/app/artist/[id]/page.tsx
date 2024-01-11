@@ -46,7 +46,7 @@ export default async function ArtistPage({ params }: Props) {
           />
         )}
 
-        {topTracks && <TopTracks data={topTracks} />}
+        {topTracks && <TopTracks artistId={params.id} data={topTracks} />}
 
         <Rows albums={albums} relatedArtists={relatedArtists} artistId={params.id} />
       </main>

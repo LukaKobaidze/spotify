@@ -21,6 +21,7 @@ export default function Tooltip(props: Props) {
   const [showTooltip, setShowTooltip] = useState(false);
 
   useEffect(() => {
+    setShowTooltip(false);
     const element = childrenRef.current;
 
     if (!element) return;

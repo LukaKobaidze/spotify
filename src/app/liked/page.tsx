@@ -1,12 +1,14 @@
 'use client';
-import Header from '@/components/Header/Header';
-import ItemHeader from '@/components/PlayerHeader/PlayerHeader';
-import PlayButton from '@/components/PlayButton/PlayButton';
-import Tracks from '@/components/Tracks';
-import { LibraryContext } from '@/context/library.context';
-import { TrackType, fetchSeveralTracks } from '@/services/spotify';
 import { useContext, useEffect, useState } from 'react';
+import { TrackType, fetchSeveralTracks } from '@/services/spotify';
+import { LibraryContext } from '@/context/library.context';
+import Header from '@/components/Header';
+import PlayerHeader from '@/components/PlayerHeader';
+import PlayButton from '@/components/PlayButton';
+import Tracks from '@/components/Tracks';
 import styles from './page.module.scss';
+import Link from 'next/link';
+import { IconSearch } from '@/icons';
 
 let abortController = new AbortController();
 
@@ -49,11 +51,13 @@ export default function LikedPage() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [liked]);
 
+  const typeAndId = 'liked';
+
   return (
     <>
-      <Header />
+      <Header backgroundAppearOnScroll />
       <main>
-        <ItemHeader
+        <PlayerHeader
           image={{
             url: 'https://t.scdn.co/images/3099b3803ad9496896c43f22fe9be8c4.png',
             width: 300,
@@ -63,10 +67,27 @@ export default function LikedPage() {
           type="Playlist"
           subtitle={`${liked.length} songs`}
         />
-        <div className={styles.playButtonWrapper}>
-          <PlayButton variant="large" />
-        </div>
-        {tracksData && <Tracks data={tracksData} />}
+        {tracksData?.length !== 0 ? (
+          <>
+            <div className={styles.playButtonWrapper}>
+              <PlayButton variant="large" data={{ typeAndId, list: tracksData! }} />
+            </div>
+            <Tracks typeAndId={typeAndId} data={tracksData!} />
+          </>
+        ) : (
+          <div className={styles.messageEmpty}>
+            <p className={styles.messageEmptyText}>
+              You currently have no liked songs.
+            </p>
+            <Link
+              href="/search"
+              className={`roundedContainer ${styles.messageEmptyLinkButton}`}
+            >
+              <IconSearch className={styles.messageEmptyLinkButtonIcon} />
+              <span>Explore Songs</span>
+            </Link>
+          </div>
+        )}
       </main>
     </>
   );

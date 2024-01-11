@@ -31,6 +31,7 @@ export default function Menu(props: MenuProps) {
   const textProps: React.HTMLAttributes<HTMLSpanElement> = {
     className: styles.itemText,
   };
+
   return (
     <ul
       className={styles.container}
@@ -42,10 +43,10 @@ export default function Menu(props: MenuProps) {
           // Fix if menu is overflowing from window
           const copy = { ...state };
 
-          if (window.innerWidth < windowPos.x + node.clientWidth) {
+          if (window.screen.width < windowPos.x + node.clientWidth) {
             copy.x -= node.clientWidth;
           }
-          if (window.innerHeight < windowPos.y + node.clientHeight) {
+          if (window.screen.height < windowPos.y + node.clientHeight) {
             copy.y -= node.clientHeight;
           }
 

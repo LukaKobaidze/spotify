@@ -1,7 +1,8 @@
 'use client';
-import { createContext, useCallback, useState } from 'react';
+import { createContext, useCallback, useEffect, useState } from 'react';
 
 interface Context {
+  windowSize: number;
   sidebarSize: number;
   mainViewSize: number;
   updateSidebarSize: (size: number) => void;
@@ -9,6 +10,7 @@ interface Context {
 }
 
 const initial: Context = {
+  windowSize: window.innerWidth,
   sidebarSize: 0,
   mainViewSize: 0,
   updateSidebarSize: () => {},
@@ -18,6 +20,7 @@ const initial: Context = {
 export const LayoutContext = createContext(initial);
 
 export function LayoutContextProvider({ children }: { children: React.ReactNode }) {
+  const [windowSize, setWindowSize] = useState(initial.windowSize);
   const [sidebarSize, setSidebarSize] = useState(initial.sidebarSize);
   const [mainViewSize, setMainViewSize] = useState(initial.mainViewSize);
 
@@ -29,9 +32,27 @@ export function LayoutContextProvider({ children }: { children: React.ReactNode 
     setMainViewSize(size);
   }, []);
 
+  useEffect(() => {
+    const handleResize = () => {
+      setWindowSize(window.innerWidth);
+    };
+
+    window.addEventListener('resize', handleResize);
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
+
   return (
     <LayoutContext.Provider
-      value={{ sidebarSize, mainViewSize, updateSidebarSize, updateMainViewSize }}
+      value={{
+        windowSize,
+        sidebarSize,
+        mainViewSize,
+        updateSidebarSize,
+        updateMainViewSize,
+      }}
     >
       {children}
     </LayoutContext.Provider>

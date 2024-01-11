@@ -1,7 +1,7 @@
 import { cookies } from 'next/headers';
 import { fetchFeaturedPlaylists, fetchPlaylist } from '@/services/spotify';
 import data from '@/data';
-import Header from '@/components/Header/Header';
+import Header from '@/components/Header';
 import SpotifyPlaylists from './SpotifyPlaylists';
 import FeaturedPlaylists from './FeaturedPlaylists';
 import GlobalTop50 from './GlobalTop50';
@@ -30,10 +30,20 @@ export default async function RootPage() {
     <>
       <Header />
       <main>
-        <SpotifyPlaylists data={spotifyPlaylistsData} className={styles.rowFirst} />
-        {globalTop50Data && <GlobalTop50 data={globalTop50Data} className={styles.globalTop50} />}
+        <SpotifyPlaylists
+          data={spotifyPlaylistsData}
+          accessToken={accessToken}
+          className={styles.rowFirst}
+        />
+        {globalTop50Data && (
+          <GlobalTop50 data={globalTop50Data} className={styles.globalTop50} />
+        )}
         {featuredPlaylistsData && (
-          <FeaturedPlaylists data={featuredPlaylistsData} className={styles.row} />
+          <FeaturedPlaylists
+            data={featuredPlaylistsData}
+            accessToken={accessToken}
+            className={styles.row}
+          />
         )}
       </main>
     </>

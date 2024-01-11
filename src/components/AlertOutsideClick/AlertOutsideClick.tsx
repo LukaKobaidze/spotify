@@ -1,23 +1,17 @@
-import { useEffect, useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 
-interface Props extends React.HTMLAttributes<HTMLDivElement> {
+interface Props {
   event: 'click' | 'mousedown';
   onOutsideClick: () => void;
+  children: React.ReactElement;
   handleWhen?: boolean;
   ignore?: React.RefObject<Element>[];
 }
 
 export default function AlertOutsideClick(props: Props) {
-  const {
-    event,
-    ignore,
-    handleWhen = true,
-    onOutsideClick,
-    children,
-    ...restProps
-  } = props;
+  const { event, ignore, handleWhen = true, onOutsideClick, children } = props;
 
-  const ref = useRef<HTMLDivElement>(null);
+  const ref = useRef<HTMLDivElement>();
 
   useEffect(() => {
     const handleEvent = (e: MouseEvent) => {
@@ -40,9 +34,9 @@ export default function AlertOutsideClick(props: Props) {
     return () => document.removeEventListener(event, handleEvent);
   }, [handleWhen, onOutsideClick, ignore, event]);
 
-  return (
-    <div ref={ref} {...restProps}>
-      {children}
-    </div>
+  return React.Children.map(children, (child: any) =>
+    React.cloneElement(child, {
+      ref: (ref: any) => (ref = { current: ref }),
+    })
   );
 }

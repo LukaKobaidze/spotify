@@ -18,6 +18,7 @@ export default function TrackListHeader({ data }: Props) {
           width={image.width || undefined}
           height={image.height || undefined}
           fill={!image.width}
+          sizes={!image.width ? '100vw' : undefined}
           alt=""
           className={styles.image}
         />
