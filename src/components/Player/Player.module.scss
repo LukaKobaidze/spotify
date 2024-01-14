@@ -30,7 +30,7 @@
   @media (max-width: 750px) {
     width: 0;
     flex-grow: 1;
-    max-width: 300px;
+    max-width: 250px;
     min-width: 200px;
   }
 }
@@ -52,7 +52,7 @@
     max-width: 300px;
     width: 0;
     flex-grow: 1;
-    margin-right: 10px;
+    margin-right: 20px;
 
     &Top {
       margin-bottom: 9px;

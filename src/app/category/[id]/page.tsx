@@ -8,6 +8,7 @@ import Card from '@/components/Card';
 import Header from '@/components/Header';
 import ItemPlayer from '@/components/ItemPlayer';
 import ItemsGrid from '@/components/ItemsGrid';
+import PlaylistItem from '@/components/PlaylistItem/PlaylistItem';
 
 interface Props {
   params: {
@@ -37,11 +38,11 @@ export default async function CategoryPage({ params }: Props) {
         )}
         <ItemsGrid>
           {playlistsData?.items.map((playlist) => (
-            <ItemPlayer key={playlist.id} customPos={{ bottom: 114 }}>
-              <Link href={`/playlist/${playlist.id}`}>
-                <Card data={playlist} subtitle={playlist.description} subtitleMaxLines={2} />
-              </Link>
-            </ItemPlayer>
+            <PlaylistItem
+              key={playlist.id}
+              accessToken={accessToken}
+              data={playlist}
+            />
           ))}
         </ItemsGrid>
       </main>

@@ -55,7 +55,7 @@ export function PlayerContextProvider({ children }: { children: React.ReactNode 
       setPlayerTrack((state) => {
         if (
           state?.typeAndId === playerTrackArg.typeAndId &&
-          !playerTrackArg.currentlyPlaying
+          playerTrackArg.currentlyPlaying === undefined
         ) {
           setIsPlaying(!isPlaying);
           return {
@@ -67,7 +67,9 @@ export function PlayerContextProvider({ children }: { children: React.ReactNode 
         setIsPlaying(true);
         return {
           ...playerTrackArg,
-          currentlyPlaying: playerTrackArg.currentlyPlaying || 0,
+          currentlyPlaying:
+            playerTrackArg.currentlyPlaying ||
+            playerTrackArg.list.findIndex((track) => track.preview_url),
         };
       });
     },
@@ -88,7 +90,8 @@ export function PlayerContextProvider({ children }: { children: React.ReactNode 
 
       return {
         ...state,
-        currentlyPlaying: previousTrack === -1 ? state.currentlyPlaying : previousTrack,
+        currentlyPlaying:
+          previousTrack === -1 ? state.currentlyPlaying : previousTrack,
       };
     });
   }, [setPlayerTrack]);

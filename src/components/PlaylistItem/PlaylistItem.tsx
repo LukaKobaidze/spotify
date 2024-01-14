@@ -1,3 +1,4 @@
+'use client';
 import { PlaylistWithNoTracksType, fetchPlaylist } from '@/services/spotify';
 import ItemPlayer from '../ItemPlayer';
 import Link from 'next/link';

@@ -101,6 +101,7 @@ main {
   font-weight: 700;
 
   &:hover,
+  &:focus-visible,
   &Active {
     color: rgb(255, 255, 255);
   }
@@ -111,7 +112,8 @@ main {
 }
 
 .linkHoverUnderline {
-  &:hover {
+  &:hover,
+  &:focus-visible {
     text-decoration: underline;
     color: #fff;
   }

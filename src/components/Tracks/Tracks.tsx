@@ -140,6 +140,7 @@ export default function Tracks(props: Props) {
               isPlaying &&
               mapTrack.id === playerTrack.list[playerTrack.currentlyPlaying]?.id;
             const currentAlbum = album || mapTrack.album!;
+            const isDisabled = !mapTrack.preview_url;
 
             const handlePlayTrack = () =>
               playTrack({
@@ -154,13 +155,18 @@ export default function Tracks(props: Props) {
                 key={mapTrack.id}
                 className={`${styles.songRow} ${
                   trackIsPlaying ? styles.isPlaying : ''
-                } ${trackIndex === trackActive ? styles.active : ''}`}
+                } ${isDisabled ? styles.disabled : ''} ${
+                  trackIndex === trackActive ? styles.active : ''
+                }`}
                 onContextMenu={(e) => handleTrackRightClick(e, mapTrack)}
                 onClick={() => setTrackActive(trackIndex)}
               >
                 {!hideIndexing && (
                   <td className={styles.index}>
-                    <button className={styles.player} onClick={handlePlayTrack}>
+                    <button
+                      className={styles.player}
+                      onClick={isDisabled ? undefined : handlePlayTrack}
+                    >
                       {trackIsPlaying ? <IconPause /> : <IconPlay />}
                     </button>
                     <span className={styles.indexSpan}>{trackIndex + 1} </span>

@@ -12,6 +12,7 @@ import LibraryItem from './LibraryItem';
 import Tooltip from '../Tooltip';
 
 const SIDEBAR_EXPANDED_MIN = 280;
+const MAINVIEW_SIZE_MIN = 416;
 
 interface Props {
   className?: string;
@@ -40,7 +41,9 @@ export default function Sidebar(props: Props) {
       const sidebarSize = e.pageX - 7;
 
       if (sidebarSize > SIDEBAR_EXPANDED_MIN - 1) {
-        setExpandedSize(Math.min(sidebarSize, window.innerWidth - 416));
+        setExpandedSize(
+          Math.min(sidebarSize, window.innerWidth - MAINVIEW_SIZE_MIN)
+        );
       }
     };
     const handleMouseUp = () => {
@@ -51,7 +54,7 @@ export default function Sidebar(props: Props) {
       if (e.key === 'ArrowRight') {
         if (isExpanded) {
           setExpandedSize((expandedSizeState) =>
-            Math.min(expandedSizeState + 10, window.innerWidth - 416)
+            Math.min(expandedSizeState + 10, window.innerWidth - MAINVIEW_SIZE_MIN)
           );
         } else {
           setIsExpanded(true);
@@ -70,16 +73,32 @@ export default function Sidebar(props: Props) {
       }
     };
 
+    const handleResize = () => {
+      console.log(window.innerWidth);
+      setExpandedSize((state) => {
+        const min = window.innerWidth - MAINVIEW_SIZE_MIN;
+
+        if (min < SIDEBAR_EXPANDED_MIN) {
+          setIsExpanded(false);
+          return min;
+        }
+
+        return Math.min(state, min);
+      });
+    };
+
     if (isResizing) {
       document.addEventListener('mousemove', handleMouseMove);
       document.addEventListener('mouseup', handleMouseUp);
       document.addEventListener('keydown', handleKeyDown);
     }
+    window.addEventListener('resize', handleResize);
 
     return () => {
       document.removeEventListener('mouseup', handleMouseUp);
       document.removeEventListener('mousemove', handleMouseMove);
       document.removeEventListener('keydown', handleKeyDown);
+      window.removeEventListener('resize', handleResize);
     };
   }, [isResizing, isExpanded]);
 
@@ -103,7 +122,9 @@ export default function Sidebar(props: Props) {
             <Tooltip key={path} text={name} position="right" disabled={isExpanded}>
               <Link
                 href={path}
-                className={`textButton ${isActive ? 'textButtonActive' : ''} ${styles.navLink}`}
+                className={`textButton ${isActive ? 'textButtonActive' : ''} ${
+                  styles.navLink
+                }`}
               >
                 {isActive ? (
                   <IconActive
@@ -128,7 +149,13 @@ export default function Sidebar(props: Props) {
           >
             <button
               className={`textButton ${styles.sidebarExpandButton}`}
-              onClick={() => setIsExpanded((state) => !state)}
+              onClick={() =>
+                setIsExpanded((state) =>
+                  window.innerWidth < SIDEBAR_EXPANDED_MIN + MAINVIEW_SIZE_MIN
+                    ? false
+                    : !state
+                )
+              }
             >
               <IconFolderMusic />
               <span className={styles.sidebarExpandButtonText}>Your Library</span>
@@ -154,12 +181,14 @@ export default function Sidebar(props: Props) {
           ))}
         </div>
       </div>
-      <button
-        className={`${styles.resize} ${isResizing ? styles.active : ''}`}
-        onMouseDown={() => setIsResizing(true)}
-        onFocus={() => setIsResizing(true)}
-        onBlur={() => setIsResizing(false)}
-      />
+      {window.innerWidth >= SIDEBAR_EXPANDED_MIN + MAINVIEW_SIZE_MIN && (
+        <button
+          className={`${styles.resize} ${isResizing ? styles.active : ''}`}
+          onMouseDown={() => setIsResizing(true)}
+          onFocus={() => setIsResizing(true)}
+          onBlur={() => setIsResizing(false)}
+        />
+      )}
     </aside>
   );
 }
