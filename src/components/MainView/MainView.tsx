@@ -1,7 +1,7 @@
 'use client';
 import { useContext, useEffect, useRef } from 'react';
-import styles from './MainView.module.scss';
 import { LayoutContext } from '@/context/layout.context';
+import styles from './MainView.module.scss';
 
 interface Props {
   children: React.ReactNode;

@@ -1,11 +1,11 @@
 'use client';
 import Image from 'next/image';
-import styles from './Card.module.scss';
-import { IconAdd, IconRemove, IconUser } from '@/icons';
-import { AlbumType, ArtistType, PlaylistType } from '@/services/spotify';
 import { useContext } from 'react';
+import { AlbumType, ArtistType, PlaylistType } from '@/services/spotify';
 import { MenuContext } from '@/context/menu.context';
 import { LibraryContext } from '@/context/library.context';
+import { IconAdd, IconRemove, IconUser } from '@/icons';
+import styles from './Card.module.scss';
 
 interface Props {
   data: AlbumType | PlaylistType | ArtistType;

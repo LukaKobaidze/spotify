@@ -1,15 +1,14 @@
 'use client';
-import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
-import data from '@/data';
 import { usePathname } from 'next/navigation';
-import { IconFolderMusic } from '@/icons';
-import styles from './Sidebar.module.scss';
-import { useContext } from 'react';
+import { useState, useEffect, useRef, useContext } from 'react';
 import { LibraryContext } from '@/context/library.context';
 import { LayoutContext } from '@/context/layout.context';
+import { IconFolderMusic } from '@/icons';
+import data from '@/data';
+import Tooltip from '@/components/Tooltip';
 import LibraryItem from './LibraryItem';
-import Tooltip from '../Tooltip';
+import styles from './Sidebar.module.scss';
 
 const SIDEBAR_EXPANDED_MIN = 280;
 const MAINVIEW_SIZE_MIN = 416;

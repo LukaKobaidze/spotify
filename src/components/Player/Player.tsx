@@ -1,5 +1,8 @@
 'use client';
 import { useContext, useEffect, useMemo, useRef, useState } from 'react';
+import { msToTime } from '@/helpers/time';
+import { LibraryContext } from '@/context/library.context';
+import { LayoutContext } from '@/context/layout.context';
 import { PlayerContext } from '@/context/player.context';
 import {
   IconPause,
@@ -10,13 +13,10 @@ import {
   IconVolumeLow,
   IconVolumeMute,
 } from '@/icons';
-import TrackTitle from '../TrackTitle/TrackTitle';
+import TrackTitle from '@/components/TrackTitle';
+import LikeButton from '@/components/LikeButton';
+import Tooltip from '@/components/Tooltip';
 import styles from './Player.module.scss';
-import Tooltip from '../Tooltip/Tooltip';
-import { msToTime } from '@/helpers/time';
-import { LibraryContext } from '@/context/library.context';
-import LikeButton from '../LikeButton/LikeButton';
-import { LayoutContext } from '@/context/layout.context';
 
 const VOLUME_DEFAULT = 50;
 
@@ -27,7 +27,7 @@ interface Props {
 export default function Player(props: Props) {
   const { className } = props;
   const {
-    playerTrack,
+    player,
     playPreviousTrack,
     playNextTrack,
     isPlaying,
@@ -41,12 +41,15 @@ export default function Player(props: Props) {
   const audio = useRef<HTMLAudioElement>(null);
   const { liked, onSaveToLiked } = useContext(LibraryContext);
 
-  const track = playerTrack?.list[playerTrack.currentlyPlaying];
-  const trackAlbum = playerTrack?.listAlbum || track?.album;
+  const track = player?.list[player.currentlyPlaying];
+  const trackAlbum = player?.album || track?.album;
+
+  console.log({track});
+  console.log({trackAlbum});
 
   useEffect(() => {
     audio.current?.load();
-  }, [track?.preview_url]);
+  }, [player?.id, track?.preview_url]);
 
   useEffect(() => {
     if (!audio.current) return;
@@ -173,7 +176,7 @@ export default function Player(props: Props) {
               setCurrentTime(audio.current?.duration || 0);
               stopPlaying();
 
-              if (playerTrack!.list.length - 1 !== playerTrack!.currentlyPlaying) {
+              if (player!.list.length - 1 !== player!.currentlyPlaying) {
                 playNextTrack();
               }
             }}

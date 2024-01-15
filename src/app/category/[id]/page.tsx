@@ -3,12 +3,9 @@ import {
   fetchCategoryPlaylists,
   fetchSingleBrowseCategory,
 } from '@/services/spotify';
-import Link from 'next/link';
-import Card from '@/components/Card';
 import Header from '@/components/Header';
-import ItemPlayer from '@/components/ItemPlayer';
 import ItemsGrid from '@/components/ItemsGrid';
-import PlaylistItem from '@/components/PlaylistItem/PlaylistItem';
+import PlayerCard from '@/components/PlayerCard';
 
 interface Props {
   params: {
@@ -38,11 +35,7 @@ export default async function CategoryPage({ params }: Props) {
         )}
         <ItemsGrid>
           {playlistsData?.items.map((playlist) => (
-            <PlaylistItem
-              key={playlist.id}
-              accessToken={accessToken}
-              data={playlist}
-            />
+            <PlayerCard key={playlist.id} data={playlist} description={playlist.description} />
           ))}
         </ItemsGrid>
       </main>

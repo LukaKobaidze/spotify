@@ -1,7 +1,9 @@
+import Link from 'next/link';
 import { cookies } from 'next/headers';
 import { fetchAlbum, fetchArtist, fetchTrack } from '@/services/spotify';
 import { fetchLyrics } from '@/services/genius';
 import { getAlbumReleaseYear, msToTime } from '@/helpers/time';
+import { getPlayerId } from '@/helpers/player';
 import Header from '@/components/Header';
 import PlayerHeader from '@/components/PlayerHeader';
 import Tracks from '@/components/Tracks';
@@ -45,7 +47,12 @@ export default async function TrackPage({ params }: Props) {
               subtitle={
                 <>
                   &nbsp;•&nbsp;
-                  <span>{trackData.album.name}</span>
+                  <Link
+                    href={'/album/' + trackData.album.id}
+                    className="linkHoverUnderline"
+                  >
+                    {trackData.album.name}
+                  </Link>
                   &nbsp;•&nbsp;
                   <Tooltip
                     text={new Date(trackData.album.release_date).toLocaleDateString(
@@ -94,7 +101,7 @@ export default async function TrackPage({ params }: Props) {
           <div className={styles.albumWrapper}>
             <TrackListHeader data={albumData} />
             <Tracks
-              typeAndId={'album' + albumData.id}
+              playerId={getPlayerId(albumData)}
               data={albumData.tracks.items}
               album={albumData}
               hideHeaderLabels

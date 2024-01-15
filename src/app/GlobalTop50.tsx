@@ -1,11 +1,11 @@
 'use client';
-import { usePathname } from 'next/navigation';
+import Link from 'next/link';
+import { useMemo } from 'react';
 import { PlaylistType } from '@/services/spotify';
-import styles from './GlobalTop50.module.scss';
+import { getPlayerId } from '@/helpers/player';
 import TrackListHeader from '@/components/TrackListHeader';
 import Tracks from '@/components/Tracks';
-import { useMemo } from 'react';
-import Link from 'next/link';
+import styles from './GlobalTop50.module.scss';
 
 interface Props {
   data: PlaylistType;
@@ -22,7 +22,7 @@ export default function GlobalTop50({ data, className }: Props) {
     <div className={className || ''}>
       <TrackListHeader data={data} />
       <Tracks
-        typeAndId={'playlist' + data.id}
+        playerId={getPlayerId(data)}
         data={tracksData}
         bodyGap={5}
         hideHeaderLabels

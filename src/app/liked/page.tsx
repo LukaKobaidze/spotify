@@ -1,18 +1,20 @@
 'use client';
+import Link from 'next/link';
 import { useContext, useEffect, useState } from 'react';
 import { TrackType, fetchSeveralTracks } from '@/services/spotify';
 import { LibraryContext } from '@/context/library.context';
+import { PlayerContext } from '@/context/player.context';
+import { IconSearch } from '@/icons';
 import Header from '@/components/Header';
 import PlayerHeader from '@/components/PlayerHeader';
 import PlayButton from '@/components/PlayButton';
 import Tracks from '@/components/Tracks';
 import styles from './page.module.scss';
-import Link from 'next/link';
-import { IconSearch } from '@/icons';
 
 let abortController = new AbortController();
 
 export default function LikedPage() {
+  const { player, startPlayer, isPlaying } = useContext(PlayerContext);
   const { liked } = useContext(LibraryContext);
   const [accessToken, setAccessToken] = useState<string | null>(null);
   const [tracksData, setTracksData] = useState<TrackType[]>();
@@ -51,7 +53,7 @@ export default function LikedPage() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [liked]);
 
-  const typeAndId = 'liked';
+  const localPlayerId = 'liked';
 
   return (
     <>
@@ -67,14 +69,24 @@ export default function LikedPage() {
           type="Playlist"
           subtitle={`${liked.length} songs`}
         />
-        {tracksData?.length !== 0 ? (
+        {player && tracksData?.length ? (
           <>
             <div className={styles.playButtonWrapper}>
-              <PlayButton variant="large" data={{ typeAndId, list: tracksData! }} />
+              <PlayButton
+                variant="large"
+                onClick={() =>
+                  startPlayer({
+                    argumentType: 'id',
+                    id: localPlayerId,
+                    tracks: tracksData!,
+                  })
+                }
+                isButtonPlaying={player.id === localPlayerId && isPlaying}
+              />
             </div>
-            <Tracks typeAndId={typeAndId} data={tracksData!} />
+            <Tracks playerId={localPlayerId} data={tracksData!} />
           </>
-        ) : (
+        ) : !liked.length ? (
           <div className={styles.messageEmpty}>
             <p className={styles.messageEmptyText}>
               You currently have no liked songs.
@@ -87,7 +99,7 @@ export default function LikedPage() {
               <span>Explore Songs</span>
             </Link>
           </div>
-        )}
+        ) : null}
       </main>
     </>
   );

@@ -1,10 +1,10 @@
 'use client';
-import { useContext, useEffect, useRef, useState } from 'react';
-import { LayoutContext } from '@/context/layout.context';
-import { ArtistType } from '@/services/spotify';
-import ColorThief from 'colorthief';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useContext, useRef, useState } from 'react';
+import ColorThief from 'colorthief';
+import { LayoutContext } from '@/context/layout.context';
+import { ArtistType } from '@/services/spotify';
 import FluidTypography from '@/components/FluidTypography';
 import styles from './PlayerHeader.module.scss';
 

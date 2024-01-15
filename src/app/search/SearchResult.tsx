@@ -2,11 +2,11 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { SearchDataType } from '@/services/spotify';
-import ItemPlayer from '@/components/ItemPlayer/ItemPlayer';
+import ItemPlayer from '@/components/ItemPlayer';
 import Tracks from '@/components/Tracks';
-import Card from '@/components/Card/Card';
+import Card from '@/components/Card';
+import ItemsRow from '@/components/ItemsRow';
 import styles from './SearchResult.module.scss';
-import ItemsRow from '@/components/ItemsRow/ItemsRow';
 
 interface Props {
   data: SearchDataType;
@@ -25,7 +25,7 @@ export default function SearchResult(props: Props) {
           <div className={styles.topResult}>
             <h2 className={styles.topHeading}>Top result</h2>
 
-            <ItemPlayer variant="2">
+            <ItemPlayer variant="2" data={topResult}>
               <Link
                 href={'artist/' + topResult.id}
                 className={styles.topResultAnchor}
@@ -48,7 +48,7 @@ export default function SearchResult(props: Props) {
           <div className={styles.tracksWrapper}>
             <h2 className={styles.topHeading}>Songs</h2>
             <Tracks
-              typeAndId={'search' + searchValue}
+              playerId={'search' + searchValue}
               data={data.tracks?.items?.slice(0, 4) || []}
               bodyGap={0}
               hideHeaderLabels
@@ -64,7 +64,7 @@ export default function SearchResult(props: Props) {
         <ItemsRow heading="Albums" className={styles.albumsRow}>
           {(renderAmount) => {
             return data.albums.items.slice(0, renderAmount).map((album) => (
-              <ItemPlayer key={album.id}>
+              <ItemPlayer key={album.id} data={album}>
                 <Link href={'/album/' + album.id}>
                   <Card
                     data={album}
@@ -85,7 +85,7 @@ export default function SearchResult(props: Props) {
         <ItemsRow heading="Playlists" className={styles.row}>
           {(renderAmount) => {
             return data.playlists.items.slice(0, renderAmount).map((playlist) => (
-              <ItemPlayer key={playlist.id}>
+              <ItemPlayer key={playlist.id} data={playlist}>
                 <Link href={'/playlist/' + playlist.id}>
                   <Card
                     data={playlist}
@@ -102,7 +102,7 @@ export default function SearchResult(props: Props) {
         <ItemsRow heading="Artists" className={styles.row}>
           {(renderAmount) => {
             return data.artists.items.slice(0, renderAmount).map((artist) => (
-              <ItemPlayer key={artist.id}>
+              <ItemPlayer key={artist.id} data={artist}>
                 <Link href={'/artist/' + artist.id}>
                   <Card data={artist} subtitle="Artist" imageRounded />
                 </Link>

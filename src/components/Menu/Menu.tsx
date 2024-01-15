@@ -1,9 +1,9 @@
 'use client';
-import { useContext, useRef, useState } from 'react';
 import Link from 'next/link';
-import styles from './Menu.module.scss';
+import { useContext, useState } from 'react';
 import { MenuContext } from '@/context/menu.context';
 import { IconSquare } from '@/icons';
+import styles from './Menu.module.scss';
 
 export interface MenuProps {
   items: ({ name: { Icon?: any; text: string } } & (

@@ -1,16 +1,15 @@
 'use client';
 import { FeaturedPlaylistsType } from '@/services/spotify';
 import ItemsRow from '@/components/ItemsRow';
-import PlaylistItem from '@/components/PlaylistItem/PlaylistItem';
+import PlayerCard from '@/components/PlayerCard';
 
 interface Props {
   data: FeaturedPlaylistsType;
-  accessToken: string | undefined;
   className?: string;
 }
 
 export default function FeaturedPlaylists(props: Props) {
-  const { data, accessToken, className } = props;
+  const { data, className } = props;
 
   return (
     <ItemsRow heading="Featured Playlists" className={className}>
@@ -18,10 +17,10 @@ export default function FeaturedPlaylists(props: Props) {
         return data.items
           .slice(0, renderAmount)
           .map((playlist) => (
-            <PlaylistItem
+            <PlayerCard
               key={playlist.id}
               data={playlist}
-              accessToken={accessToken}
+              description={playlist.description}
             />
           ));
       }}

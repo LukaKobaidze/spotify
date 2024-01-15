@@ -1,7 +1,7 @@
 'use client';
 import Image from 'next/image';
-import styles from './TrackTitle.module.scss';
 import Link from 'next/link';
+import styles from './TrackTitle.module.scss';
 
 interface Props {
   trackName: string;

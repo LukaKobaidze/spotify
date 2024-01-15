@@ -1,4 +1,3 @@
-import React from 'react';
 import styles from './ItemsGrid.module.scss';
 
 type Props = React.HTMLAttributes<HTMLDivElement>;

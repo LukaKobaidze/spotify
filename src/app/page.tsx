@@ -30,20 +30,12 @@ export default async function RootPage() {
     <>
       <Header />
       <main>
-        <SpotifyPlaylists
-          data={spotifyPlaylistsData}
-          accessToken={accessToken}
-          className={styles.rowFirst}
-        />
+        <SpotifyPlaylists data={spotifyPlaylistsData} className={styles.rowFirst} />
         {globalTop50Data && (
           <GlobalTop50 data={globalTop50Data} className={styles.globalTop50} />
         )}
         {featuredPlaylistsData && (
-          <FeaturedPlaylists
-            data={featuredPlaylistsData}
-            accessToken={accessToken}
-            className={styles.row}
-          />
+          <FeaturedPlaylists data={featuredPlaylistsData} className={styles.row} />
         )}
       </main>
     </>

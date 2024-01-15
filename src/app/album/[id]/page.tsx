@@ -1,5 +1,6 @@
 import { cookies } from 'next/headers';
 import { fetchAlbum, fetchArtist } from '@/services/spotify';
+import { getPlayerId } from '@/helpers/player';
 import { getAlbumReleaseYear, msToTimeFormatted } from '@/helpers/time';
 import Header from '@/components/Header';
 import PlayerHeader from '@/components/PlayerHeader';
@@ -74,7 +75,7 @@ export default async function AlbumPage({ params }: Props) {
         )}
         {albumData?.tracks?.items.length && (
           <Tracks
-            typeAndId={'album' + params.id}
+            playerId={getPlayerId(albumData)}
             data={albumData.tracks.items}
             album={albumData}
             hideAlbum

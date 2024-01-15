@@ -1,26 +1,31 @@
 'use client';
+import { useContext, useState } from 'react';
+import { ArtistType, TrackType } from '@/services/spotify';
+import { PlayerContext } from '@/context/player.context';
+import { getPlayerId } from '@/helpers/player';
 import PlayButton from '@/components/PlayButton';
 import Tracks from '@/components/Tracks';
 import styles from './TopTracks.module.scss';
-import { TrackType } from '@/services/spotify';
-import { useState } from 'react';
 
 interface Props {
-  artistId: string;
-  data: TrackType[];
+  artist: ArtistType;
+  tracks: TrackType[];
 }
 
 export default function TopTracks(props: Props) {
-  const { artistId, data } = props;
+  const { artist, tracks } = props;
 
+  const { player, isPlaying, startPlayer } = useContext(PlayerContext);
   const [seeMore, setSeeMore] = useState(false);
-
-  const typeAndId = 'toptracks' + artistId;
 
   return (
     <>
       <div className={styles.actions}>
-        <PlayButton className={styles.playButton} data={{ typeAndId, list: data }} />
+        <PlayButton
+          className={styles.playButton}
+          onClick={() => startPlayer({ argumentType: 'data', data: artist, tracks })}
+          isButtonPlaying={getPlayerId(artist) === player?.id && isPlaying}
+        />
       </div>
 
       <div>
@@ -28,8 +33,8 @@ export default function TopTracks(props: Props) {
           <h2>Popular</h2>
         </div>
         <Tracks
-          typeAndId={typeAndId}
-          data={seeMore ? data : data.slice(0, 5)}
+          playerId={getPlayerId(artist)}
+          data={seeMore ? tracks : tracks.slice(0, 5)}
           hideHeaderLabels
         />
         <button

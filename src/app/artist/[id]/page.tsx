@@ -1,16 +1,13 @@
 import { cookies } from 'next/headers';
-import Image from 'next/image';
 import {
   fetchArtist,
   fetchArtistAlbums,
   fetchArtistRelatedArtists,
   fetchArtistTopTracks,
 } from '@/services/spotify';
-import ColorThief from 'colorthief';
 import Header from '@/components/Header';
 import TopTracks from './TopTracks';
 import Rows from './Rows';
-import styles from './page.module.scss';
 import Hero from './Hero';
 
 interface Props {
@@ -46,7 +43,9 @@ export default async function ArtistPage({ params }: Props) {
           />
         )}
 
-        {topTracks && <TopTracks artistId={params.id} data={topTracks} />}
+        {artistData && topTracks && (
+          <TopTracks artist={artistData} tracks={topTracks} />
+        )}
 
         <Rows albums={albums} relatedArtists={relatedArtists} artistId={params.id} />
       </main>

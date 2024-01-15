@@ -49,7 +49,7 @@ export type TrackType = {
   is_playable: boolean;
   name: string;
   preview_url: string;
-  type: string;
+  type: 'track';
   uri: string;
   track_number?: number;
   disc_number?: number;
@@ -114,7 +114,7 @@ export type AlbumType = {
   release_date_precision: string;
   total_tracks: number;
   tracks: DataType<Omit<TrackType, 'album'>>;
-  type: string;
+  type: 'album';
   label?: string;
   copyrights?: { text: string; type: string }[];
   is_playable?: boolean;
@@ -155,7 +155,7 @@ export type ArtistType = {
   href: string;
   id: string;
   name: string;
-  type: string;
+  type: 'artist';
   uri: string;
   followers: { href: string | null; total: number };
   genres: string[];
@@ -204,7 +204,7 @@ export type PlaylistType = {
     is_local: boolean;
     track: TrackType & { album: Omit<AlbumType, 'tracks'> };
   }>;
-  type: string;
+  type: 'playlist';
   uri: string;
 };
 export async function fetchPlaylist(

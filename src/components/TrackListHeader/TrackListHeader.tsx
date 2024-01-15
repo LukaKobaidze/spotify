@@ -1,7 +1,7 @@
 import Link from 'next/link';
-import styles from './TrackListHeader.module.scss';
 import Image from 'next/image';
 import { AlbumType, PlaylistType } from '@/services/spotify';
+import styles from './TrackListHeader.module.scss';
 
 interface Props {
   data: PlaylistType | AlbumType;

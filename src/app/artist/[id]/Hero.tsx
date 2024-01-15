@@ -1,11 +1,11 @@
 'use client';
-import { ImageType } from '@/services/spotify';
 import Image from 'next/image';
-import ColorThief from 'colorthief';
 import { useContext, useRef, useState } from 'react';
-import styles from './Hero.module.scss';
-import FluidTypography from '@/components/FluidTypography';
+import ColorThief from 'colorthief';
+import { ImageType } from '@/services/spotify';
 import { LayoutContext } from '@/context/layout.context';
+import FluidTypography from '@/components/FluidTypography';
+import styles from './Hero.module.scss';
 
 interface Props {
   name: string;

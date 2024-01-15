@@ -1,11 +1,10 @@
-import { cookies } from 'next/headers';
 import Link from 'next/link';
+import { cookies } from 'next/headers';
 import { fetchArtistAlbums } from '@/services/spotify';
 import Header from '@/components/Header';
 import ItemsGrid from '@/components/ItemsGrid';
-import ItemPlayer from '@/components/ItemPlayer';
-import Card from '@/components/Card';
 import styles from './page.module.scss';
+import PlayerCard from '@/components/PlayerCard';
 
 interface Props {
   params: {
@@ -32,21 +31,16 @@ export default async function ArtistAlbumsPage({ params }: Props) {
             </Link>
             <ItemsGrid>
               {albums.items.map((album) => (
-                <ItemPlayer key={album.id}>
-                  <Link href={'/album/' + album.id}>
-                    <Card
-                      data={album}
-                      subtitle={
-                        album.release_date.slice(
-                          0,
-                          album.release_date.indexOf('-')
-                        ) +
-                        ' • ' +
-                        album.artists[0].name
-                      }
-                    />
-                  </Link>
-                </ItemPlayer>
+                <PlayerCard
+                  key={album.id}
+                  data={album}
+                  description={
+                    album.release_date.slice(0, album.release_date.indexOf('-')) +
+                    ' • ' +
+                    album.artists[0].name
+                  }
+                  customPos={{ bottom: 95 }}
+                />
               ))}
             </ItemsGrid>
           </>

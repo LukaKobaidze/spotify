@@ -1,8 +1,8 @@
 'use client';
+import Link from 'next/link';
 import { useContext, useMemo } from 'react';
 import { LayoutContext } from '@/context/layout.context';
 import styles from './ItemsRow.module.scss';
-import Link from 'next/link';
 
 interface Props {
   children: (renderAmount: number) => React.ReactNode[];

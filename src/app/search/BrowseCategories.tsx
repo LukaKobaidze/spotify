@@ -1,8 +1,8 @@
-import { BrowseCategoryType, DataType } from '@/services/spotify';
-import styles from './BrowseCategories.module.scss';
 import Link from 'next/link';
 import Image from 'next/image';
+import { BrowseCategoryType, DataType } from '@/services/spotify';
 import ItemsGrid from '@/components/ItemsGrid';
+import styles from './BrowseCategories.module.scss';
 
 interface Props {
   data: DataType<BrowseCategoryType> | null;

@@ -6,10 +6,10 @@ import { PlayerContextProvider } from '@/context/player.context';
 import { LibraryContextProvider } from '@/context/library.context';
 import { LayoutContextProvider } from '@/context/layout.context';
 import MainView from '@/components/MainView';
-import './globals.scss';
-import { MenuContextProvider } from '@/context/menu.context';
 import { cookies } from 'next/headers';
-import VerifyAuth from '@/components/VerifyAuth/VerifyAuth';
+import { MenuContextProvider } from '@/context/menu.context';
+import VerifyAuth from '@/components/VerifyAuth';
+import './globals.scss';
 
 const inter = Inter({ subsets: ['latin'] });
 

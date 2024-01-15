@@ -1,32 +1,43 @@
-import PlayButton from '../PlayButton/PlayButton';
+'use client';
+import { useContext } from 'react';
+import {
+  AlbumType,
+  ArtistType,
+  PlaylistType,
+  PlaylistWithNoTracksType,
+  TrackType,
+} from '@/services/spotify';
+import { getPlayerId } from '@/helpers/player';
+import { PlayerContext } from '@/context/player.context';
+import PlayButton from '@/components/PlayButton';
 import styles from './ItemPlayer.module.scss';
 
 interface Props {
-  onPlayButtonClick: () => void;
+  data: PlaylistWithNoTracksType | PlaylistType | AlbumType | ArtistType | TrackType;
   variant?: '1' | '2';
   customPos?: { bottom?: number; right?: number };
   playerButtonClassName?: string;
-  isActive?: boolean;
-  isButtonPlaying?: boolean;
   classNameWrapper?: string;
   children?: React.ReactNode;
 }
 
 export default function ItemPlayer(props: Props) {
   const {
-    onPlayButtonClick,
+    data,
     variant = '1',
     customPos,
     playerButtonClassName,
-    isActive,
-    isButtonPlaying,
     classNameWrapper,
     children,
   } = props;
 
+  const { player, startPlayer, isPlaying } = useContext(PlayerContext);
+
+  const isButtonPlaying = getPlayerId(data) === player?.id && isPlaying;
+
   return (
     <div
-      className={`${styles.container} ${isActive ? styles.active : ''} ${
+      className={`${styles.container} ${isButtonPlaying ? styles.active : ''} ${
         classNameWrapper || ''
       }`}
     >
@@ -34,7 +45,7 @@ export default function ItemPlayer(props: Props) {
       <PlayButton
         isButtonPlaying={isButtonPlaying}
         onClick={() => {
-          onPlayButtonClick();
+          startPlayer({ argumentType: 'data', data: data });
         }}
         className={`${styles.button} ${styles[`button--${variant}`]} ${
           playerButtonClassName || ''

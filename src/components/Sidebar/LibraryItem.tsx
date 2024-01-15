@@ -1,10 +1,10 @@
 import Link from 'next/link';
-import Tooltip from '@/components/Tooltip';
 import Image from 'next/image';
 import { useContext } from 'react';
+import { LibraryContext } from '@/context/library.context';
 import { MenuContext } from '@/context/menu.context';
 import { IconRemove } from '@/icons';
-import { LibraryContext } from '@/context/library.context';
+import Tooltip from '@/components/Tooltip';
 import styles from './LibraryItem.module.scss';
 
 export interface LibraryItemProps {

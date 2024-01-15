@@ -4,7 +4,7 @@
   border-radius: 6px;
   transition: background-color 300ms;
 
-  &:hover {
+  &:hover, &.active {
     background-color: #282828;
 
     & > .button {

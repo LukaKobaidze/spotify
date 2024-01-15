@@ -1,4 +1,5 @@
 'use client';
+import Link from 'next/link';
 import { useState, useContext, useRef, useEffect } from 'react';
 import { msToTime } from '@/helpers/time';
 import {
@@ -17,16 +18,14 @@ import { MenuContext } from '@/context/menu.context';
 import { PlayerContext } from '@/context/player.context';
 import { LibraryContext } from '@/context/library.context';
 import { AlbumType, TrackType } from '@/services/spotify';
-import Link from 'next/link';
-import Tooltip from '../Tooltip';
-import TrackTitle from '../TrackTitle';
-import LikeButton from '../LikeButton';
-import AlertOutsideClick from '../AlertOutsideClick';
+import Tooltip from '@/components/Tooltip';
+import TrackTitle from '@/components/TrackTitle';
+import LikeButton from '@/components/LikeButton';
+import AlertOutsideClick from '@/components/AlertOutsideClick';
 import styles from './Tracks.module.scss';
-import ConsoleLogToClient from '../ConsoleLogToClient/ConsoleLogToClient';
 
 type Props = {
-  typeAndId: string;
+  playerId: string;
   data: Optional<TrackType, 'album'>[];
   album?: AlbumType;
   hideHeaderLabels?: boolean;
@@ -39,7 +38,7 @@ type Props = {
 
 export default function Tracks(props: Props) {
   const {
-    typeAndId,
+    playerId,
     data,
     album,
     hideHeaderLabels,
@@ -50,7 +49,8 @@ export default function Tracks(props: Props) {
     className,
   } = props;
 
-  const { playerTrack, isPlaying, playTrack } = useContext(PlayerContext);
+  const { player, isPlaying, startPlayer, updateTrackList } =
+    useContext(PlayerContext);
   const { liked, onSaveToLiked } = useContext(LibraryContext);
   const { renderMenu } = useContext(MenuContext);
   const { mainViewSize } = useContext(LayoutContext);
@@ -108,6 +108,14 @@ export default function Tracks(props: Props) {
     }
   }, [mainViewSize]);
 
+  useEffect(() => {
+    if (playerId === player?.id) {
+      updateTrackList(data);
+    }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [data.length, updateTrackList]);
+
   const renderHideAlbumColumn = hideAlbumColumn || containerWidth < 600;
 
   return (
@@ -136,18 +144,20 @@ export default function Tracks(props: Props) {
           {data?.map((mapTrack, trackIndex: number) => {
             const image = mapTrack?.album?.images[mapTrack.album.images.length - 1];
             const trackIsPlaying =
-              playerTrack &&
+              player &&
               isPlaying &&
-              mapTrack.id === playerTrack.list[playerTrack.currentlyPlaying]?.id;
+              playerId === player.id &&
+              mapTrack.id === player.list[player.currentlyPlaying]?.id;
             const currentAlbum = album || mapTrack.album!;
             const isDisabled = !mapTrack.preview_url;
 
             const handlePlayTrack = () =>
-              playTrack({
-                typeAndId: typeAndId,
-                list: data,
-                currentlyPlaying: trackIndex,
-                listAlbum: album || undefined,
+              startPlayer({
+                argumentType: 'id',
+                id: playerId,
+                tracks: data,
+                trackIndex,
+                album: !mapTrack.album ? album : undefined,
               });
 
             return (

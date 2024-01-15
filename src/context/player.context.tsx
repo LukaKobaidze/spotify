@@ -1,14 +1,25 @@
 'use client';
-import { createContext, useState, useCallback, useEffect } from 'react';
+import { createContext, useState, useCallback } from 'react';
+import { getCookie } from 'cookies-next';
 import { Optional } from '@/types';
-import { AlbumType, TrackType } from '@/services/spotify';
+import {
+  AlbumType,
+  ArtistType,
+  PlaylistType,
+  PlaylistWithNoTracksType,
+  TrackType,
+  fetchAlbum,
+  fetchArtistTopTracks,
+  fetchPlaylist,
+} from '@/services/spotify';
+import { getPlayerId } from '@/helpers/player';
 import { useLocalStorageState } from '@/hooks';
 
-export type PlayerTrackType = {
-  typeAndId: string;
+export type PlayerType = {
+  id: string;
   list: Optional<TrackType, 'album'>[];
   currentlyPlaying: number;
-  listAlbum?: Omit<
+  album?: Omit<
     AlbumType,
     | 'external_ids'
     | 'genres'
@@ -22,62 +33,173 @@ export type PlayerTrackType = {
 };
 
 interface Context {
-  playerTrack: PlayerTrackType | null;
+  player: PlayerType | null;
   isPlaying: boolean;
-  playTrack: (track: Optional<PlayerTrackType, 'currentlyPlaying'>) => void;
+  startPlayer: (
+    args: {
+      trackIndex?: number;
+      album?: Omit<
+        AlbumType,
+        | 'external_ids'
+        | 'genres'
+        | 'label'
+        | 'popularity'
+        | 'tracks'
+        | 'copyrights'
+        | 'available_markets'
+        | 'album_group'
+      >;
+    } & (
+      | {
+          argumentType: 'data';
+          data:
+            | PlaylistWithNoTracksType
+            | PlaylistType
+            | AlbumType
+            | ArtistType
+            | TrackType;
+          tracks?: Optional<TrackType, 'album'>[];
+        }
+      | { argumentType: 'id'; id: string; tracks: Optional<TrackType, 'album'>[] }
+    )
+  ) => void;
   playPreviousTrack: () => void;
   playNextTrack: () => void;
   togglePlaying: () => void;
   stopPlaying: () => void;
+  updateTrackList: (list: Optional<TrackType, 'album'>[]) => void;
 }
 
 const initial: Context = {
-  playerTrack: null,
+  player: null,
   isPlaying: false,
-  playTrack: () => {},
+  startPlayer: () => {},
   playPreviousTrack: () => {},
   playNextTrack: () => {},
   togglePlaying: () => {},
   stopPlaying: () => {},
+  updateTrackList: () => {},
 };
 
 export const PlayerContext = createContext(initial);
 
 export function PlayerContextProvider({ children }: { children: React.ReactNode }) {
-  const [playerTrack, setPlayerTrack] = useLocalStorageState(
-    'player-tracks',
-    initial.playerTrack
-  );
+  const [player, setPlayer] = useLocalStorageState('player', initial.player);
   const [isPlaying, setIsPlaying] = useState(initial.isPlaying);
 
-  const playTrack: Context['playTrack'] = useCallback(
-    (playerTrackArg) => {
-      setPlayerTrack((state) => {
-        if (
-          state?.typeAndId === playerTrackArg.typeAndId &&
-          playerTrackArg.currentlyPlaying === undefined
-        ) {
-          setIsPlaying(!isPlaying);
-          return {
-            ...playerTrackArg,
-            currentlyPlaying: state.currentlyPlaying,
-          };
-        }
+  const getTrackListIndex = (
+    list: TrackType[] | Omit<TrackType, 'album'>[],
+    trackIndex: number | undefined
+  ) => {
+    return trackIndex === undefined
+      ? list.findIndex((track) => track.preview_url)
+      : trackIndex;
+  };
 
-        setIsPlaying(true);
-        return {
-          ...playerTrackArg,
-          currentlyPlaying:
-            playerTrackArg.currentlyPlaying ||
-            playerTrackArg.list.findIndex((track) => track.preview_url),
-        };
-      });
+  const startPlayer: Context['startPlayer'] = useCallback(
+    (args) => {
+      const accessToken = getCookie('access_token') as string;
+      const trackListId =
+        args.argumentType === 'id' ? args.id : getPlayerId(args.data);
+
+      if (player?.id === trackListId) {
+        const { trackIndex, album } = args;
+
+        if (trackIndex !== undefined && trackIndex !== player.currentlyPlaying) {
+          setPlayer((state) =>
+            state ? { ...state, currentlyPlaying: trackIndex, album } : null
+          );
+          setIsPlaying(true);
+        } else {
+          setIsPlaying((state) => !state);
+        }
+      } else if (args.argumentType === 'id') {
+        const { id, tracks, trackIndex, album } = args;
+
+        const currentlyPlaying = getTrackListIndex(tracks, trackIndex);
+
+        if (currentlyPlaying !== -1) {
+          setPlayer({
+            list: tracks,
+            id,
+            currentlyPlaying,
+            album,
+          });
+          setIsPlaying(true);
+        }
+      } else {
+        const { data, tracks, trackIndex, album } = args;
+
+        console.log(album);
+
+        if (tracks !== undefined) {
+          setPlayer({
+            list: tracks,
+            id: trackListId,
+            currentlyPlaying: getTrackListIndex(tracks, trackIndex),
+            album,
+          });
+          setIsPlaying(true);
+        } else if (data.type === 'playlist') {
+          fetchPlaylist(accessToken, data.id).then((data) => {
+            const list = data.tracks.items.map((item) => item.track);
+
+            setPlayer({
+              list: list,
+              id: trackListId,
+              currentlyPlaying: getTrackListIndex(list, trackIndex),
+              album,
+            });
+            setIsPlaying(true);
+
+            return;
+          });
+        } else if (data.type === 'album') {
+          if (data.tracks?.items) {
+            setPlayer({
+              list: data.tracks.items,
+              id: trackListId,
+              album: album,
+              currentlyPlaying: getTrackListIndex(data.tracks.items, trackIndex),
+            });
+            setIsPlaying(true);
+          } else {
+            fetchAlbum(accessToken, data.id).then((data) => {
+              setPlayer({
+                list: data.tracks.items,
+                id: trackListId,
+                album: album,
+                currentlyPlaying: getTrackListIndex(data.tracks.items, trackIndex),
+              });
+              setIsPlaying(true);
+            });
+          }
+        } else if (data.type === 'artist') {
+          fetchArtistTopTracks(accessToken, data.id).then((data) => {
+            setPlayer({
+              list: data.tracks,
+              id: trackListId,
+              album: album,
+              currentlyPlaying: getTrackListIndex(data.tracks, trackIndex),
+            });
+            setIsPlaying(true);
+          });
+        } else if (data.type === 'track') {
+          setPlayer({
+            list: [data],
+            id: trackListId,
+            album: album,
+            currentlyPlaying: 0,
+          });
+          setIsPlaying(true);
+        }
+      }
     },
-    [setPlayerTrack, isPlaying]
+    [player?.id, player?.currentlyPlaying, setPlayer]
   );
 
   const playPreviousTrack: Context['playPreviousTrack'] = useCallback(() => {
-    setPlayerTrack((state) => {
+    setPlayer((state) => {
       if (state === null) return null;
 
       let previousTrack = -1;
@@ -94,10 +216,10 @@ export function PlayerContextProvider({ children }: { children: React.ReactNode 
           previousTrack === -1 ? state.currentlyPlaying : previousTrack,
       };
     });
-  }, [setPlayerTrack]);
+  }, [setPlayer]);
 
   const playNextTrack: Context['playNextTrack'] = useCallback(() => {
-    setPlayerTrack((state) => {
+    setPlayer((state) => {
       if (state === null) return null;
 
       let nextTrackIndex = state.list
@@ -119,7 +241,7 @@ export function PlayerContextProvider({ children }: { children: React.ReactNode 
       };
     });
     setIsPlaying(true);
-  }, [setPlayerTrack]);
+  }, [setPlayer]);
 
   const togglePlaying: Context['togglePlaying'] = useCallback(() => {
     setIsPlaying((state) => !state);
@@ -129,19 +251,31 @@ export function PlayerContextProvider({ children }: { children: React.ReactNode 
     setIsPlaying(false);
   }, []);
 
-  useEffect(() => {
-    console.log(playerTrack);
-  }, [playerTrack]);
+  const updateTrackList: Context['updateTrackList'] = useCallback(
+    (list) => {
+      setPlayer((state) =>
+        state
+          ? {
+              ...state,
+              list,
+              currentlyPlaying: Math.min(state.currentlyPlaying, list.length - 1),
+            }
+          : null
+      );
+    },
+    [setPlayer]
+  );
 
   return (
     <PlayerContext.Provider
       value={{
-        playerTrack,
+        player,
         isPlaying,
-        playTrack,
+        startPlayer,
         playPreviousTrack,
         playNextTrack,
         stopPlaying,
+        updateTrackList,
         togglePlaying,
       }}
     >
