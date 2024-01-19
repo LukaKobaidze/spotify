@@ -130,59 +130,81 @@ export function PlayerContextProvider({ children }: { children: React.ReactNode 
       } else {
         const { data, tracks, trackIndex, album } = args;
 
-        console.log(album);
-
         if (tracks !== undefined) {
-          setPlayer({
-            list: tracks,
-            id: trackListId,
-            currentlyPlaying: getTrackListIndex(tracks, trackIndex),
-            album,
-          });
-          setIsPlaying(true);
+          const currentlyPlaying = getTrackListIndex(tracks, trackIndex);
+
+          if (currentlyPlaying !== -1) {
+            setPlayer({
+              list: tracks,
+              id: trackListId,
+              currentlyPlaying,
+              album,
+            });
+            setIsPlaying(true);
+          }
         } else if (data.type === 'playlist') {
           fetchPlaylist(accessToken, data.id).then((data) => {
             const list = data.tracks.items.map((item) => item.track);
 
-            setPlayer({
-              list: list,
-              id: trackListId,
-              currentlyPlaying: getTrackListIndex(list, trackIndex),
-              album,
-            });
-            setIsPlaying(true);
+            const currentlyPlaying = getTrackListIndex(list, trackIndex);
 
-            return;
+            if (currentlyPlaying !== -1) {
+              setPlayer({
+                list: list,
+                id: trackListId,
+                currentlyPlaying,
+                album,
+              });
+              setIsPlaying(true);
+            }
           });
         } else if (data.type === 'album') {
           if (data.tracks?.items) {
-            setPlayer({
-              list: data.tracks.items,
-              id: trackListId,
-              album: album,
-              currentlyPlaying: getTrackListIndex(data.tracks.items, trackIndex),
-            });
-            setIsPlaying(true);
-          } else {
-            fetchAlbum(accessToken, data.id).then((data) => {
+            const currentlyPlaying = getTrackListIndex(
+              data.tracks.items,
+              trackIndex
+            );
+
+            if (currentlyPlaying !== -1) {
               setPlayer({
                 list: data.tracks.items,
                 id: trackListId,
                 album: album,
-                currentlyPlaying: getTrackListIndex(data.tracks.items, trackIndex),
+                currentlyPlaying,
               });
               setIsPlaying(true);
+            }
+          } else {
+            fetchAlbum(accessToken, data.id).then((data) => {
+              const currentlyPlaying = getTrackListIndex(
+                data.tracks.items,
+                trackIndex
+              );
+
+              if (currentlyPlaying !== -1) {
+                setPlayer({
+                  list: data.tracks.items,
+                  id: trackListId,
+                  album: album,
+                  currentlyPlaying,
+                });
+                setIsPlaying(true);
+              }
             });
           }
         } else if (data.type === 'artist') {
           fetchArtistTopTracks(accessToken, data.id).then((data) => {
-            setPlayer({
-              list: data.tracks,
-              id: trackListId,
-              album: album,
-              currentlyPlaying: getTrackListIndex(data.tracks, trackIndex),
-            });
-            setIsPlaying(true);
+            const currentlyPlaying = getTrackListIndex(data.tracks, trackIndex);
+
+            if (currentlyPlaying !== -1) {
+              setPlayer({
+                list: data.tracks,
+                id: trackListId,
+                album: album,
+                currentlyPlaying,
+              });
+              setIsPlaying(true);
+            }
           });
         } else if (data.type === 'track') {
           setPlayer({

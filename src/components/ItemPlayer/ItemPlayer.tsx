@@ -45,7 +45,11 @@ export default function ItemPlayer(props: Props) {
       <PlayButton
         isButtonPlaying={isButtonPlaying}
         onClick={() => {
-          startPlayer({ argumentType: 'data', data: data });
+          startPlayer({
+            argumentType: 'data',
+            data: data,
+            album: data.type === 'album' ? data : undefined,
+          });
         }}
         className={`${styles.button} ${styles[`button--${variant}`]} ${
           playerButtonClassName || ''

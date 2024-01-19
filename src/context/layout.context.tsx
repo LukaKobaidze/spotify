@@ -10,7 +10,7 @@ interface Context {
 }
 
 const initial: Context = {
-  windowSize: window.innerWidth,
+  windowSize: typeof window === 'undefined' ? 0 : window.innerWidth,
   sidebarSize: 0,
   mainViewSize: 0,
   updateSidebarSize: () => {},

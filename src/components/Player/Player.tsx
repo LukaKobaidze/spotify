@@ -44,9 +44,6 @@ export default function Player(props: Props) {
   const track = player?.list[player.currentlyPlaying];
   const trackAlbum = player?.album || track?.album;
 
-  console.log({track});
-  console.log({trackAlbum});
-
   useEffect(() => {
     audio.current?.load();
   }, [player?.id, track?.preview_url]);

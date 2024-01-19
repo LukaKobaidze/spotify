@@ -73,7 +73,6 @@ export default function Sidebar(props: Props) {
     };
 
     const handleResize = () => {
-      console.log(window.innerWidth);
       setExpandedSize((state) => {
         const min = window.innerWidth - MAINVIEW_SIZE_MIN;
 
@@ -180,14 +179,15 @@ export default function Sidebar(props: Props) {
           ))}
         </div>
       </div>
-      {window.innerWidth >= SIDEBAR_EXPANDED_MIN + MAINVIEW_SIZE_MIN && (
-        <button
-          className={`${styles.resize} ${isResizing ? styles.active : ''}`}
-          onMouseDown={() => setIsResizing(true)}
-          onFocus={() => setIsResizing(true)}
-          onBlur={() => setIsResizing(false)}
-        />
-      )}
+      {typeof window !== 'undefined' &&
+        window.innerWidth >= SIDEBAR_EXPANDED_MIN + MAINVIEW_SIZE_MIN && (
+          <button
+            className={`${styles.resize} ${isResizing ? styles.active : ''}`}
+            onMouseDown={() => setIsResizing(true)}
+            onFocus={() => setIsResizing(true)}
+            onBlur={() => setIsResizing(false)}
+          />
+        )}
     </aside>
   );
 }
