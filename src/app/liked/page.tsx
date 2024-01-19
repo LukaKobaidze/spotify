@@ -30,7 +30,9 @@ export default function LikedPage() {
     abortController = new AbortController();
 
     if (accessToken) {
-      fetchSeveralTracks(accessToken, liked, abortController).then((data) => {
+      fetchSeveralTracks(accessToken, liked, {
+        signal: abortController.signal,
+      }).then((data) => {
         setTracksData(data.flatMap((d) => d.tracks));
       });
     }

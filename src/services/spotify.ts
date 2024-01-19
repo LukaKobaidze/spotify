@@ -57,12 +57,13 @@ export type TrackType = {
 
 export async function fetchTrack(
   accessToken: string,
-  id: string
+  id: string,
+  options?: RequestInit
 ): Promise<TrackType> {
-  const res = await fetch(
-    `${API_URL}/tracks/${id}?market=ES`,
-    defaultOptionsGET(accessToken)
-  );
+  const res = await fetch(`${API_URL}/tracks/${id}?market=ES`, {
+    ...defaultOptionsGET(accessToken),
+    ...options,
+  });
 
   return res.json();
 }
@@ -70,7 +71,7 @@ export async function fetchTrack(
 export async function fetchSeveralTracks(
   accessToken: string,
   ids: string[],
-  abortController: AbortController
+  options?: RequestInit
 ): Promise<{ tracks: TrackType[] }[]> {
   let fetchArr: Promise<{ tracks: TrackType[] }>[] = [];
 
@@ -78,7 +79,7 @@ export async function fetchSeveralTracks(
     fetchArr.push(
       fetch(`${API_URL}/tracks?ids=${ids.slice(i, i + 50).join(',')}`, {
         ...defaultOptionsGET(accessToken),
-        signal: abortController.signal,
+        ...options,
       }).then((res) => res.json())
     );
   }
@@ -88,12 +89,13 @@ export async function fetchSeveralTracks(
 
 export async function fetchArtistTopTracks(
   accessToken: string,
-  id: string
+  id: string,
+  options?: RequestInit
 ): Promise<{ tracks: TrackType[] }> {
-  const res = await fetch(
-    `${API_URL}/artists/${id}/top-tracks?market=ES`,
-    defaultOptionsGET(accessToken)
-  );
+  const res = await fetch(`${API_URL}/artists/${id}/top-tracks?market=ES`, {
+    ...defaultOptionsGET(accessToken),
+    ...options,
+  });
 
   return res.json();
 }
@@ -126,24 +128,26 @@ export type AlbumType = {
 
 export async function fetchAlbum(
   accessToken: string,
-  id: string
+  id: string,
+  options?: RequestInit
 ): Promise<AlbumType> {
-  const res = await fetch(
-    `${API_URL}/albums/${id}?market=ES`,
-    defaultOptionsGET(accessToken)
-  );
+  const res = await fetch(`${API_URL}/albums/${id}?market=ES`, {
+    ...defaultOptionsGET(accessToken),
+    ...options,
+  });
 
   return res.json();
 }
 
 export async function fetchArtistAlbums(
   accessToken: string,
-  id: string
+  id: string,
+  options?: RequestInit
 ): Promise<DataType<AlbumType>> {
-  const res = await fetch(
-    `${API_URL}/artists/${id}/albums?include_groups=album`,
-    defaultOptionsGET(accessToken)
-  );
+  const res = await fetch(`${API_URL}/artists/${id}/albums?include_groups=album`, {
+    ...defaultOptionsGET(accessToken),
+    ...options,
+  });
 
   return res.json();
 }
@@ -165,23 +169,25 @@ export type ArtistType = {
 
 export async function fetchArtist(
   accessToken: string,
-  id: string
+  id: string,
+  options?: RequestInit
 ): Promise<ArtistType> {
-  const res = await fetch(
-    `${API_URL}/artists/${id}`,
-    defaultOptionsGET(accessToken)
-  );
+  const res = await fetch(`${API_URL}/artists/${id}`, {
+    ...defaultOptionsGET(accessToken),
+    ...options,
+  });
 
   return res.json();
 }
 export async function fetchArtistRelatedArtists(
   accessToken: string,
-  id: string
+  id: string,
+  options?: RequestInit
 ): Promise<{ artists: ArtistType[] }> {
-  const res = await fetch(
-    `${API_URL}/artists/${id}/related-artists`,
-    defaultOptionsGET(accessToken)
-  );
+  const res = await fetch(`${API_URL}/artists/${id}/related-artists`, {
+    ...defaultOptionsGET(accessToken),
+    ...options,
+  });
 
   return res.json();
 }
@@ -209,12 +215,13 @@ export type PlaylistType = {
 };
 export async function fetchPlaylist(
   accessToken: string,
-  id: string
+  id: string,
+  options?: RequestInit
 ): Promise<PlaylistType> {
-  const res = await fetch(
-    `${API_URL}/playlists/${id}`,
-    defaultOptionsGET(accessToken)
-  );
+  const res = await fetch(`${API_URL}/playlists/${id}`, {
+    ...defaultOptionsGET(accessToken),
+    ...options,
+  });
 
   return res.json();
 }
@@ -227,11 +234,12 @@ export type FeaturedPlaylistsType = DataType<PlaylistWithNoTracksType>;
 
 export async function fetchFeaturedPlaylists(
   accessToken: string,
-  limit?: number
+  limit?: number,
+  options?: RequestInit
 ): Promise<FeaturedPlaylistsType> {
   const res = await fetch(
     `${API_URL}/browse/featured-playlists${limit ? '?limit=' + limit : ''}`,
-    defaultOptionsGET(accessToken)
+    { ...defaultOptionsGET(accessToken), ...options }
   );
 
   return (await res.json()).playlists;
@@ -239,12 +247,13 @@ export async function fetchFeaturedPlaylists(
 
 export async function fetchCategoryPlaylists(
   categoryId: string,
-  accessToken: string
+  accessToken: string,
+  options?: RequestInit
 ): Promise<DataType<PlaylistWithNoTracksType>> {
-  const res = await fetch(
-    `${API_URL}/browse/categories/${categoryId}/playlists`,
-    defaultOptionsGET(accessToken)
-  );
+  const res = await fetch(`${API_URL}/browse/categories/${categoryId}/playlists`, {
+    ...defaultOptionsGET(accessToken),
+    ...options,
+  });
 
   return (await res.json()).playlists;
 }
@@ -260,13 +269,14 @@ export type SearchDataType = {
 export async function fetchSearch(
   accessToken: string,
   searchValue: string,
-  limit?: number
+  limit?: number,
+  options?: RequestInit
 ): Promise<SearchDataType> {
   const res = await fetch(
     `${API_URL}/search?q=${searchValue}&type=artist,track,album,playlist${
       limit ? `&limit=${limit}` : ''
     }`,
-    defaultOptionsGET(accessToken)
+    { ...defaultOptionsGET(accessToken), ...options }
   );
 
   return res.json();
@@ -283,11 +293,12 @@ export type BrowseCategoryType = {
 
 export async function fetchSeveralBrowseCategories(
   accessToken: string,
-  limit?: number
+  limit?: number,
+  options?: RequestInit
 ): Promise<DataType<BrowseCategoryType>> {
   const res = await fetch(
     `${API_URL}/browse/categories${limit ? `?limit=${limit}` : ''}`,
-    defaultOptionsGET(accessToken)
+    { ...defaultOptionsGET(accessToken), ...options }
   );
 
   return (await res.json()).categories;
@@ -295,12 +306,13 @@ export async function fetchSeveralBrowseCategories(
 
 export async function fetchSingleBrowseCategory(
   id: string,
-  accessToken: string
+  accessToken: string,
+  options?: RequestInit
 ): Promise<BrowseCategoryType> {
-  const res = await fetch(
-    `${API_URL}/browse/categories/${id}`,
-    defaultOptionsGET(accessToken)
-  );
+  const res = await fetch(`${API_URL}/browse/categories/${id}`, {
+    ...defaultOptionsGET(accessToken),
+    ...options,
+  });
 
   return res.json();
 }

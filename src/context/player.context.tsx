@@ -83,6 +83,8 @@ const initial: Context = {
 
 export const PlayerContext = createContext(initial);
 
+let startPlayerAbortController = new AbortController();
+
 export function PlayerContextProvider({ children }: { children: React.ReactNode }) {
   const [player, setPlayer] = useLocalStorageState('player', initial.player);
   const [isPlaying, setIsPlaying] = useState(initial.isPlaying);
@@ -98,6 +100,9 @@ export function PlayerContextProvider({ children }: { children: React.ReactNode 
 
   const startPlayer: Context['startPlayer'] = useCallback(
     (args) => {
+      startPlayerAbortController.abort();
+      startPlayerAbortController = new AbortController();
+
       const accessToken = getCookie('access_token') as string;
       const trackListId =
         args.argumentType === 'id' ? args.id : getPlayerId(args.data);
@@ -143,7 +148,9 @@ export function PlayerContextProvider({ children }: { children: React.ReactNode 
             setIsPlaying(true);
           }
         } else if (data.type === 'playlist') {
-          fetchPlaylist(accessToken, data.id).then((data) => {
+          fetchPlaylist(accessToken, data.id, {
+            signal: startPlayerAbortController.signal,
+          }).then((data) => {
             const list = data.tracks.items.map((item) => item.track);
 
             const currentlyPlaying = getTrackListIndex(list, trackIndex);
@@ -175,7 +182,9 @@ export function PlayerContextProvider({ children }: { children: React.ReactNode 
               setIsPlaying(true);
             }
           } else {
-            fetchAlbum(accessToken, data.id).then((data) => {
+            fetchAlbum(accessToken, data.id, {
+              signal: startPlayerAbortController.signal,
+            }).then((data) => {
               const currentlyPlaying = getTrackListIndex(
                 data.tracks.items,
                 trackIndex
@@ -193,7 +202,9 @@ export function PlayerContextProvider({ children }: { children: React.ReactNode 
             });
           }
         } else if (data.type === 'artist') {
-          fetchArtistTopTracks(accessToken, data.id).then((data) => {
+          fetchArtistTopTracks(accessToken, data.id, {
+            signal: startPlayerAbortController.signal,
+          }).then((data) => {
             const currentlyPlaying = getTrackListIndex(data.tracks, trackIndex);
 
             if (currentlyPlaying !== -1) {
