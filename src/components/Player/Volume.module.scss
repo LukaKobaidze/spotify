@@ -1,0 +1,54 @@
+.volume {
+  width: 30%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+
+  & > *:not(:last-child) {
+    margin-right: 7px;
+  }
+
+  &Range {
+    width: 93px;
+  }
+
+  @media (max-width: 750px) {
+    position: relative;
+    display: block;
+    margin-left: auto;
+    width: auto;
+    margin-left: auto;
+
+    &:focus-within {
+      & > .volumeRangeWrapper {
+        display: block;
+      }
+    }
+
+    @media (pointer: fine) {
+      &:hover {
+        & > .volumeRangeWrapper {
+          display: block;
+        }
+      }
+    }
+
+    .volumeRangeWrapper {
+      background-color: #121212;
+      padding: 10px 10px 10px 10px;
+      position: absolute;
+      top: 0;
+      left: calc(50% - 2px);
+      transform: translate(-50%, -100%);
+      border-radius: 5px;
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+      border: 1px solid #000;
+      display: none;
+      z-index: 2;
+    }
+    .volumeRange {
+      height: 93px;
+      width: var(--size);
+    }
+  }
+}

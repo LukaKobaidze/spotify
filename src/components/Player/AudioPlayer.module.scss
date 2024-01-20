@@ -1,0 +1,34 @@
+.playback {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  margin-top: 8px;
+  font-size: 12px;
+
+  &Range {
+    margin: 0 10px;
+  }
+
+  @media (max-width: 750px) {
+    position: relative;
+
+    &TimerCurrent,
+    &Duration {
+      position: absolute;
+      top: -5px;
+      transform: translateY(-100%);
+    }
+
+    &TimerCurrent {
+      left: 0;
+    }
+
+    &Duration {
+      right: 0;
+    }
+
+    &Range {
+      margin: 0;
+    }
+  }
+}
