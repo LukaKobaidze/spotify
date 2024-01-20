@@ -42,9 +42,6 @@ export default function RangeSlider(props: Props) {
         } else {
           const { top } = containerRef.current.getBoundingClientRect();
 
-          console.log({ y, top, clientHeight: containerRef.current.clientHeight });
-          console.log(containerRef.current.clientHeight - (y - top));
-
           return Math.max(
             Math.min(
               (max * (containerRef.current.clientHeight - (y - top))) /

@@ -1,6 +1,6 @@
 'use client';
 import Link from 'next/link';
-import { useContext, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { MenuContext } from '@/context/menu.context';
 import { IconSquare } from '@/icons';
 import styles from './Menu.module.scss';
@@ -22,6 +22,10 @@ export default function Menu(props: MenuProps) {
   const { removeMenu } = useContext(MenuContext);
   const [windowPosRendered, setWindowPosRendered] = useState(windowPos);
   const [directionChecked, setDirectionChecked] = useState(false);
+
+  useEffect(() => {
+    setWindowPosRendered(windowPos);
+  }, [windowPos]);
 
   const iconProps: any = {
     className: styles.itemIcon,
