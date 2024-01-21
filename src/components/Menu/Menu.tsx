@@ -24,7 +24,7 @@ export default function Menu(props: MenuProps) {
   const [directionChecked, setDirectionChecked] = useState(false);
 
   useEffect(() => {
-    setWindowPosRendered(windowPos);
+    setDirectionChecked(false);
   }, [windowPos]);
 
   const iconProps: any = {
@@ -43,14 +43,14 @@ export default function Menu(props: MenuProps) {
         if (directionChecked || !node) return;
         setDirectionChecked(true);
 
-        setWindowPosRendered((state) => {
+        setWindowPosRendered(() => {
           // Fix if menu is overflowing from window
-          const copy = { ...state };
+          const copy = windowPos;
 
-          if (window.screen.width < windowPos.x + node.clientWidth) {
+          if (window.innerWidth < windowPos.x + node.clientWidth) {
             copy.x -= node.clientWidth;
           }
-          if (window.screen.height < windowPos.y + node.clientHeight) {
+          if (window.innerHeight < windowPos.y + node.clientHeight) {
             copy.y -= node.clientHeight;
           }
 
