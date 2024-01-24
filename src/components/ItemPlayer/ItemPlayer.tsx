@@ -7,7 +7,7 @@ import {
   PlaylistWithNoTracksType,
   TrackType,
 } from '@/services/spotify';
-import { getPlayerId } from '@/helpers/player';
+import { getPlayerId } from '@/helpers';
 import { PlayerContext } from '@/context/player.context';
 import PlayButton from '@/components/PlayButton';
 import styles from './ItemPlayer.module.scss';

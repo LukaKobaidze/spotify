@@ -4,7 +4,7 @@ import ItemsRow from '@/components/ItemsRow';
 import PlayerCard from '@/components/PlayerCard';
 
 interface Props {
-  data: PlaylistType[];
+  data: (PlaylistType | null)[];
   className?: string;
 }
 
@@ -16,13 +16,15 @@ export default function SpotifyPlaylists(props: Props) {
       {(renderAmount) => {
         return data
           .slice(0, renderAmount)
-          .map((playlist) => (
-            <PlayerCard
-              key={playlist.id}
-              data={playlist}
-              description={playlist.description}
-            />
-          ));
+          .map((playlist) =>
+            playlist ? (
+              <PlayerCard
+                key={playlist.id}
+                data={playlist}
+                description={playlist.description}
+              />
+            ) : null
+          );
       }}
     </ItemsRow>
   );

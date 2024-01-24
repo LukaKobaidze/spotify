@@ -33,7 +33,7 @@ export default function LikedPage() {
       fetchSeveralTracks(accessToken, liked, {
         signal: abortController.signal,
       }).then((data) => {
-        setTracksData(data.flatMap((d) => d.tracks));
+        setTracksData(data?.flatMap((d) => d.tracks));
       });
     }
   }, [accessToken, liked]);

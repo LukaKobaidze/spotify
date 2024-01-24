@@ -6,7 +6,7 @@ import PlayerCard from '@/components/PlayerCard';
 
 interface Props {
   albums: DataType<AlbumType> | null;
-  relatedArtists: ArtistType[] | null;
+  relatedArtists: ArtistType[] | null | undefined;
   artistId: string;
 }
 

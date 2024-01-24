@@ -1,6 +1,6 @@
 import { forwardRef, useMemo, useState } from 'react';
 import styles from './AudioPlayer.module.scss';
-import { msToTime } from '@/helpers/time';
+import { msToTime } from '@/helpers';
 import RangeSlider from './RangeSlider';
 
 interface Props {
@@ -9,6 +9,7 @@ interface Props {
   onAudioEnded: () => void;
   currentTime: number;
   onCurrentTimeUpdate: (currentTime: number) => void;
+  onAudioLoad: () => void;
 }
 
 type Ref = HTMLAudioElement;
@@ -20,6 +21,7 @@ export default forwardRef<Ref, Props>(function AudioPlayback(props, ref) {
     currentTime,
     onCurrentTimeUpdate,
     onAudioEnded,
+    onAudioLoad,
   } = props;
 
   const [activeSliderCurrentTime, setActiveSliderCurrentTime] = useState<
@@ -37,7 +39,12 @@ export default forwardRef<Ref, Props>(function AudioPlayback(props, ref) {
 
   return (
     <div className={styles.playback}>
-      <audio ref={ref} onEnded={onAudioEnded} preload="true">
+      <audio
+        ref={ref}
+        onLoadedData={onAudioLoad}
+        onEnded={onAudioEnded}
+        preload="true"
+      >
         <source src={audioSrc} />
       </audio>
       <span className={styles.playbackTimerCurrent}>{currentTimeFormatted}</span>

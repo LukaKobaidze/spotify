@@ -2,7 +2,7 @@
 import { useContext, useState } from 'react';
 import { ArtistType, TrackType } from '@/services/spotify';
 import { PlayerContext } from '@/context/player.context';
-import { getPlayerId } from '@/helpers/player';
+import { getPlayerId } from '@/helpers';
 import PlayButton from '@/components/PlayButton';
 import Tracks from '@/components/Tracks';
 import styles from './TopTracks.module.scss';

@@ -6,6 +6,7 @@ import {
 import Header from '@/components/Header';
 import ItemsGrid from '@/components/ItemsGrid';
 import PlayerCard from '@/components/PlayerCard';
+import ConsoleLogToClient from '@/components/ConsoleLogToClient/ConsoleLogToClient';
 
 interface Props {
   params: {
@@ -33,11 +34,22 @@ export default async function CategoryPage({ params }: Props) {
             <h1>{categoryData?.name}</h1>
           </div>
         )}
-        <ItemsGrid>
-          {playlistsData?.items.map((playlist) => (
-            <PlayerCard key={playlist.id} data={playlist} description={playlist.description} />
-          ))}
-        </ItemsGrid>
+
+        {playlistsData?.items.length ? (
+          <ItemsGrid>
+            {playlistsData?.items.map((playlist) => (
+              <PlayerCard
+                key={playlist.id}
+                data={playlist}
+                description={playlist.description}
+              />
+            ))}
+          </ItemsGrid>
+        ) : (
+          <div>
+            <p>Couldn&apos;t find any playlists in this category</p>
+          </div>
+        )}
       </main>
     </>
   );

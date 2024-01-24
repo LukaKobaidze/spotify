@@ -4,7 +4,7 @@ import Header from '@/components/Header';
 import PlayerHeader from '@/components/PlayerHeader';
 import Tracks from '@/components/Tracks';
 import AlbumPlaylistTrackActions from '@/components/AlbumPlaylistTrackActions/AlbumPlaylistTrackActions';
-import { getPlayerId } from '@/helpers/player';
+import { getPlayerId } from '@/helpers';
 
 interface Props {
   params: { id: string };

@@ -1,24 +1,15 @@
 'use client';
-import { useContext, useEffect, useMemo, useRef, useState } from 'react';
-import { msToTime } from '@/helpers/time';
+import { useContext, useEffect, useRef, useState } from 'react';
 import { LibraryContext } from '@/context/library.context';
 import { LayoutContext } from '@/context/layout.context';
 import { PlayerContext } from '@/context/player.context';
-import {
-  IconPause,
-  IconPlay,
-  IconSkipNext,
-  IconSkipPrevious,
-  IconVolumeHigh,
-  IconVolumeLow,
-  IconVolumeMute,
-} from '@/icons';
+import { IconPause, IconPlay, IconSkipNext, IconSkipPrevious } from '@/icons';
 import TrackTitle from '@/components/TrackTitle';
 import LikeButton from '@/components/LikeButton';
 import Tooltip from '@/components/Tooltip';
-import styles from './Player.module.scss';
 import AudioPlayback from './AudioPlayback';
 import Volume from './Volume';
+import styles from './Player.module.scss';
 
 interface Props {
   className?: string;
@@ -36,6 +27,7 @@ export default function Player(props: Props) {
   } = useContext(PlayerContext);
   const { windowSize } = useContext(LayoutContext);
   const [currentTime, setCurrentTime] = useState(0);
+  const [totalDuration, setTotalDuration] = useState(0);
 
   const audio = useRef<HTMLAudioElement>(null);
   const { liked, onSaveToLiked } = useContext(LibraryContext);
@@ -127,7 +119,7 @@ export default function Player(props: Props) {
         <AudioPlayback
           ref={audio}
           audioSrc={track?.preview_url}
-          audioDuration={audio.current?.duration}
+          audioDuration={totalDuration}
           onAudioEnded={() => {
             setCurrentTime(audio.current?.duration || 0);
             stopPlaying();
@@ -136,6 +128,7 @@ export default function Player(props: Props) {
               playNextTrack();
             }
           }}
+          onAudioLoad={() => setTotalDuration(audio.current?.duration || 0)}
           currentTime={currentTime}
           onCurrentTimeUpdate={(currentTime) => {
             if (audio.current) {

@@ -2,7 +2,7 @@
 import Link from 'next/link';
 import { useMemo } from 'react';
 import { PlaylistType } from '@/services/spotify';
-import { getPlayerId } from '@/helpers/player';
+import { getPlayerId } from '@/helpers';
 import TrackListHeader from '@/components/TrackListHeader';
 import Tracks from '@/components/Tracks';
 import styles from './GlobalTop50.module.scss';

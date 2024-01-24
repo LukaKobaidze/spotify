@@ -1,7 +1,7 @@
 import { cookies } from 'next/headers';
 import { fetchAlbum, fetchArtist } from '@/services/spotify';
-import { getPlayerId } from '@/helpers/player';
-import { getAlbumReleaseYear, msToTimeFormatted } from '@/helpers/time';
+import { getPlayerId } from '@/helpers';
+import { getAlbumReleaseYear, msToTimeFormatted } from '@/helpers';
 import Header from '@/components/Header';
 import PlayerHeader from '@/components/PlayerHeader';
 import Tracks from '@/components/Tracks';

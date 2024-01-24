@@ -73,8 +73,12 @@ export default function LibraryItem(props: LibraryItemProps) {
             />
           </div>
           <div className={`${styles.tooltipText} ${styles.itemText}`}>
-            <div className={styles.itemTextName}>{data.title}</div>
-            <div className={styles.tooltipTextSub}>{description}</div>
+            <div className={`oneLinerEllipsis ${styles.itemTextName}`}>
+              {data.title}
+            </div>
+            <div className={`oneLinerEllipsis ${styles.tooltipTextSub}`}>
+              {description}
+            </div>
           </div>
         </Link>
       </Tooltip>

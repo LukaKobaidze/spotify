@@ -1,7 +1,7 @@
 'use client';
 import Link from 'next/link';
 import { useState, useContext, useRef, useEffect } from 'react';
-import { msToTime } from '@/helpers/time';
+import { msToTime } from '@/helpers';
 import {
   IconAdd,
   IconAlbum,

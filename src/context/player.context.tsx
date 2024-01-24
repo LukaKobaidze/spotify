@@ -12,7 +12,7 @@ import {
   fetchArtistTopTracks,
   fetchPlaylist,
 } from '@/services/spotify';
-import { getPlayerId } from '@/helpers/player';
+import { getPlayerId } from '@/helpers';
 import { useLocalStorageState } from '@/hooks';
 
 export type PlayerType = {
@@ -151,6 +151,8 @@ export function PlayerContextProvider({ children }: { children: React.ReactNode 
           fetchPlaylist(accessToken, data.id, {
             signal: startPlayerAbortController.signal,
           }).then((data) => {
+            if (!data) return;
+
             const list = data.tracks.items.map((item) => item.track);
 
             const currentlyPlaying = getTrackListIndex(list, trackIndex);
@@ -185,6 +187,8 @@ export function PlayerContextProvider({ children }: { children: React.ReactNode 
             fetchAlbum(accessToken, data.id, {
               signal: startPlayerAbortController.signal,
             }).then((data) => {
+              if (!data) return;
+
               const currentlyPlaying = getTrackListIndex(
                 data.tracks.items,
                 trackIndex
@@ -205,6 +209,8 @@ export function PlayerContextProvider({ children }: { children: React.ReactNode 
           fetchArtistTopTracks(accessToken, data.id, {
             signal: startPlayerAbortController.signal,
           }).then((data) => {
+            if (!data) return;
+
             const currentlyPlaying = getTrackListIndex(data.tracks, trackIndex);
 
             if (currentlyPlaying !== -1) {

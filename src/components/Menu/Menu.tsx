@@ -1,6 +1,6 @@
 'use client';
 import Link from 'next/link';
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useEffect, useMemo, useState } from 'react';
 import { MenuContext } from '@/context/menu.context';
 import { IconSquare } from '@/icons';
 import styles from './Menu.module.scss';
@@ -44,8 +44,8 @@ export default function Menu(props: MenuProps) {
         setDirectionChecked(true);
 
         setWindowPosRendered(() => {
-          // Fix if menu is overflowing from window
-          const copy = windowPos;
+          // If menu is overflowing from window
+          const copy = { ...windowPos };
 
           if (window.innerWidth < windowPos.x + node.clientWidth) {
             copy.x -= node.clientWidth;

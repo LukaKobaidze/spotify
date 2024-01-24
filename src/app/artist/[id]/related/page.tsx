@@ -16,7 +16,7 @@ export default async function ArtistRelatedPage({ params }: Props) {
   const accessToken = cookieStore.get('access_token')?.value;
 
   const relatedArtists = accessToken
-    ? (await fetchArtistRelatedArtists(accessToken, params.id)).artists
+    ? (await fetchArtistRelatedArtists(accessToken, params.id))?.artists
     : null;
 
   return (

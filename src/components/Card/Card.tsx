@@ -74,12 +74,16 @@ export default function Card(props: Props) {
           </div>
         )}
       </div>
-      <h3 className={styles.title} title={data.name}>
+      <h3 className={`oneLinerEllipsis ${styles.title}`} title={data.name}>
         {data.name}
       </h3>
       <span
         className={styles.subtitle}
-        style={subtitleMaxLines ? { WebkitLineClamp: 2, lineClamp: 2 } : undefined}
+        style={
+          subtitleMaxLines
+            ? { WebkitLineClamp: subtitleMaxLines, lineClamp: subtitleMaxLines }
+            : undefined
+        }
       >
         {subtitle}
       </span>

@@ -118,3 +118,10 @@ main {
     color: #fff;
   }
 }
+
+.oneLinerEllipsis {
+  display: block;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}

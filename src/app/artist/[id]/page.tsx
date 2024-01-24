@@ -22,13 +22,13 @@ export default async function ArtistPage({ params }: Props) {
 
   const artistData = accessToken ? await fetchArtist(accessToken, params.id) : null;
   const topTracks = accessToken
-    ? (await fetchArtistTopTracks(accessToken, params.id)).tracks
+    ? (await fetchArtistTopTracks(accessToken, params.id))?.tracks
     : null;
   const albums = accessToken
     ? await fetchArtistAlbums(accessToken, params.id)
     : null;
   const relatedArtists = accessToken
-    ? (await fetchArtistRelatedArtists(accessToken, params.id)).artists
+    ? (await fetchArtistRelatedArtists(accessToken, params.id))?.artists
     : null;
 
   return (

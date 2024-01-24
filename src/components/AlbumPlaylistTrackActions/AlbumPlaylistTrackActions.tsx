@@ -7,7 +7,7 @@ import PlayButton from '@/components/PlayButton';
 import LikeButton from '@/components/LikeButton';
 import styles from './AlbumPlaylistTrackActions.module.scss';
 import { PlayerContext } from '@/context/player.context';
-import { getPlayerId } from '@/helpers/player';
+import { getPlayerId } from '@/helpers';
 
 interface Props {
   data: AlbumType | PlaylistType | TrackType;
