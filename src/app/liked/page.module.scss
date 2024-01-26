@@ -32,7 +32,13 @@
     &:hover,
     &:focus-visible {
       color: #fff;
-      border-color: rgba(179, 179, 179, 0.4)
+      border-color: rgba(179, 179, 179, 0.4);
     }
   }
+}
+
+.loadingContainer {
+  display: flex;
+  justify-content: center;
+  padding: 50px;
 }

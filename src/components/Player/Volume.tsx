@@ -10,10 +10,11 @@ interface Props {
   onVolumeChange: (volume: number) => void;
   onMuteToggle: (isMuted: boolean) => void;
   windowSize: number;
+  className?: string;
 }
 
 export default function Volume(props: Props) {
-  const { onMuteToggle, onVolumeChange, windowSize } = props;
+  const { onMuteToggle, onVolumeChange, windowSize, className } = props;
 
   const [volumeState, setVolumeState] = useState(VOLUME_DEFAULT);
   const [isMuted, setIsMuted] = useState(false);
@@ -41,7 +42,7 @@ export default function Volume(props: Props) {
   }, [volumeState]);
 
   return (
-    <div className={styles.volume}>
+    <div className={`${styles.volume} ${className || ''}`}>
       <Tooltip
         disabled={windowSize < 751}
         text={isMuted ? 'Unmute' : 'Mute'}
@@ -65,6 +66,7 @@ export default function Volume(props: Props) {
         <RangeSlider
           value={isMuted ? 0 : volumeState}
           max={100}
+          onChange={(value) => setVolumeState(value)}
           onChangeLive={(value) => setVolumeState(value)}
           direction={windowSize > 750 ? 'horizontal' : 'vertical'}
           className={styles.volumeRange}

@@ -235,7 +235,10 @@ export default function Tracks(props: Props) {
                       const element = e.target as HTMLButtonElement;
                       const rect = element.getBoundingClientRect();
 
-                      handleRenderTrackMenu(mapTrack, { x: rect.left, y: rect.top });
+                      handleRenderTrackMenu(mapTrack, {
+                        x: rect.left + document.documentElement.scrollLeft,
+                        y: rect.top + document.documentElement.scrollTop,
+                      });
                     }}
                   >
                     <IconMore />

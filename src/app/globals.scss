@@ -3,6 +3,10 @@
   --clr-tooltip-text: #fff;
   --layout-gap: 8px;
   --main-content-padding: 24px;
+
+  @media (max-width: 575px) {
+    --main-content-padding: 16px;
+  }
 }
 
 *,
@@ -57,11 +61,20 @@ body {
   flex-direction: column;
   overflow: hidden;
   grid-template-areas:
-    'sidebar main'
-    'player player';
+    'sidebar mainview'
+    'footer footer';
 
   grid-template-columns: auto 1fr;
   grid-template-rows: 1fr 80px;
+  scrollbar-gutter: stable;
+
+  @media (max-width: 575px) {
+    display: block;
+    overflow: initial;
+    overflow-y: scroll;
+    padding: 0;
+    background-color: #121212;
+  }
 }
 
 h1,
@@ -81,10 +94,31 @@ main {
 
 .sidebar {
   grid-area: sidebar;
+
+  @media (max-width: 575px) {
+    display: none !important;
+  }
 }
 
-.player {
-  grid-area: player;
+.footer {
+  grid-area: footer;
+  margin-top: var(--layout-gap);
+
+  @media (max-width: 575px) {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    z-index: 12;
+  }
+}
+
+.navigationMobile {
+  display: none;
+
+  @media (max-width: 575px) {
+    display: block;
+  }
 }
 
 .roundedContainer {
@@ -123,5 +157,9 @@ main {
   display: block;
   text-overflow: ellipsis;
   white-space: nowrap;
+  overflow: hidden;
+}
+
+.overflow-hidden {
   overflow: hidden;
 }

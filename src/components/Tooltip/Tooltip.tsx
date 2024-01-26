@@ -58,23 +58,42 @@ export default function Tooltip(props: Props) {
       switch (position) {
         case 'top':
           return {
-            '--pos-x': rect.right - element.clientWidth / 2 + 'px',
-            '--pos-y': rect.top - offset + 'px',
+            '--pos-x':
+              rect.right -
+              element.clientWidth / 2 +
+              document.documentElement.scrollLeft +
+              'px',
+            '--pos-y': rect.top - offset + document.documentElement.scrollTop + 'px',
           };
         case 'right':
           return {
-            '--pos-x': rect.right + offset + 'px',
-            '--pos-y': rect.bottom - element.clientHeight / 2 + 'px',
+            '--pos-x':
+              rect.right + offset + document.documentElement.scrollLeft + 'px',
+            '--pos-y':
+              rect.bottom -
+              element.clientHeight / 2 +
+              document.documentElement.scrollTop +
+              'px',
           };
         case 'bottom':
           return {
-            '--pos-x': rect.right - element.clientWidth / 2 + 'px',
-            '--pos-y': rect.bottom + offset + 'px',
+            '--pos-x':
+              rect.right -
+              element.clientWidth / 2 +
+              document.documentElement.scrollLeft +
+              'px',
+            '--pos-y':
+              rect.bottom + offset + document.documentElement.scrollTop + 'px',
           };
         case 'left':
           return {
-            '--pos-x': rect.left - offset + 'px',
-            '--pos-y': rect.bottom - element.clientHeight / 2 + 'px',
+            '--pos-x':
+              rect.left - offset + document.documentElement.scrollLeft + 'px',
+            '--pos-y':
+              rect.bottom -
+              element.clientHeight / 2 +
+              document.documentElement.scrollTop +
+              'px',
           };
       }
     }

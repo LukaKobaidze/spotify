@@ -2,6 +2,11 @@
   position: relative;
   padding-bottom: var(--main-content-padding);
   flex-grow: 1;
-  grid-area: main;
+  grid-area: mainview;
   overflow: auto;
+
+  @media (max-width: 575px) {
+    padding-top: 64px;
+    padding-bottom: 150px;
+  }
 }

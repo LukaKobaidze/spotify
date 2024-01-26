@@ -1,0 +1,98 @@
+.container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  background-color: #121212;
+  z-index: 11;
+  transform: translateY(100%);
+  animation: slideIn 200ms;
+  animation-fill-mode: forwards;
+  padding: 5px;
+  overflow-y: auto;
+  padding-bottom: 30px;
+}
+
+@keyframes slideIn {
+  0% {
+    transform: translateY(100%);
+  }
+
+  100% {
+    transform: translateY(0%);
+  }
+}
+
+.header {
+  padding-top: 10px;
+  padding-bottom: 10px;
+  color: #fff;
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  background-color: #121212;
+}
+
+.main {
+  margin-top: 20px;
+  padding-left: 15px;
+  padding-right: 15px;
+}
+
+.closeButton {
+  &Icon {
+    width: 27px;
+    height: 27px;
+  }
+}
+
+.imageWrapper {
+  width: 100%;
+  padding-bottom: 100%;
+  position: relative;
+  box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+  margin-bottom: 40px;
+}
+
+.image {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 15px;
+}
+
+.nameWrapper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.likeButton {
+  width: 20px;
+  height: 20px;
+}
+
+.trackName {
+  margin-bottom: 5px;
+}
+
+.audioPlayback {
+  margin-top: 40px;
+}
+
+.controls {
+  margin-top: 20px;
+}
+
+.playButton {
+  width: 47px;
+  height: 47px;
+}
+
+.skipButton {
+  width: 30px;
+  height: 30px;
+}

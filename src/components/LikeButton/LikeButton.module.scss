@@ -1,13 +1,21 @@
 .buttonLike {
-  padding: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 33px;
+  height: 33px;
 
-  &--normal {
-    & > svg {
-      transform: scale(0.6);
-    }
+  &--large {
+    width: 55px;
+    height: 55px;
   }
 }
 
-.iconHeartFill {
-  color: rgb(30, 215, 96);
+.icon {
+  width: 50%;
+  height: 50%;
+
+  &Fill {
+    color: rgb(30, 215, 96);
+  }
 }

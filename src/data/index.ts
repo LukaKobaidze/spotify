@@ -24,6 +24,6 @@ const data = {
     ],
     playlistGlobalTop50: '37i9dQZEVXbMDoHDwVN2tF',
   },
-};
+} as const;
 
 export default data;

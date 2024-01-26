@@ -6,8 +6,6 @@
   height: var(--size);
   cursor: default;
 
-  &:hover,
-  &:active,
   &.active {
     & .progress {
       background-color: #1db954;
@@ -15,6 +13,18 @@
 
     & .thumb {
       opacity: 1;
+    }
+  }
+
+  @media (hover: hover) {
+    &:hover {
+      & .progress {
+        background-color: #1db954;
+      }
+
+      & .thumb {
+        opacity: 1;
+      }
     }
   }
 
@@ -27,7 +37,7 @@
       width: 33.333333333%;
       height: 100%;
       display: flex;
-      align-items: flex-end;    
+      align-items: flex-end;
     }
 
     .progress {

@@ -10,6 +10,7 @@ import PlayerHeader from '@/components/PlayerHeader';
 import PlayButton from '@/components/PlayButton';
 import Tracks from '@/components/Tracks';
 import styles from './page.module.scss';
+import LoadingSpinner from '@/components/LoadingSpinner';
 
 let abortController = new AbortController();
 
@@ -101,7 +102,9 @@ export default function LikedPage() {
               <span>Explore Songs</span>
             </Link>
           </div>
-        ) : null}
+        ) : (
+          <div className={styles.loadingContainer}><LoadingSpinner /></div>
+        )}
       </main>
     </>
   );

@@ -65,15 +65,34 @@ export default function RangeSlider(props: Props) {
         setKeyboardActive(false);
       };
 
+      const onTouchMove = (e: TouchEvent) => {
+        const touch = e.changedTouches[0];
+
+        onChangeLive!(getValueByCoords(touch.pageX, touch.pageY));
+      };
+
+      const onTouchEnd = (e: TouchEvent) => {
+        if (onChange) {
+          const touch = e.changedTouches[0];
+          onChange(getValueByCoords(touch.pageX, touch.pageY));
+        }
+        setSliderActive(false);
+        setKeyboardActive(false);
+      };
+
       if (onChangeLive) {
         document.addEventListener('mousemove', onMouseMove);
+        document.addEventListener('touchmove', onTouchMove);
       }
 
       document.addEventListener('mouseup', onMouseUp);
+      document.addEventListener('touchend', onTouchEnd);
 
       return () => {
         document.removeEventListener('mousemove', onMouseMove);
         document.removeEventListener('mouseup', onMouseUp);
+        document.removeEventListener('touchmove', onTouchMove);
+        document.removeEventListener('touchend', onTouchEnd);
       };
     }
 
@@ -121,8 +140,9 @@ export default function RangeSlider(props: Props) {
       ref={containerRef}
       className={`${styles.container} ${
         direction === 'vertical' ? styles['container--vertical'] : ''
-      } ${keyboardActive ? styles.active : ''} ${className}`}
+      } ${sliderActive || keyboardActive ? styles.active : ''} ${className}`}
       onMouseDown={() => setSliderActive(true)}
+      onTouchStart={() => setSliderActive(true)}
       onFocus={() => setKeyboardActive(true)}
       onBlur={() => setKeyboardActive(false)}
     >
