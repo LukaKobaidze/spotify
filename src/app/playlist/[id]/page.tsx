@@ -17,6 +17,7 @@ export default async function PlaylistPage({ params }: Props) {
   const data = accessToken ? await fetchPlaylist(accessToken, params.id) : null;
 
   const tracksData = data?.tracks.items.map((track) => track.track);
+
   return (
     <>
       <Header backgroundAppearOnScroll />

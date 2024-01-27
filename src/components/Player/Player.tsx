@@ -118,8 +118,10 @@ export default function Player(props: Props) {
               trackId={track.id}
               artistName={track.artists[0].name}
               artistId={track.artists[0].id}
-              image={trackAlbum.images[1].url}
-              imageSize={trackAlbum.images[1].height}
+              image={{
+                src: trackAlbum.images[trackAlbum.images.length - 1].url,
+                size: 56,
+              }}
               className={styles.trackTitle}
               classNameText={styles.trackTitleText}
               classNameImage={styles.trackImage}

@@ -53,7 +53,7 @@ export default function Card(props: Props) {
               className={`${styles.image} ${imageRounded ? styles.rounded : ''}`}
               src={image.url}
               fill
-              sizes="100vw"
+              sizes="157px"
             />
           ) : (
             <Image
@@ -62,6 +62,7 @@ export default function Card(props: Props) {
               src={image.url}
               width={image.width}
               height={image.height}
+              sizes="157px"
             />
           )
         ) : (

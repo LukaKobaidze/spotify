@@ -8,8 +8,7 @@ interface Props {
   trackId: string;
   artistName: string;
   artistId: string;
-  image?: string;
-  imageSize?: number;
+  image?: { src: string; size: number };
   className?: string;
   classNameText?: string;
   classNameImage?: string;
@@ -24,7 +23,6 @@ export default function TrackTitle(props: Props) {
     artistName,
     artistId,
     image,
-    imageSize,
     className,
     classNameText,
     classNameImage,
@@ -37,9 +35,9 @@ export default function TrackTitle(props: Props) {
       {image && (
         <Image
           alt=""
-          src={image}
-          width={imageSize}
-          height={imageSize}
+          src={image.src}
+          width={image.size}
+          height={image.size}
           className={`${styles.image} ${classNameImage || ''}`}
         />
       )}

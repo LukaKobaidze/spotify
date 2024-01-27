@@ -24,7 +24,7 @@ export default function BrowseCategories({ data }: Props) {
             <Image
               src={imageData.url}
               fill
-              sizes="100vw"
+              sizes="220px"
               alt=""
               className={styles.categoryImage}
             />

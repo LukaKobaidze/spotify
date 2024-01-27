@@ -66,7 +66,7 @@ export default function LibraryItem(props: LibraryItemProps) {
               src={data.image}
               alt=""
               fill
-              sizes="100vw"
+              sizes="48px"
               className={`${styles.itemImage} ${
                 data.type === 'artist' ? styles.itemImageArtist : ''
               }`}

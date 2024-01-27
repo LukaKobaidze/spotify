@@ -15,10 +15,8 @@ export default function TrackListHeader({ data }: Props) {
       <div className={styles.imageWrapper}>
         <Image
           src={image.url}
-          width={image.width || undefined}
-          height={image.height || undefined}
-          fill={!image.width}
-          sizes={!image.width ? '100vw' : undefined}
+          width={80}
+          height={80}
           alt=""
           className={styles.image}
         />

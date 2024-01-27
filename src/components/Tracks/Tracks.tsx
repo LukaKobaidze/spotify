@@ -190,7 +190,7 @@ export default function Tracks(props: Props) {
                       </button>
                     </div>
                   )}
-                  {hideAlbum ? (
+                  {hideAlbum || !image ? (
                     <TrackTitle
                       trackName={mapTrack.name}
                       trackId={mapTrack.id}
@@ -203,8 +203,7 @@ export default function Tracks(props: Props) {
                       trackId={mapTrack.id}
                       artistName={mapTrack.artists[0].name}
                       artistId={mapTrack.artists[0].id}
-                      image={image?.url}
-                      imageSize={image?.height}
+                      image={{ src: image.url, size: 40 }}
                     />
                   )}
                 </td>

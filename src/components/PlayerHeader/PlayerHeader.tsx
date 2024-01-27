@@ -48,11 +48,9 @@ export default function PlayerHeader(props: Props) {
         <Image
           ref={imageRef}
           src={image.url}
-          width={image.width || undefined}
-          height={image.height || undefined}
+          width={232 || undefined}
+          height={232 || undefined}
           alt=""
-          fill={!image.width}
-          sizes={!image.width ? '100vw' : undefined}
           className={`${styles.imageMain} ${classNameImage || ''}`}
           onLoad={(e) => {
             const colorThief = new ColorThief();
@@ -84,8 +82,8 @@ export default function PlayerHeader(props: Props) {
             <Link href={`/artist/${artist.id}`} className={styles.artistAnchor}>
               <Image
                 src={artistImage!.url}
-                width={artistImage!.width}
-                height={artistImage!.height}
+                width={24}
+                height={24}
                 alt=""
                 className={styles.subtitleImage}
               />
