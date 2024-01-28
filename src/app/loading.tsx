@@ -2,9 +2,7 @@ import Header from '@/components/Header';
 import LoadingSpinner from '@/components/LoadingSpinner';
 import styles from './loading.module.scss';
 
-interface Props {}
-
-export default function PageLoading(props: Props) {
+export default function PageLoading() {
   return (
     <>
       <Header />

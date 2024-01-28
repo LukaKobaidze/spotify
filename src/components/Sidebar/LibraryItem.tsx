@@ -3,7 +3,7 @@ import Image from 'next/image';
 import { useContext } from 'react';
 import { LibraryContext } from '@/context/library.context';
 import { MenuContext } from '@/context/menu.context';
-import { IconRemove } from '@/icons';
+import { IconRemove, IconUser } from '@/icons';
 import Tooltip from '@/components/Tooltip';
 import styles from './LibraryItem.module.scss';
 
@@ -12,7 +12,7 @@ export interface LibraryItemProps {
     id: string;
     title: string;
     type: string;
-    image: string;
+    image: string | null;
     trackLength?: number;
   };
   isExpanded: boolean;
@@ -62,15 +62,19 @@ export default function LibraryItem(props: LibraryItemProps) {
           onContextMenu={handleItemRightClick}
         >
           <div className={styles.itemImageWrapper}>
-            <Image
-              src={data.image}
-              alt=""
-              fill
-              sizes="48px"
-              className={`${styles.itemImage} ${
-                data.type === 'artist' ? styles.itemImageArtist : ''
-              }`}
-            />
+            {data.image ? (
+              <Image
+                src={data.image}
+                alt=""
+                fill
+                sizes="48px"
+                className={`${styles.itemImage} ${
+                  data.type === 'artist' ? styles.itemImageArtist : ''
+                }`}
+              />
+            ) : (
+              <IconUser />
+            )}
           </div>
           <div className={`${styles.tooltipText} ${styles.itemText}`}>
             <div className={`oneLinerEllipsis ${styles.itemTextName}`}>

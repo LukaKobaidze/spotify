@@ -149,20 +149,22 @@ export default function Player(props: Props) {
         </div>
       )}
 
-      <Volume
-        className={styles.volume}
-        windowSize={windowSize}
-        onVolumeChange={(volume) => {
-          if (audio.current) {
-            audio.current.volume = Math.min(volume / 100, 1);
-          }
-        }}
-        onMuteToggle={(muted) => {
-          if (audio.current) {
-            audio.current.muted = muted;
-          }
-        }}
-      />
+      {windowSize > 575 && (
+        <Volume
+          className={styles.volume}
+          windowSize={windowSize}
+          onVolumeChange={(volume) => {
+            if (audio.current) {
+              audio.current.volume = Math.min(volume / 100, 1);
+            }
+          }}
+          onMuteToggle={(muted) => {
+            if (audio.current) {
+              audio.current.muted = muted;
+            }
+          }}
+        />
+      )}
 
       {windowSize <= 575 && (
         <>

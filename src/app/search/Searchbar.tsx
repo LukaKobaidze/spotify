@@ -46,7 +46,7 @@ export default function Searchbar(props: Props) {
         className={styles.input}
         value={searchedValue}
         onChange={(e) => setSearchedValue(e.target.value)}
-        placeholder='What do you want to listen to?'
+        placeholder="What do you want to listen to?"
       />
       <button type="submit" className={styles.searchButton}>
         <IconSearch />

@@ -10,7 +10,8 @@ import Sidebar from '@/components/Sidebar';
 import MainView from '@/components/MainView';
 import Player from '@/components/Player';
 import './globals.scss';
-import FooterMobile from '@/components/NavigationMobile';
+import NavigationMobile from '@/components/NavigationMobile';
+import { RouterContextProvider } from '@/context/router.context';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -24,25 +25,27 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   const accessToken = cookieStore.get('access_token')?.value;
 
   return (
-    <MenuContextProvider>
-      <PlayerContextProvider>
-        <LibraryContextProvider>
-          <LayoutContextProvider>
-            <html lang="en">
-              <body className={inter.className}>
-                <VerifyAuth accessToken={accessToken} />
+    <RouterContextProvider>
+      <MenuContextProvider>
+        <PlayerContextProvider>
+          <LibraryContextProvider>
+            <LayoutContextProvider>
+              <html lang="en">
+                <body className={inter.className}>
+                  <VerifyAuth accessToken={accessToken} />
 
-                <Sidebar className="sidebar" />
-                <MainView>{children}</MainView>
-                <footer className="footer">
-                  <Player />
-                  <FooterMobile className="navigationMobile" />
-                </footer>
-              </body>
-            </html>
-          </LayoutContextProvider>
-        </LibraryContextProvider>
-      </PlayerContextProvider>
-    </MenuContextProvider>
+                  <Sidebar className="sidebar" />
+                  <MainView>{children}</MainView>
+                  <footer className="footer">
+                    <Player />
+                    <NavigationMobile className="navigationMobile" />
+                  </footer>
+                </body>
+              </html>
+            </LayoutContextProvider>
+          </LibraryContextProvider>
+        </PlayerContextProvider>
+      </MenuContextProvider>
+    </RouterContextProvider>
   );
 }

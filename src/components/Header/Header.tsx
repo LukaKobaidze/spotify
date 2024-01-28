@@ -1,9 +1,10 @@
 'use client';
 import { useRouter } from 'next/navigation';
-import { useEffect, useRef, useState } from 'react';
+import { useContext, useEffect, useRef, useState } from 'react';
 import { IconKeyboardArrowLeft, IconKeyboardArrowRight } from '@/icons';
 import Tooltip from '@/components/Tooltip';
 import styles from './Header.module.scss';
+import { RouterContext } from '@/context/router.context';
 
 interface Props extends React.HTMLAttributes<HTMLDivElement> {
   backgroundOpacity?: number;
@@ -19,7 +20,8 @@ export default function Header(props: Props) {
     ...restProps
   } = props;
 
-  const router = useRouter();
+  const { routeAvailable, onRouteGoBack, onRouteGoForward } =
+    useContext(RouterContext);
 
   const headerRef = useRef<HTMLElement>(null);
   const [headerBgOpacity, setHeaderBgOpacity] = useState(
@@ -68,12 +70,24 @@ export default function Header(props: Props) {
       />
       <div className={styles.history}>
         <Tooltip text="Go back" position="bottom">
-          <button className={styles.historyButton} onClick={() => router.back()}>
+          <button
+            className={`${styles.historyButton} ${
+              !routeAvailable.back ? styles.disabled : ''
+            }`}
+            onClick={() => onRouteGoBack()}
+            disabled={!routeAvailable.back}
+          >
             <IconKeyboardArrowLeft />
           </button>
         </Tooltip>
         <Tooltip text="Go forward" position="bottom">
-          <button className={styles.historyButton} onClick={() => router.forward()}>
+          <button
+            className={`${styles.historyButton} ${
+              !routeAvailable.forward ? styles.disabled : ''
+            }`}
+            onClick={() => onRouteGoForward()}
+            disabled={!routeAvailable.forward}
+          >
             <IconKeyboardArrowRight />
           </button>
         </Tooltip>

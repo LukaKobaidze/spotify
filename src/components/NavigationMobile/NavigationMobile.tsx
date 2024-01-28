@@ -10,12 +10,15 @@ import {
 } from '@/icons';
 import { usePathname } from 'next/navigation';
 import data from '@/data';
+import { useContext } from 'react';
+import { LayoutContext } from '@/context/layout.context';
 
 interface Props extends React.HTMLAttributes<HTMLElement> {}
 
 export default function FooterMobile(props: Props) {
   const { className, ...restProps } = props;
 
+  const { windowSize } = useContext(LayoutContext);
   const pathname = usePathname();
 
   const iconProps = {
@@ -29,6 +32,7 @@ export default function FooterMobile(props: Props) {
     },
   };
 
+  if (windowSize > 575) return null;
   return (
     <nav className={`${styles.nav} ${className || ''}`}>
       <div className={styles.contentWrapper}>

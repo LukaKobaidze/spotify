@@ -51,7 +51,8 @@ export function LibraryContextProvider({ children }: { children: React.ReactNode
           id: item.id,
           title: item.name,
           type: item.type,
-          image: (item.images[1] || item.images[0]).url,
+          image:
+            item.images.length === 0 ? null : (item.images[1] || item.images[0]).url,
         };
 
         const trackLength =

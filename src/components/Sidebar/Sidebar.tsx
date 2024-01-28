@@ -9,6 +9,7 @@ import data from '@/data';
 import Tooltip from '@/components/Tooltip';
 import LibraryItem from './LibraryItem';
 import styles from './Sidebar.module.scss';
+import { useLocalStorageState } from '@/hooks';
 
 const SIDEBAR_EXPANDED_MIN = 280;
 const MAINVIEW_SIZE_MIN = 416;
@@ -20,12 +21,15 @@ interface Props {
 export default function Sidebar(props: Props) {
   const { className } = props;
 
-  const { updateSidebarSize } = useContext(LayoutContext);
+  const { windowSize, updateSidebarSize } = useContext(LayoutContext);
 
   const pathname = usePathname();
   const { liked, libraryItems } = useContext(LibraryContext);
-  const [isExpanded, setIsExpanded] = useState(false);
-  const [expandedSize, setExpandedSize] = useState(SIDEBAR_EXPANDED_MIN);
+  const [isExpanded, setIsExpanded] = useLocalStorageState('sidebar-expanded', true);
+  const [expandedSize, setExpandedSize] = useLocalStorageState(
+    'sidebar-size',
+    SIDEBAR_EXPANDED_MIN
+  );
   const [isResizing, setIsResizing] = useState(false);
   const sidebarRef = useRef<HTMLElement>(null);
 
@@ -98,12 +102,13 @@ export default function Sidebar(props: Props) {
       document.removeEventListener('keydown', handleKeyDown);
       window.removeEventListener('resize', handleResize);
     };
-  }, [isResizing, isExpanded]);
+  }, [isResizing, isExpanded, setExpandedSize, setIsExpanded]);
 
   useEffect(() => {
     updateSidebarSize(sidebarRef.current?.clientWidth || 0);
   }, [isExpanded, expandedSize, updateSidebarSize]);
 
+  if (windowSize <= 575) return null;
   return (
     <aside
       className={`${styles.sidebar} ${isExpanded ? styles.expanded : ''} ${

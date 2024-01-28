@@ -5,6 +5,10 @@
   display: flex;
   flex-direction: column;
   width: 72px;
+  
+  & svg {
+    font-size: 60px;
+  }
 
   &.expanded {
     width: 280px;
