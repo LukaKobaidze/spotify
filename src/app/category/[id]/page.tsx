@@ -6,7 +6,6 @@ import {
 import Header from '@/components/Header';
 import ItemsGrid from '@/components/ItemsGrid';
 import PlayerCard from '@/components/PlayerCard';
-import ConsoleLogToClient from '@/components/ConsoleLogToClient/ConsoleLogToClient';
 
 interface Props {
   params: {

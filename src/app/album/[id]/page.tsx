@@ -26,7 +26,7 @@ export default async function AlbumPage({ params }: Props) {
 
   return (
     <>
-      <Header backgroundOpacity={0.55} />
+      <Header backgroundOpacity={0.95} backgroundAppearOnScroll />
       <main>
         {albumData && artistData && (
           <PlayerHeader

@@ -12,6 +12,11 @@
     margin-bottom: 5px;
     position: relative;
     overflow: hidden;
+
+    & a,
+    & button {
+      z-index: 2;
+    }
   }
 }
 
@@ -115,4 +120,12 @@
   transform: scaleX(0);
   background-color: #fff;
   transform-origin: left;
+}
+
+.mobileOnClickExtender {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
 }

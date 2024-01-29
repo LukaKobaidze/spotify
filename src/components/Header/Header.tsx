@@ -63,7 +63,7 @@ export default function Header(props: Props) {
         className={styles.headerBackground}
         style={{
           backgroundColor: backgroundOpacity
-            ? `rgba(0, 0, 0, ${backgroundOpacity})`
+            ? `rgba(18, 18, 18, ${backgroundOpacity})`
             : undefined,
           opacity: headerBgOpacity,
         }}

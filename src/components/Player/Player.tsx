@@ -84,16 +84,13 @@ export default function Player(props: Props) {
   }, [isPlaying, track]);
 
   return (
-    <div
-      className={`${styles.container} ${className || ''}`}
-      onClick={
-        windowSize <= 575 && !extendMobilePlayer
-          ? () => {
-              setExtendMobilePlayer(true);
-            }
-          : undefined
-      }
-    >
+    <div className={`${styles.container} ${className || ''}`}>
+      {windowSize <= 575 && !extendMobilePlayer && (
+        <div
+          className={styles.mobileOnClickExtender}
+          onClick={() => setExtendMobilePlayer(true)}
+        />
+      )}
       <audio
         ref={audio}
         onLoadedData={() => setTotalDuration(audio.current?.duration || 0)}

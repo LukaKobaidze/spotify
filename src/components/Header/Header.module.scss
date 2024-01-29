@@ -43,9 +43,10 @@
     align-items: center;
     justify-content: center;
     cursor: pointer;
+    border: 0.5px solid rgba(255, 255, 255, 0.1);
 
     &.disabled {
-      opacity: 0.5;
+      opacity: 0.6;
       pointer-events: none;
     }
   }
