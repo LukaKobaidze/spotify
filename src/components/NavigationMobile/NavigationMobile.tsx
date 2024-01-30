@@ -17,7 +17,7 @@ export default function FooterMobile(props: Props) {
   const { windowSize } = useContext(LayoutContext);
   const pathname = usePathname();
 
-  const [showLibrary, setShowLibrary] = useState(true);
+  const [showLibrary, setShowLibrary] = useState(false);
 
   useEffect(() => {
     if (windowSize <= 575 && showLibrary) {
