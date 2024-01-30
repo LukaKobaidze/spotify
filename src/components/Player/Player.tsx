@@ -1,19 +1,17 @@
 'use client';
+import { usePathname } from 'next/navigation';
 import { useContext, useEffect, useRef, useState } from 'react';
 import { LibraryContext } from '@/context/library.context';
 import { LayoutContext } from '@/context/layout.context';
 import { PlayerContext } from '@/context/player.context';
-import { IconPause, IconPlay, IconSkipNext, IconSkipPrevious } from '@/icons';
 import TrackTitle from '@/components/TrackTitle';
 import LikeButton from '@/components/LikeButton';
-import Tooltip from '@/components/Tooltip';
 import AudioPlayback from './AudioPlayback';
 import Volume from './Volume';
-import styles from './Player.module.scss';
 import MobilePlayer from './MobilePlayer';
 import AudioPlayButton from './AudioPlayButton';
-import { usePathname } from 'next/navigation';
 import Controls from './Controls';
+import styles from './Player.module.scss';
 
 interface Props {
   className?: string;

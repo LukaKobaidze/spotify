@@ -7,7 +7,7 @@ import { LayoutContext } from '@/context/layout.context';
 import { IconFolderMusic } from '@/icons';
 import data from '@/data';
 import Tooltip from '@/components/Tooltip';
-import LibraryItem from './LibraryItem';
+import LibraryItem from '@/components/LibraryItem';
 import styles from './Sidebar.module.scss';
 import { useLocalStorageState } from '@/hooks';
 
@@ -108,7 +108,7 @@ export default function Sidebar(props: Props) {
     updateSidebarSize(sidebarRef.current?.clientWidth || 0);
   }, [isExpanded, expandedSize, updateSidebarSize]);
 
-  if (windowSize <= 575) return null;
+  if (typeof window !== 'undefined' && windowSize <= 575) return null;
   return (
     <aside
       className={`${styles.sidebar} ${isExpanded ? styles.expanded : ''} ${

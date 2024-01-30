@@ -2,7 +2,7 @@
 import { createContext } from 'react';
 import { useLocalStorageState } from '@/hooks';
 import { AlbumType, ArtistType, PlaylistType, TrackType } from '@/services/spotify';
-import { LibraryItemProps } from '@/components/Sidebar/LibraryItem';
+import { LibraryItemProps } from '@/components/LibraryItem/LibraryItem';
 
 type ItemType = AlbumType | PlaylistType | ArtistType;
 
