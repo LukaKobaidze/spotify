@@ -44,7 +44,7 @@ export default function FooterMobile(props: Props) {
 
   if (windowSize > 575) return null;
   return (
-    <nav className={`${styles.nav} ${className || ''}`}>
+    <nav className={`${styles.nav} ${className || ''}`} {...restProps}>
       <div className={styles.contentWrapper}>
         {data.mainNavigation.map(({ path, name, Icon, IconActive }) => {
           const isActive = pathname === path && !showLibrary;

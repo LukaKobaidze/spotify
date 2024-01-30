@@ -82,7 +82,7 @@ export default function Player(props: Props) {
   }, [isPlaying, track]);
 
   return (
-    <div className={`${styles.container} ${className || ''}`}>
+    <div className={`${styles.container} ${windowSize <= 575 && !player ? styles.hide : ''} ${className || ''}`}>
       {windowSize <= 575 && !extendMobilePlayer && (
         <div
           className={styles.mobileOnClickExtender}
