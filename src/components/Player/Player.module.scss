@@ -102,6 +102,7 @@
   display: none;
   width: 40px;
   height: 40px;
+  flex-shrink: 0;
 
   @media (max-width: 575px) {
     display: flex;

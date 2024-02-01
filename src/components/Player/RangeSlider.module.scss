@@ -3,7 +3,7 @@
   display: flex;
   align-items: center;
   width: 100%;
-  height: var(--size);
+  height: calc(var(--size) + 4px);
   cursor: default;
 
   &.active {
@@ -55,7 +55,7 @@
 
 .slider {
   flex-shrink: 0;
-  height: 33.333333333%;
+  height: calc(var(--size) / 3);
   width: 100%;
   background-color: hsla(0, 0%, 100%, 0.3);
   border-radius: 2px;
