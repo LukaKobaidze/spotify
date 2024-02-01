@@ -66,26 +66,26 @@
     }
   }
 
-  &:hover {
-    background-color: rgba(255, 255, 255, 0.1);
+  @media (hover: hover) {
+    &:hover {
+      background-color: rgba(255, 255, 255, 0.1);
 
-    &:not(.disabled) {
-      & .player,
-      .playerOnImageWrapper {
+      &:not(.disabled) {
+        & .player,
+        .playerOnImageWrapper {
+          opacity: 1;
+        }
+
+        & .indexSpan {
+          opacity: 0;
+        }
+      }
+
+      & .moreButton {
         opacity: 1;
       }
-
-      & .indexSpan {
-        opacity: 0;
-      }
     }
 
-    & .moreButton {
-      opacity: 1;
-    }
-  }
-
-  @media (hover: hover) {
     &.active {
       background-color: rgba(255, 255, 255, 0.1);
     }
