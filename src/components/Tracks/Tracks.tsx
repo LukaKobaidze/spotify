@@ -151,15 +151,17 @@ export default function Tracks(props: Props) {
             const currentAlbum = album || mapTrack.album!;
             const isDisabled = !mapTrack.preview_url;
 
-            const handlePlayTrack = () =>
-              startPlayer({
-                argumentType: 'id',
-                id: playerId,
-                tracks: data,
-                trackIndex,
-                album: !mapTrack.album ? album : undefined,
-              });
-
+            const handlePlayTrack = () => {
+              if (!isDisabled) {
+                startPlayer({
+                  argumentType: 'id',
+                  id: playerId,
+                  tracks: data,
+                  trackIndex,
+                  album: !mapTrack.album ? album : undefined,
+                });
+              }
+            };
             return (
               <tr
                 key={mapTrack.id}
@@ -169,14 +171,17 @@ export default function Tracks(props: Props) {
                   trackIndex === trackActive ? styles.active : ''
                 }`}
                 onContextMenu={(e) => handleTrackRightClick(e, mapTrack)}
-                onClick={() => setTrackActive(trackIndex)}
+                onClick={(e) => {
+                  setTrackActive(trackIndex);
+
+                  if (window.matchMedia('(pointer: coarse)').matches) {
+                    handlePlayTrack();
+                  }
+                }}
               >
                 {!hideIndexing && (
                   <td className={styles.index}>
-                    <button
-                      className={styles.player}
-                      onClick={isDisabled ? undefined : handlePlayTrack}
-                    >
+                    <button className={styles.player} onClick={handlePlayTrack}>
                       {trackIsPlaying ? <IconPause /> : <IconPlay />}
                     </button>
                     <span className={styles.indexSpan}>{trackIndex + 1} </span>
