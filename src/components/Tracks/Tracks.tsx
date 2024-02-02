@@ -142,12 +142,15 @@ export default function Tracks(props: Props) {
       <AlertOutsideClick event="click" onOutsideClick={() => setTrackActive(null)}>
         <tbody className={styles.tbody} style={tbodyStyle}>
           {data?.map((mapTrack, trackIndex: number) => {
+            if (!mapTrack) return null;
+
             const image = mapTrack?.album?.images[mapTrack.album.images.length - 1];
             const trackIsPlaying =
               player &&
               isPlaying &&
               playerId === player.id &&
               mapTrack.id === player.list[player.currentlyPlaying]?.id;
+            console.log(mapTrack);
             const currentAlbum = album || mapTrack.album!;
             const isDisabled = !mapTrack.preview_url;
 
