@@ -26,6 +26,7 @@ export default function GlobalTop50({ data, className }: Props) {
         data={tracksData}
         bodyGap={5}
         hideHeaderLabels
+        hideIndexing
       />
       <Link href={'/playlist/' + data.id} className={styles.seeMore}>
         See More

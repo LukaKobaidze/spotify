@@ -11,7 +11,7 @@ interface Props {
 export default function LibraryMobile(props: Props) {
   const { onClose } = props;
 
-  const { libraryItems } = useContext(LibraryContext);
+  const { libraryItems, liked } = useContext(LibraryContext);
 
   return (
     <div className={styles.container}>
@@ -22,6 +22,18 @@ export default function LibraryMobile(props: Props) {
         <h2 className={styles.heading}>Your Library</h2>
       </div>
       <div className={styles.wrapperFixed}>
+        <LibraryItem
+          data={{
+            id: '',
+            title: 'Liked Songs',
+            trackLength: liked.length,
+            type: 'playlist',
+            image: 'https://misc.scdn.co/liked-songs/liked-songs-640.png',
+          }}
+          linkHref="/liked"
+          isExpanded
+        />
+
         {libraryItems.map((item) => (
           <LibraryItem key={item.id} data={item} isExpanded />
         ))}

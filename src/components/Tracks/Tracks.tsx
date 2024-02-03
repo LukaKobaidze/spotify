@@ -150,7 +150,7 @@ export default function Tracks(props: Props) {
               isPlaying &&
               playerId === player.id &&
               mapTrack.id === player.list[player.currentlyPlaying]?.id;
-            console.log(mapTrack);
+
             const currentAlbum = album || mapTrack.album!;
             const isDisabled = !mapTrack.preview_url;
 

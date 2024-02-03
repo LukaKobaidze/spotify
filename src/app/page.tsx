@@ -6,6 +6,7 @@ import SpotifyPlaylists from './SpotifyPlaylists';
 import FeaturedPlaylists from './FeaturedPlaylists';
 import GlobalTop50 from './GlobalTop50';
 import styles from './page.module.scss';
+import LoadingSpinner from '@/components/LoadingSpinner';
 
 export default async function RootPage() {
   const cookieStore = cookies();
@@ -36,6 +37,11 @@ export default async function RootPage() {
         )}
         {featuredPlaylistsData && (
           <FeaturedPlaylists data={featuredPlaylistsData} className={styles.row} />
+        )}
+        {(!globalTop50Data || !featuredPlaylistsData) && (
+          <div className={styles.loadingSpinnerContainer}>
+            <LoadingSpinner />
+          </div>
         )}
       </main>
     </>

@@ -1,7 +1,9 @@
 import styles from './LoadingSpinner.module.scss';
 
-interface Props {}
+type Props = React.HTMLAttributes<HTMLDivElement>;
 
 export default function LoadingSpinner(props: Props) {
-  return <div className={styles.spinner} />;
+  const { className, ...restProps } = props;
+
+  return <div className={`${styles.spinner} ${className || ''}`} {...restProps} />;
 }
