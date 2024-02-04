@@ -4,6 +4,7 @@
   width: 100%;
   margin-top: 8px;
   font-size: 12px;
+  position: relative;
 
   &Range {
     margin: 0 10px;
@@ -30,5 +31,28 @@
     &Range {
       margin: 0;
     }
+  }
+}
+
+.alertMessage {
+  position: absolute;
+  right: 0;
+  transform: translateX(100%);
+  cursor: pointer;
+  padding: 5px;
+
+  @media (hover: none) {
+    display: none;
+  }
+
+  &Icon {
+    width: 21px;
+    height: 21px;
+    color: rgb(255, 107, 107);
+  }
+
+  &Text {
+    text-align: center;
+    line-height: 1.5;
   }
 }

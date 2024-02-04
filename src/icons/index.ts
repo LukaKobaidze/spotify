@@ -1,5 +1,6 @@
 export { default as IconAdd } from './add.svg';
 export { default as IconAlbum } from './album.svg';
+export { default as IconAlert } from './alert.svg';
 export { default as IconClear } from './clear.svg';
 export { default as IconDuration } from './duration.svg';
 export { default as IconFolderMusic } from './folder-music.svg';
