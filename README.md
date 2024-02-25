@@ -1,34 +1,83 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+<details>
+  <summary>Table of Contents</summary>
+  <ul>
+    <li>
+      <a href="#about-the-project">About The Project</a>
+      <ul>
+        <li><a href="#built-with">Built With</a></li>
+        <li><a href="#description">Description</a></li>
+      </ul>
+    </li>
+    <li><a href="#getting-started">Getting Started</a></li>
+  </ul>
+</details>
+
+## About The Project
+
+![Project image](screenshot.png)
+
+### Built with
+
+- [![Next.js][nextjs-image]][nextjs-url]
+- [![TypeScript][typescript-image]][typescript-url]
+- [![Sass][sass-image]][sass-url]
+- [![Spotify API][spotify-api-image]][spotify-api-url]
+- [![Genius API][genius-api-image]][genius-api-url]
+
+### Description
+
+- Using official Spotify API to get large library of tracks.
+- Handling large data of albums, artists, tracks, custom playlists and more.
+- Using Genius API to get lyrics for any track page.
+- Includes your personal library, where you can save your favorite albums, playlist, artists and tracks.
+- Custom made player that plays tracks
+- Resizable sidebar.
 
 ## Getting Started
 
-First, run the development server:
+1. Clone the repository, and move to the root directory of the project
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
+```sh
+git clone https://github.com/LukaKobaidze/typing-app
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+2. Install packages
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```sh
+npm install
+```
+or
+```sh
+yarn install
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+3. Add environment variables for APIs (add `.env.local` file at the root directory of the project)
+```sh
+SPOTIFY_CLIENT_ID=<your-spotify-client-id-here>
+SPOTIFY_CLIENT_SECRET=<your-client-secret-here>
+GENIUS_ACCESS_TOKEN=<your-genius-access-token-here>
+```
+To get your personal tokens/ids mentioned above, check out these APIs official pages:
+https://developer.spotify.com/documentation/web-api
+https://genius.com/developers
 
-## Learn More
+4. Run the application locally
 
-To learn more about Next.js, take a look at the following resources:
+```sh
+npm run dev
+```
+or
+```sh
+yarn dev
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+[nextjs-image]: https://img.shields.io/badge/next.js-000000?style=for-the-badge&logo=nextdotjs&logoColor=white
+[typescript-image]: https://shields.io/badge/TypeScript-3178C6?logo=TypeScript&logoColor=FFF&style=for-the-badge
+[sass-image]: https://img.shields.io/badge/Sass-CC6699?style=for-the-badge&logo=sass&logoColor=white
+[spotify-api-image]: https://img.shields.io/badge/spotify%20api-1DB954?style=for-the-badge&logo=spotify&logoColor=white
+[genius-api-image]: https://img.shields.io/badge/genius%20api-ffff64?style=for-the-badge&logo=genius&logoColor=black
+[nextjs-url]: https://nextjs.org/
+[typescript-url]: https://www.typescriptlang.org/
+[sass-url]: https://sass-lang.com/
+[spotify-api-url]: https://developer.spotify.com/documentation/web-api
+[genius-api-url]: https://genius.com/developers
