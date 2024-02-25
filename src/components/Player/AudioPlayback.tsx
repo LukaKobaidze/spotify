@@ -50,7 +50,7 @@ export default function AudioPlayback(props: Props) {
         {msToTime((audioDuration || 0) * 1000)}
       </span>
 
-      {windowSize > 575 && (
+      {audioDuration && windowSize > 575 && (
         <Tooltip
           position="top"
           text={
