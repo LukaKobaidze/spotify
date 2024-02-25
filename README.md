@@ -46,19 +46,23 @@ git clone https://github.com/LukaKobaidze/typing-app
 ```sh
 npm install
 ```
+
 or
+
 ```sh
 yarn install
 ```
 
 3. Add environment variables for APIs (add `.env.local` file at the root directory of the project)
+
 ```sh
 SPOTIFY_CLIENT_ID=<your-spotify-client-id-here>
 SPOTIFY_CLIENT_SECRET=<your-client-secret-here>
 GENIUS_ACCESS_TOKEN=<your-genius-access-token-here>
 ```
-To get your personal tokens/ids mentioned above, check out these APIs official pages:
-https://developer.spotify.com/documentation/web-api
+
+To get your personal tokens/ids mentioned above, check out these APIs official pages: <br />
+https://developer.spotify.com/documentation/web-api <br />
 https://genius.com/developers
 
 4. Run the application locally
@@ -66,7 +70,9 @@ https://genius.com/developers
 ```sh
 npm run dev
 ```
+
 or
+
 ```sh
 yarn dev
 ```
